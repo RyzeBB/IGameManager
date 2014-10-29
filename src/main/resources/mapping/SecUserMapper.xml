@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.igame.security.mapper.SecUserMapper">
+
+	<select id="selectlist" resultType="SecUser">
+		select * from sec_user
+	</select>
+	
+	<select id="selectOneById" parameterType="int" resultType="SecUser">
+		select * from sec_user where id = #{id}
+	</select>
+	
+	<select id="selectOneByUserName" parameterType="String" resultType="SecUser">
+		select * from sec_user where username = #{username}
+	</select>
+
+	<update id="updateOne" parameterType="SecUser">
+		update sec_user
+			set
+				username = #{username},
+				password = #{password},
+				createTime = #{createTime},
+				expireTime = #{expireTime},
+		where id = #{id}
+	</update>
+
+	<insert id="insertOne" parameterType="SecUser">
+		insert into sec_user(username,password,createTime,expireTime)
+		value(#{username},#{password},#{createTime},#{expireTime})
+	</insert>
+
+	<delete id="deleteOne" parameterType="int">
+		delete from sec_user WHERE id = #{id}
+	</delete>
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.igame.security.mapper.SecUserRolesMapper">
+
+	<select id="selectlistByUserId" parameterType="int" resultType="SecRole">
+		select * from sec_role where id in(select roleid from sec_usersroles where userid = #{userId})
+	</select>
+	
+	<select id="selectOneById" parameterType="int" resultType="UsersRoles">
+		select * from sec_usersroles where id = #{id}
+	</select>
+
+	<update id="updateOne" parameterType="UsersRoles">
+		update sec_usersroles
+			set
+				roleid = #{roleid},
+				userid = #{userid},
+				orderNo = #{orderNo}
+		where id = #{id}
+	</update>
+
+	<insert id="insertOne" parameterType="UsersRoles">
+		insert into sec_usersroles(roleid,userid,orderNo)
+		value(#{roleid},#{userid},#{orderNo})
+	</insert>
+
+	<delete id="deleteOne" parameterType="int">
+		delete from sec_usersroles WHERE id = #{id}
+	</delete>
+
+</mapper>

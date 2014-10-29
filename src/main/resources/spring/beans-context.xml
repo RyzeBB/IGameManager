@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 					http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	 					http://www.springframework.org/schema/aop 
+	 					http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	 					http://www.springframework.org/schema/tx
+              			http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	 					http://www.springframework.org/schema/context
+        			    http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<import resource="beans-security.xml" />
+	<context:annotation-config />
+	<context:component-scan base-package="com.igame">
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath:mysql_jdbc.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClassName}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="acquireIncrement" value="${c3p0.acquireIncrement}"></property>
+		<property name="initialPoolSize" value="${c3p0.initialPoolSize}"></property>
+		<property name="maxIdleTime" value="${c3p0.maxIdleTime}"></property>
+		<property name="maxPoolSize" value="${c3p0.maxPoolSize}"></property>
+		<property name="minPoolSize" value="${c3p0.minPoolSize}"></property>
+		<property name="acquireRetryDelay" value="${c3p0.acquireRetryDelay}"></property>
+		<property name="acquireRetryAttempts" value="${c3p0.acquireRetryAttempts}"></property>
+		<property name="breakAfterAcquireFailure" value="${c3p0.breakAfterAcquireFailure}"></property>
+	</bean>
+
+	<!-- myBatis sessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:spring/mybatis.xml" />
+		<property name="mapperLocations" value="classpath:mapping/*.xml" />
+	</bean>
+
+	<!-- mybatis 获取session工具 -->
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- myBatis Mapper接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage" value="com.igame.security.mapper" />
+	</bean>
+
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+	<!-- 声明式事务 -->
+	<bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="init*" propagation="REQUIRED" />
+			<tx:method name="*" read-only="true" />
+		</tx:attributes>
+	</tx:advice>
+
+	<aop:config proxy-target-class="true">
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.igame.security.service.*.*(..))" />
+	</aop:config>
+</beans>

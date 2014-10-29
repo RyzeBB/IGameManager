@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.igame.security.mapper.SecACLMapper">
+	<select id="selectlistByRoleIds" resultType="SecACL">
+		SELECT * FROM sec_acl WHERE principalSn in
+		<foreach collection="array" item="roleId" index="index" open="(" close=")" separator=",">
+            #{"roleId"}
+        </foreach>
+	</select>
+	
+	<select id="selectlistByModuId" parameterType="int" resultType="SecACL">
+		SELECT * FROM sec_acl WHERE resourceSn = #{moduleId}
+	</select>
+
+	<select id="selectOneById" parameterType="int" resultType="SecACL">
+		SELECT * FROM sec_acl where id = #{id}
+	</select>
+
+	<update id="updateOne" parameterType="SecACL">
+		update sec_acl
+			set
+				aclState = #{aclState},
+				principalSn = #{principalSn},
+				resourceSn = #{resourceSn}
+			where id = #{id}
+	</update>
+	
+	<insert id="insertOne"  parameterType="SecACL">
+		insert into sec_acl(aclState,principalSn,resourceSn)
+			value(#{aclState},#{principalSn},#{resourceSn})
+	</insert>
+	
+	
+	<delete id="deleteOne"  parameterType="int">
+		delete from sec_acl WHERE id = #{id}
+	</delete>
+	
+</mapper>

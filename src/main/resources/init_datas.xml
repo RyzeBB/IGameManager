@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<InitDatas>
+	<Modules>
+		<Module name="组织管理" sn="orgmgr" url="" orderNo="70">
+			<Module name="机构管理" sn="org" url="org/org!showMain?parentId=0" orderNo="7010"/>
+			<Module name="人员管理" sn="person" url="person/person!showMain" orderNo="7020"/>
+		</Module>
+		<Module name="权限管理" sn="auth" url="" orderNo="80">
+			<Module name="模块管理" sn="module" url="module/module!showMain?parentId=0" orderNo="8010"/>
+			<Module name="角色管理" sn="role" url="role/role!showMain" orderNo="8020"/>
+			<Module name="用户管理" sn="user" url="user/user!showMain" orderNo="8030"/>
+		</Module>
+		<Module name="系统管理" sn="sytemmgr" url="" orderNo="90">
+			<Module name="密码修改" sn="chgpsw" url="user!chgpsw" orderNo="9010"/>
+			<Module name="代码定义" sn="codedef" url="codedef" orderNo="9020"/>
+			<Module name="系统初始化" sn="systeminit" url="systeminit" orderNo="9030"/>
+		</Module>
+	</Modules>
+	<Roles>
+		<Role name="系统管理员">
+			<Acl module="组织管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="机构管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="人员管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="权限管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="模块管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="角色管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="用户管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="系统管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="密码修改" C="true" R="true" U="true" D="true"/>
+			<Acl module="系统初始化" C="true" R="true" U="true" D="true"/>
+		</Role>
+		<Role name="普通员工">
+		</Role>
+		<Role name="部门领导">
+			<Acl module="组织管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="机构管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="人员管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="权限管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="模块管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="角色管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="用户管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="系统管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="密码修改" C="true" R="true" U="true" D="true"/>
+		</Role>
+		<Role name="总经理">
+			<Acl module="组织管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="机构管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="人员管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="权限管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="模块管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="角色管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="用户管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="系统管理" C="true" R="true" U="true" D="true"/>
+			<Acl module="密码修改" C="true" R="true" U="true" D="true"/>
+			<Acl module="代码定义" C="true" R="true" U="true" D="true"/>
+			<Acl module="系统初始化" C="true" R="true" U="true" D="true"/>
+		</Role>
+		<Role name="档案管理员">
+			<Acl module="用户管理" C="true" R="true" U="true" D="true"/>
+		</Role>
+	</Roles>
+	<Organizations>
+		<Org name="BOSS">
+			<Org name="总裁办"/>
+			<Org name="行政部"/>
+			<Org name="财务部"/>
+		</Org>
+		<Org name="技术二部">
+			<Person name="陈十" username="cs" password="cs" roles="总经理"/>
+			<Org name="办公室">
+				<Person name="诸一一" username="zyy" password="zyy" roles="部门领导"/>
+				<Person name="王八" username="wb" password="wb" roles="档案管理员"/>
+			</Org>
+			<Org name="造价咨询部"/>
+			<Org name="财务部">
+				<Person name="卫一二" username="wye" password="wye" roles="部门领导"/>
+			</Org>
+			<Org name="招标代理部"/>
+			<Org name="软件开发部">
+			    <Person name="冯九" username="fj" password="fj" roles="部门领导"/>
+				<Org name="OA项目组"/>
+				<Org name="CRM项目组"/>
+				<Org name="烟草行业项目组">
+					<Person name="钱二" username="qe" password="qe" roles="部门领导"/>
+					<Person name="孙三" username="ss" password="ss" roles="普通员工"/>
+					<Person name="李四" username="ls" password="ls" roles="普通员工"/>
+					<Person name="周五" username="zw" password="zw" roles="普通员工"/>
+					<Person name="吴六" username="wl" password="wl" roles="普通员工"/>
+					<Person name="郑七" username="zq" password="zq" roles="普通员工"/>
+				</Org>
+			</Org>
+			<Org name="市场部"/>
+			<Org name="技术服务部">
+				<Person name="赵一" username="zy" password="zy" roles="系统管理员"/>
+				<Person name="蒋一三" username="jys" password="jys" roles="普通员工"/>
+				<Person name="沈一四" username="sys" password="sys" roles="普通员工"/>
+				<Person name="韩一五" username="hyw" password="hyw" roles="普通员工"/>
+				<Person name="杨一六" username="yyl" password="yyl" roles="普通员工,系统管理员"/>
+			</Org>
+		</Org>
+		<Org name="上海分公司">
+			<Org name="上海研发中心"></Org>
+			<Org name="销售部"></Org>
+		</Org>
+		<Org name="广州分公司">
+			<Org name="广州研发中心"></Org>
+		</Org>
+	</Organizations>
+</InitDatas>
