@@ -7,6 +7,8 @@ public class InitTest extends TestCase {
 //		InitXmlService datas = factory.getBean(InitXmlService.class);
 //		datas.initDatas();
 //xx
+		
+		//修改后
 	}
 
 }
