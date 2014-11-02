@@ -1,3 +1,4 @@
+package com.igame.security.controller;
 //package com.igame.web.controller.security;
 //
 //import java.util.Date;

@@ -83,7 +83,7 @@
 	<!--配置一个请求后缀，凡是以html结尾的路径，都会被springmvc拦截 -->
 	<servlet-mapping>
 		<servlet-name>springMVC</servlet-name>
-		<url-pattern>*.action</url-pattern>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 	<servlet-mapping>
@@ -94,4 +94,13 @@
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
+	
+	<error-page>
+        <error-code>404</error-code>
+        <location>/404.html</location>
+    </error-page>
+    <error-page>
+        <error-code>405</error-code>
+        <location>/405.html</location>
+    </error-page>
 </web-app>

@@ -1,4 +1,4 @@
-package com.igame.web.controller.security;
+package com.igame.security.controller;
 
 import java.util.List;
 

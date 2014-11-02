@@ -9,11 +9,16 @@
 	<http pattern="/css/**" security="none" />
 	<http pattern="/*.css" security="none"></http>
 	<http pattern="/js/**" security="none"></http>
+	<http pattern="/img/**" security="none"></http>
 	<http pattern="/images/**" security="none"></http>
 	<http pattern="/fancybox/**" security="none"></http>
 	<http pattern="/login2.html" security="none"></http>
+	<http pattern="/crossdomain.xml" security="none"></http>
+	<http pattern="/humans.txt" security="none"></http>
+	<http pattern="/robots.txt" security="none"></http>
 	<http pattern="/*.html" security="none"></http>
 	<http pattern="/commons/**" security="none"></http>
+	<http pattern="/404.html" security="none"></http>
 
 	<http auto-config="true" use-expressions="true" entry-point-ref="authenticationProcessingFilterEntryPoint" disable-url-rewriting="true">
 		<!-- 不拦截 -->

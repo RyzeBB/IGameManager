@@ -6,5 +6,6 @@
 	<typeAliases>
 		<package name="com.igame.security.entity" />
 	</typeAliases>
+	
 
 </configuration>
