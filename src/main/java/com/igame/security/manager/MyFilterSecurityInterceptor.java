@@ -36,7 +36,6 @@ public class MyFilterSecurityInterceptor extends AbstractSecurityInterceptor imp
 		}finally {
 			super.afterInvocation(token, null);
 		}
-		logger.debug("你好 ");
 		logger.debug("------------MyFilterSecurityInterceptor.doFilter()-----------拦截器该方法结束了....");
 	}
 
