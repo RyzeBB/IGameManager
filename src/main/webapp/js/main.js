@@ -18,7 +18,8 @@ $(function () {
     $('#fileupload').fileupload({
         // Uncomment the following to send cross-domain cookies:
         //xhrFields: {withCredentials: true},
-        url: 'upload'
+        url: 'upload',
+        maxNumberOfFiles :4
     });
 
     // Enable iframe cross-domain access via redirect option:
@@ -33,28 +34,28 @@ $(function () {
 
     if (window.location.hostname === 'blueimp.github.io') {
         // Demo settings:
-        $('#fileupload').fileupload('option', {
-            url: '//jquery-file-upload.appspot.com/',
-            // Enable image resizing, except for Android and Opera,
-            // which actually support image resizing, but fail to
-            // send Blob objects via XHR requests:
-            disableImageResize: /Android(?!.*Chrome)|Opera/
-                .test(window.navigator.userAgent),
-            maxFileSize: 5000000,
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
-        });
-        // Upload server status check for browsers with CORS support:
-        if ($.support.cors) {
-            $.ajax({
-                url: '//jquery-file-upload.appspot.com/',
-                type: 'HEAD'
-            }).fail(function () {
-                $('<div class="alert alert-danger"/>')
-                    .text('Upload server currently unavailable - ' +
-                            new Date())
-                    .appendTo('#fileupload');
-            });
-        }
+//        $('#fileupload').fileupload('option', {
+//            url: '//jquery-file-upload.appspot.com/',
+//            // Enable image resizing, except for Android and Opera,
+//            // which actually support image resizing, but fail to
+//            // send Blob objects via XHR requests:
+//            disableImageResize: /Android(?!.*Chrome)|Opera/
+//                .test(window.navigator.userAgent),
+//            maxFileSize: 5000000,
+//            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+//        });
+//        // Upload server status check for browsers with CORS support:
+//        if ($.support.cors) {
+//            $.ajax({
+//                url: '//jquery-file-upload.appspot.com/',
+//                type: 'HEAD'
+//            }).fail(function () {
+//                $('<div class="alert alert-danger"/>')
+//                    .text('Upload server currently unavailable - ' +
+//                            new Date())
+//                    .appendTo('#fileupload');
+//            });
+//        }
     } else {
     	
     	 $('#fileupload').fileupload('option', {
@@ -65,10 +66,9 @@ $(function () {
              disableImageResize: /Android(?!.*Chrome)|Opera/
                  .test(window.navigator.userAgent),
              maxFileSize: 5000000,
-             maxNumberOfFiles:2,
+             maxNumberOfFiles:6,
              acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
          });
-    	 
         // Load existing files:
         $('#fileupload').addClass('fileupload-processing');
         $.ajax({
@@ -84,5 +84,13 @@ $(function () {
                 .call(this, $.Event('done'), {result: result});
         });
     }
-
+  //定位  
+    $('#pic_select').panel({
+    	 title: "图片选择",
+    	    width: 900,
+    	    height: 400,
+    	    iconCls: 'icon-ok',
+    	    closable:true
+    });
+    $('#pic_select').panel('close')
 });

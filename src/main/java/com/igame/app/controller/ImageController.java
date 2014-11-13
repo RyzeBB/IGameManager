@@ -113,7 +113,7 @@ public class ImageController {
             try {
                 mpf.transferTo(newFile);
                 
-                BufferedImage thumbnail = Scalr.resize(ImageIO.read(newFile), 290);
+                BufferedImage thumbnail = Scalr.resize(ImageIO.read(newFile), 150);
                 String thumbnailFilename = newFilenameBase + "-thumbnail.png";
                 File thumbnailFile = new File(storageDirectory + "/" + thumbnailFilename);
                 ImageIO.write(thumbnail, "png", thumbnailFile);

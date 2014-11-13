@@ -16,6 +16,19 @@
 <meta http-equiv="description" content="This is my page">
 <link rel="stylesheet" type="text/css" href="js/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="js/themes/icon.css">
+
+<!-- Bootstrap styles -->
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- Generic page styles -->
+<link rel="stylesheet" href="css/style.css">
+<!-- blueimp Gallery styles -->
+<link rel="stylesheet" href="css/blueimp-gallery.min.css">
+<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
+<link rel="stylesheet" href="css/jquery.fileupload.css">
+<link rel="stylesheet" href="css/jquery.fileupload-ui.css">
+<!-- CSS adjustments for browsers with JavaScript disabled -->
+<noscript><link rel="stylesheet" href="css/jquery.fileupload-noscript.css"></noscript>
+<noscript><link rel="stylesheet" href="css/jquery.fileupload-ui-noscript.css"></noscript>
 <style type="text/css">
 table {
 	font-size: 12px;
@@ -24,6 +37,41 @@ table {
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="js/locale/easyui-lang-zh_CN.js"></script>
+
+
+<!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
+<script src="js/jquery.ui.widget.js"></script>
+<!-- The Templates plugin is included to render the upload/download listings -->
+<script src="js/tmpl.min.js"></script>
+<!-- The Load Image plugin is included for the preview images and image resizing functionality -->
+<script src="js/load-image.all.min.js"></script>
+<!-- The Canvas to Blob plugin is included for image resizing functionality -->
+<script src="js/canvas-to-blob.min.js"></script>
+<!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
+<script src="js/bootstrap.min.js"></script>
+<!-- blueimp Gallery script -->
+<script src="js/jquery.blueimp-gallery.min.js"></script>
+<!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
+<script src="js/jquery.iframe-transport.js"></script>
+<!-- The basic File Upload plugin -->
+<script src="js/jquery.fileupload.js"></script>
+<!-- The File Upload processing plugin -->
+<script src="js/jquery.fileupload-process.js"></script>
+<!-- The File Upload image preview & resize plugin -->
+<script src="js/jquery.fileupload-image.js"></script>
+<!-- The File Upload audio preview plugin -->
+<script src="js/jquery.fileupload-audio.js"></script>
+<!-- The File Upload video preview plugin -->
+<script src="js/jquery.fileupload-video.js"></script>
+<!-- The File Upload validation plugin -->
+<script src="js/jquery.fileupload-validate.js"></script>
+<!-- The File Upload user interface plugin -->
+<script src="js/jquery.fileupload-ui.js"></script>
+
+<!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
+<!--[if (gte IE 8)&(lt IE 10)]>
+<script src="js/cors/jquery.xdr-transport.js"></script>
+<![endif]-->
 
 <script type="text/javascript">
 // 	$.fn.serializeObject = function() {
@@ -92,7 +140,67 @@ table {
 		var add_attr_c = $(content).appendTo("#attr_set");
 		$.parser.parse(add_attr_c);
 	}
-</script>
+	
+	function openPic() {
+		$("#pic_select").panel("open");
+		var e = window.event || arguments[0];
+		var y = e.pageY || e.clientY + document.documentElement.scrollTop;
+		$("#pic_select_div").css({'top': y + 'px'});  
+	}
+	
+	function choose_img(imgurl,c_o){
+// 		var win_pic = $("input[name='win_pic']");
+//         for(var i=0;i<win_pic.length;i++){
+//         	if(win_pic[i].value==null){
+//         		var content = "<img src= '"+imgurl+"' style='width:148px;height:148px'>";
+//         		$(content).addTo(win_pic.parent());
+//         	}
+//         }
+		if(c_o.checked){
+	        $("#window_pic ul li").each(function(i, o){
+	        	if( $(o).children("div").html().trim()==""){
+					var content = "<img src= '"+imgurl+"' style='width:148px;height:148px'><input type='hidden' name='winpic' value='"+imgurl+"'>";
+					 $(o).children("div").html(content);
+					 return false;
+	        	} else {
+	        		if(i>=4){
+	        			alert("最多上传五张图");
+	        			c_o.checked = false;
+	        		}
+	        	}
+	        });
+		}else{
+			$("#window_pic ul li").each(function(i, o){
+				var input_ = $(o).children("div").children("input");
+	        	if(typeof(input_)!="undefined" && input_.val() == imgurl){
+	        		if(i>=4){
+	        			$(o).children("div").html("");
+	        		}else{
+	        			$(o).children("div").html("");
+	        			$("#window_pic ul li").each(function(j, oj){
+	        				if(j>=i && j<4){
+	        					var next_content = $(oj).next().children("div").html();
+	        					if(next_content != ""){
+	        						$(oj).children("div").html(next_content);
+	        						$(oj).next().children("div").html("");
+	 		 					 }else{
+	 		 						return false;
+	 		 					 }
+	        				}
+	        			});
+// 	        				
+// 	        				alert(next_content);
+// 	        				
+// 	        			}
+	        			 return false;
+	        		}
+	        	}
+        });
+		}
+	}
+	
+	//初始化文件上传功能模块
+	//$('#fileupload').fileupload(); 
 </script>
 
 </head>
@@ -167,7 +275,31 @@ table {
 				<tr>
 					<td valign="top">橱窗图片:</td>
 					<td>
-						<div id="p" class="easyui-panel" style="background: #F7F7F7; width: 800px; height: 200px; padding: 10px;"></div>
+						<div class="easyui-panel" style="background: #F7F7F7; width: 800px; height: 300px; padding: 10px;">
+							<div id="window_pic">
+							<ul>
+								<li>
+									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
+								</li>
+								<li>
+									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
+									
+								</li>
+								<li>
+									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
+								</li>
+								<li>
+									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
+								</li>
+								<li>
+									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
+								</li>
+							</ul>
+						</div>
+						<div align="center" style="padding-top: 200px">
+								<button class="btn btn-primary start" type="button" onclick="openPic()">添加图片</button>
+							</div>
+						</div>
 					</td>
 				</tr>
 
@@ -192,8 +324,142 @@ table {
 		</form>
 		<div style="text-align: center; padding: 5px">
 			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">Submit</a> <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">Clear</a>
-		</div>
-	</div>
+		</div></div>
+		<div id="pic_select_div" style="float:left;position:absolute;left:100px;top:10px;">
+		<div id="pic_select" class="easyui-pane">
+			<div class="container">
+    <!-- The file upload form used as target for the file upload widget -->
+    <form id="fileupload" action="upload" method="POST" enctype="multipart/form-data">
+        <!-- Redirect browsers with JavaScript disabled to the origin page -->
+        <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
+        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+        <div class="row fileupload-buttonbar">
+            <div class="col-lg-7">
+                <!-- The fileinput-button span is used to style the file input field as button -->
+                <span class="btn btn-success fileinput-button">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    <span>Add files...</span>
+                    <input type="file" name="files[]" multiple="">
+                </span>
+                <button type="submit" class="btn btn-primary start">
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start upload</span>
+                </button>
+                <button type="reset" class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel upload</span>
+                </button>
+                <button type="button" class="btn btn-danger delete">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" class="toggle">
+                <!-- The global file processing state -->
+                <span class="fileupload-process"></span>
+            </div>
+            <!-- The global progress state -->
+            <div class="col-lg-5 fileupload-progress fade">
+            	<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+                </div>
+                <!-- The extended global progress state -->
+                <div class="progress-extended">&nbsp;</div>
+            </div>
+        </div>
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
+    <br>
+    </form>
+</div>
+<!-- The blueimp Gallery widget -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+    <div class="slides"></div>
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td style="width:200px">
+            <span class="preview"></span>
+        </td>
+        <td style="width:100px">
+            <input type="checkbox" disabled="disabled">
+            <strong class="error text-danger"></strong>
+        </td>
+        <td>
+            <p class="size">Processing...</p>
+            <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
+        </td>
+        <td>
+            {% if (!i && !o.options.autoUpload) { %}
+                <button class="btn btn-primary start" disabled>
+                    <i class="glyphicon glyphicon-upload"></i>
+                    <span>Start</span>
+                </button>
+            {% } %}
+            {% if (!i) { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade">
+        <td style="width:200px">
+            <span class="preview">
+                {% if (file.thumbnailUrl) { %}
+                    <a href="{%=file.url%}" title="{%=file.name%}" download="{%=file.name%}" data-gallery><img src="{%=file.thumbnailUrl%}"></a>
+                {% } %}
+            </span>
+        </td>
+        <td style="width:100px">
+                {% if (file.url) { %}
+                    <input type="checkbox" onclick="choose_img('{%=file.url%}',this)">
+                {% } else { %}
+                    <input type="checkbox" disabled="disabled">
+                {% } %}
+            {% if (file.error) { %}
+                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+            {% } %}
+        </td>
+        <td>
+            <span class="size">{%=o.formatFileSize(file.size)%}</span>
+        </td>
+        <td>
+            {% if (file.deleteUrl) { %}
+                <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
+                    <i class="glyphicon glyphicon-trash"></i>
+                    <span>Delete</span>
+                </button>
+                <input type="checkbox" name="delete" value="1" class="toggle">
+            {% } else { %}
+                <button class="btn btn-warning cancel">
+                    <i class="glyphicon glyphicon-ban-circle"></i>
+                    <span>Cancel</span>
+                </button>
+            {% } %}
+        </td>
+    </tr>
+{% } %}
+</script>											
+</div>
+</div>
+	
 
+	
+	<!-- The main application script -->
+<script src="js/main.js"></script>
 </body>
 </html>
