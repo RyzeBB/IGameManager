@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 import org.slf4j.Logger;
@@ -29,8 +30,10 @@ import com.igame.security.service.SecRoleService;
  * @author Allen
  */
 @Component("myInvocationSecurityMetadataSource")
-public class MyInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
-	private static final Logger logger = LoggerFactory.getLogger(MyInvocationSecurityMetadataSource.class);
+public class MyInvocationSecurityMetadataSource implements
+		FilterInvocationSecurityMetadataSource {
+	private static final Logger logger = LoggerFactory
+			.getLogger(MyInvocationSecurityMetadataSource.class);
 	private SecRoleService secRoleService;
 	private ACLService aclService;
 	private SecModuleService secModuleService;
@@ -38,7 +41,7 @@ public class MyInvocationSecurityMetadataSource implements FilterInvocationSecur
 	/* 保存资源和权限的对应关系 key-资源url value-权限(role.code) */
 	private static Map<String, Collection<ConfigAttribute>> resourceMap = null;
 
-	// @PostConstruct
+//	@PostConstruct
 	public void loadResourceDefine() {
 		logger.debug("=============== loadResourceDefine 开始加载资源列表数据 ===============");
 		resourceMap = new HashMap<String, Collection<ConfigAttribute>>();
@@ -62,7 +65,8 @@ public class MyInvocationSecurityMetadataSource implements FilterInvocationSecur
 						break;
 					}
 				}
-				ConfigAttribute configAttribute = new SecurityAclsConfig(acl_secRole.getCode(), secACL);
+				ConfigAttribute configAttribute = new SecurityAclsConfig(
+						acl_secRole.getCode(), secACL);
 				configAttributes.add(configAttribute);
 			}
 
@@ -83,7 +87,8 @@ public class MyInvocationSecurityMetadataSource implements FilterInvocationSecur
 	 * 根据请求的资源地址，获取它所拥有的权限
 	 */
 	@Override
-	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
+	public Collection<ConfigAttribute> getAttributes(Object object)
+			throws IllegalArgumentException {
 		logger.debug("=============== loadResourceDefine getAttributes===============");
 		// 获取请求的url地址
 		String url = ((FilterInvocation) object).getRequestUrl();

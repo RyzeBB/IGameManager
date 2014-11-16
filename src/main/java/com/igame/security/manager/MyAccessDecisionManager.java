@@ -31,6 +31,7 @@ public class MyAccessDecisionManager implements AccessDecisionManager {
 	 */
 	@Override
 	public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes) throws AccessDeniedException, InsufficientAuthenticationException {
+		logger.info("权限校验 ");
 //		if (configAttributes == null) {
 //			return;
 //		}

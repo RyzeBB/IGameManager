@@ -1,8 +1,12 @@
-package com.igame.app.vo;
+package com.igame.app.entity;
 
 import java.util.List;
 
-public class GoodsVO {
+import org.apache.commons.lang3.StringUtils;
+
+import com.alibaba.fastjson.JSON;
+
+public class GoodsEntity implements JsonEntity {
 	private int id;// 商品ID
 	private int type;// 商品类型ID
 	private String typeName;// 商品类型名称
@@ -10,12 +14,12 @@ public class GoodsVO {
 	private String introduce;// 商品简介
 	private int price;// 商品原始价格
 	private int offer;// 商品折扣(单位%，例如20，表示折扣20%)
-	private String unit = "元";// 价格单位
-	private MutiAttr[] muti_att;// 多属性
+	private String unit;// 价格单位
+	private String mulVa1Json;// 多属性
 	private String icon;// 商品icon(根据排版风格1，风格2， 该Icon的 尺寸要求不一样)
-	private List<String> titlePic;// /商品主图片下载URL(可以有12张图片)
-	private List<String> detailePic;// 商品详情图片下载URL
-	private List<String> params;// 商品详细参数介绍
+	private String titlePicJson;// /商品主图片下载URL(可以有12张图片)
+	private String detailePicJson;// 商品详情图片下载URL
+	private String paramsJson;// 商品详细参数介绍
 	private String address;// 商品发货地
 	private int stock;// 商品库存
 	private int saleCount;// 已出售商品个数
@@ -24,6 +28,46 @@ public class GoodsVO {
 	private int disStyle;// 显示风格
 	private String serviecType;// 客服方式，1为电话，2为微信号，3为QQ号
 	private String serviecTel;// 客服电话/或微信号/或QQ号
+
+	// 原始对象操作
+	private List<MulVal> mulVa1;
+	private List<String> titlePic;
+	private List<String> detailePic;
+	private List<String> params;
+
+	@Override
+	public void decode() {
+		if (StringUtils.isNotEmpty(mulVa1Json)) {
+			mulVa1 = JSON.parseArray(mulVa1Json, MulVal.class);
+		}
+
+		if (StringUtils.isNotEmpty(titlePicJson)) {
+			titlePic = JSON.parseArray(titlePicJson, String.class);
+		}
+		if (StringUtils.isNotEmpty(detailePicJson)) {
+			detailePic = JSON.parseArray(detailePicJson, String.class);
+		}
+		if (StringUtils.isNotEmpty(paramsJson)) {
+			params = JSON.parseArray(paramsJson, String.class);
+		}
+
+	}
+
+	@Override
+	public void encode() {
+		if (mulVa1 != null && !mulVa1.isEmpty()) {
+			mulVa1Json = JSON.toJSONString(mulVa1);
+		}
+		if (titlePic != null && !titlePic.isEmpty()) {
+			titlePicJson = JSON.toJSONString(titlePic);
+		}
+		if (detailePic != null && !detailePic.isEmpty()) {
+			detailePicJson = JSON.toJSONString(detailePic);
+		}
+		if (params != null && !params.isEmpty()) {
+			paramsJson = JSON.toJSONString(params);
+		}
+	}
 
 	public int getId() {
 		return id;
@@ -89,12 +133,12 @@ public class GoodsVO {
 		this.unit = unit;
 	}
 
-	public MutiAttr[] getMuti_att() {
-		return muti_att;
+	public String getMulVa1Json() {
+		return mulVa1Json;
 	}
 
-	public void setMuti_att(MutiAttr[] muti_att) {
-		this.muti_att = muti_att;
+	public void setMulVa1Json(String mulVa1Json) {
+		this.mulVa1Json = mulVa1Json;
 	}
 
 	public String getIcon() {
@@ -105,28 +149,28 @@ public class GoodsVO {
 		this.icon = icon;
 	}
 
-	public List<String> getTitlePic() {
-		return titlePic;
+	public String getTitlePicJson() {
+		return titlePicJson;
 	}
 
-	public void setTitlePic(List<String> titlePic) {
-		this.titlePic = titlePic;
+	public void setTitlePicJson(String titlePicJson) {
+		this.titlePicJson = titlePicJson;
 	}
 
-	public List<String> getDetailePic() {
-		return detailePic;
+	public String getDetailePicJson() {
+		return detailePicJson;
 	}
 
-	public void setDetailePic(List<String> detailePic) {
-		this.detailePic = detailePic;
+	public void setDetailePicJson(String detailePicJson) {
+		this.detailePicJson = detailePicJson;
 	}
 
-	public List<String> getParams() {
-		return params;
+	public String getParamsJson() {
+		return paramsJson;
 	}
 
-	public void setParams(List<String> params) {
-		this.params = params;
+	public void setParamsJson(String paramsJson) {
+		this.paramsJson = paramsJson;
 	}
 
 	public String getAddress() {
@@ -191,6 +235,38 @@ public class GoodsVO {
 
 	public void setServiecTel(String serviecTel) {
 		this.serviecTel = serviecTel;
+	}
+
+	public List<MulVal> getMulVa1() {
+		return mulVa1;
+	}
+
+	public void setMulVa1(List<MulVal> mulVa1) {
+		this.mulVa1 = mulVa1;
+	}
+
+	public List<String> getTitlePic() {
+		return titlePic;
+	}
+
+	public void setTitlePic(List<String> titlePic) {
+		this.titlePic = titlePic;
+	}
+
+	public List<String> getDetailePic() {
+		return detailePic;
+	}
+
+	public void setDetailePic(List<String> detailePic) {
+		this.detailePic = detailePic;
+	}
+
+	public List<String> getParams() {
+		return params;
+	}
+
+	public void setParams(List<String> params) {
+		this.params = params;
 	}
 
 }

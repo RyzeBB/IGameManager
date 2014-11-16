@@ -43,11 +43,20 @@ public class GoodsController {
 
 	private static final Logger log = LoggerFactory.getLogger(GoodsController.class);
 
-	@RequestMapping(value = "/createGoods", method = RequestMethod.POST)
+//	@RequestMapping(value = "/createGoods", method = RequestMethod.POST,produces="application/json")
 //	@ResponseBody
+//	public String createGoods(@RequestBody GoodsVO goodsVO) {
+//		log.debug("====== +++++++++" );
+////		System.out.println(goodsVO.toJSONString());
+//		System.out.println(JSON.toJSON(goodsVO));
+//		return "hello";
+//	}
+	
+	@RequestMapping(value = "/createGoods", method = RequestMethod.POST)
 	public String createGoods(@ModelAttribute("ff") GoodsVO goodsVO) {
 		log.debug("====== +++++++++" );
-		System.out.println(JSON.toJSON(goodsVO));
+		String json = JSON.toJSONString(goodsVO);
+		System.out.println(json);
 		return "goods/success";
 	}
 

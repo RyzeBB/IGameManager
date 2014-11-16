@@ -6,19 +6,20 @@
 			+ request.getServerName() + ":" + request.getServerPort()
 			+ path + "/";
 %>
-<base href="<%=basePath%>">
 
 <html>
 <head>
+<base href="<%=basePath%>">
 <title>My starting page</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
-<link rel="stylesheet" type="text/css" href="js/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="js/themes/default/easyui.css">
 <link rel="stylesheet" type="text/css" href="js/themes/icon.css">
 
 <!-- Bootstrap styles -->
-<link rel="stylesheet" href="css/bootstrap.min.css">
+<!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
 <!-- Generic page styles -->
 <link rel="stylesheet" href="css/style.css">
 <!-- blueimp Gallery styles -->
@@ -27,17 +28,18 @@
 <link rel="stylesheet" href="css/jquery.fileupload.css">
 <link rel="stylesheet" href="css/jquery.fileupload-ui.css">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
-<noscript><link rel="stylesheet" href="css/jquery.fileupload-noscript.css"></noscript>
-<noscript><link rel="stylesheet" href="css/jquery.fileupload-ui-noscript.css"></noscript>
+<noscript>
+	<link rel="stylesheet" href="css/jquery.fileupload-noscript.css">
+</noscript>
+<noscript>
+	<link rel="stylesheet" href="css/jquery.fileupload-ui-noscript.css">
+</noscript>
 <style type="text/css">
 table {
 	font-size: 12px;
 }
 </style>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="js/locale/easyui-lang-zh_CN.js"></script>
-
 
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
 <script src="js/jquery.ui.widget.js"></script>
@@ -48,7 +50,7 @@ table {
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
 <script src="js/canvas-to-blob.min.js"></script>
 <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
-<script src="js/bootstrap.min.js"></script>
+<!-- <script src="js/bootstrap.min.js"></script> -->
 <!-- blueimp Gallery script -->
 <script src="js/jquery.blueimp-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
@@ -72,57 +74,74 @@ table {
 <!--[if (gte IE 8)&(lt IE 10)]>
 <script src="js/cors/jquery.xdr-transport.js"></script>
 <![endif]-->
+<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/locale/easyui-lang-zh_CN.js"></script>
 
 <script type="text/javascript">
-// 	$.fn.serializeObject = function() {
-// 		var o = {};
-// 		var a = this.serializeArray();
-// 		$.each(a, function() {
-// 			if (o[this.name]) {
-// 				if (!o[this.name].push) {
-// 					o[this.name] = [ o[this.name] ];
-// 				}
-// 				o[this.name].push(this.value || '');
-// 			} else {
-// 				o[this.name] = this.value || '';
-// 			}
-// 		});
-// 		return o;
-// 	};
+	// 	$.fn.serializeObject = function() {
+	// 		var o = {};
+	// 		var a = this.serializeArray();
+	// 		$.each(a, function() {
+	// 			if (o[this.name]) {
+	// 				if (!o[this.name].push) {
+	// 					o[this.name] = [ o[this.name] ];
+	// 				}
+	// 				o[this.name].push(this.value || '');
+	// 			} else {
+	// 				o[this.name] = this.value || '';
+	// 			}
+	// 		});
+	// 		return o;
+	// 	};
+	$.fn.serializeObject = function() {
+		var serializeObj = {};
+		var array = this.serializeArray();
+		console.info("array == " + array);
+		console.info(JSON.stringify(array));
+		$(array).each(
+				function() {
+					if (serializeObj[this.name]) {
+						console.info(this.name + "==="
+								+ $.isArray(serializeObj[this.name]));
+						if ($.isArray(serializeObj[this.name])) {
+							serializeObj[this.name].push(this.value);
+						} else {
+							serializeObj[this.name] = [
+									serializeObj[this.name], this.value ];
+						}
+					} else {
+						serializeObj[this.name] = this.value;
+					}
+				});
+		return serializeObj;
+	};
 
 	function submitForm() {
-		// 		var data = $("#ff").serializeArray(); //自动将form表单封装成json
-		// 		alert(JSON.stringify(data)); 
 		tag = $('#ff').form('validate');
 		if (tag) {
 			$('#ff').submit();
-// 			var jsonuserinfo = $('#ff').serializeObject();
-// 			$.ajaxSetup({
-// 				contentType : 'application/json'
-// 			});
-// 			console.info(JSON.stringify(jsonuserinfo));
-			// 			$.post($('#ff').attr('action'), jsonuserinfo, po_sucess, "json" );
-
-// 			$.ajax({
-// 				type:"post",
-// 				url:$("#ff").attr("action"),
-// 				data:JSON.stringify(jsonuserinfo),
-// 				dataType : "json",
-// 				contentType: "application/json;charset=utf-8",
-// 				success : function(msg) {
-// 					alert("success")
-// 				},
-// 				error : function(XMLHttpRequest, textStatus, errorThrown) {
-// 					alert("失败");
-// 				}
-// 			});
-
-			// 	        alert(JSON.stringify(jsonuserinfo)); 
+// 			jsonuserinfo = $("#ff").serializeObject();
+			// 			var jsonuserinfo = $('#ff').serializeObject();
+			// 			$.ajaxSetup({
+			// 				contentType : 'application/json;charset=utf-8'
+			// 			});
+			// 			$.ajax({
+			// 				type : "post",
+			// 				url : $("#ff").attr("action"),
+			// 				data : JSON.stringify(jsonuserinfo),
+			// // 				data : jsonuserinfo,
+			// 				dataType : "json",
+			// 				contentType : "application/json;charset=utf-8",
+			// 				success : function(msg) {
+			// 					alert("success")
+			// 				},
+			// 				error : function(XMLHttpRequest, textStatus, errorThrown) {
+			// 					alert("失败");
+			// 				}
+			// 			});
 		} else {
 			return;
 		}
-
-		//$('#ff').form('submit');
 	}
 
 	function po_sucess(cdata) {
@@ -134,73 +153,112 @@ table {
 
 	function addAttr() {
 		content = "<tr><td>"
-				+ "<input name=\"attrName\" class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'属性名称...' ,validType:'length[2,6]'\" style=\"width:60px;height:25px\"> : "
-				+ "<input name=\"attrValue\" class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'属性值...',validType:'length[2,6]' \" style=\"width:100px;height:25px\">"
+				+ "<input name=\"params\" class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'例如: 品牌:coco',validType:'length[2,6]' \" style=\"width:120px;height:25px\">"
 				+ "</td></tr>";
 		var add_attr_c = $(content).appendTo("#attr_set");
 		$.parser.parse(add_attr_c);
 	}
-	
+
 	function openPic() {
 		$("#pic_select").panel("open");
 		var e = window.event || arguments[0];
 		var y = e.pageY || e.clientY + document.documentElement.scrollTop;
-		$("#pic_select_div").css({'top': y + 'px'});  
+		$("#pic_select_div").css({
+			'top' : y + 'px'
+		});
 	}
-	
-	function choose_img(imgurl,c_o){
-// 		var win_pic = $("input[name='win_pic']");
-//         for(var i=0;i<win_pic.length;i++){
-//         	if(win_pic[i].value==null){
-//         		var content = "<img src= '"+imgurl+"' style='width:148px;height:148px'>";
-//         		$(content).addTo(win_pic.parent());
-//         	}
-//         }
-		if(c_o.checked){
-	        $("#window_pic ul li").each(function(i, o){
-	        	if( $(o).children("div").html().trim()==""){
-					var content = "<img src= '"+imgurl+"' style='width:148px;height:148px'><input type='hidden' name='winpic' value='"+imgurl+"'>";
-					 $(o).children("div").html(content);
-					 return false;
-	        	} else {
-	        		if(i>=4){
-	        			alert("最多上传五张图");
-	        			c_o.checked = false;
-	        		}
-	        	}
-	        });
-		}else{
-			$("#window_pic ul li").each(function(i, o){
-				var input_ = $(o).children("div").children("input");
-	        	if(typeof(input_)!="undefined" && input_.val() == imgurl){
-	        		if(i>=4){
-	        			$(o).children("div").html("");
-	        		}else{
-	        			$(o).children("div").html("");
-	        			$("#window_pic ul li").each(function(j, oj){
-	        				if(j>=i && j<4){
-	        					var next_content = $(oj).next().children("div").html();
-	        					if(next_content != ""){
-	        						$(oj).children("div").html(next_content);
-	        						$(oj).next().children("div").html("");
-	 		 					 }else{
-	 		 						return false;
-	 		 					 }
-	        				}
-	        			});
-// 	        				
-// 	        				alert(next_content);
-// 	        				
-// 	        			}
-	        			 return false;
-	        		}
-	        	}
-        });
+
+	function choose_img(imgurl, c_o) {
+		if (c_o.checked) {
+			$("#window_pic ul li")
+					.each(
+							function(i, o) {
+								if ($(o).children("div").html().trim() == "") {
+									var content = "<img src= '"+imgurl+"' style='width:148px;height:148px'><input type='hidden' name='titlePic' value='"+imgurl+"'>";
+									$(o).children("div").html(content);
+									return false;
+								} else {
+									if (i >= 4) {
+										alert("最多上传五张图");
+										c_o.checked = false;
+									}
+								}
+							});
+		} else {
+			$("#window_pic ul li")
+					.each(
+							function(i, o) {
+								var input_ = $(o).children("div").children(
+										"input");
+								if (typeof (input_) != "undefined"
+										&& input_.val() == imgurl) {
+									if (i >= 4) {
+										$(o).children("div").html("");
+									} else {
+										$(o).children("div").html("");
+										$("#window_pic ul li")
+												.each(
+														function(j, oj) {
+															if (j >= i && j < 4) {
+																var next_content = $(
+																		oj)
+																		.next()
+																		.children(
+																				"div")
+																		.html();
+																if (next_content != "") {
+																	$(oj)
+																			.children(
+																					"div")
+																			.html(
+																					next_content);
+																	$(oj)
+																			.next()
+																			.children(
+																					"div")
+																			.html(
+																					"");
+																} else {
+																	return false;
+																}
+															}
+														});
+										return false;
+									}
+								}
+							});
 		}
 	}
-	
-	//初始化文件上传功能模块
-	//$('#fileupload').fileupload(); 
+
+	function addRow(id) {
+		tr_c = $("#" + id + " tr:last");
+		td_length = tr_c.children('td').length;
+		// 		content = "<tr>" + $("#" + id + " tr:last").html() + "</tr>";
+		content = "<tr>";
+		for (i = 0; i < td_length; i++) {
+			content = content
+					+ "<td><input type=\"text\"  name='muti_att["+i+"].value' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>";
+		}
+		content = content + "</tr>"
+		// 		alert(content);
+		n_node = $(content).appendTo($("#" + id));
+		$.parser.parse(n_node);
+	};
+	var colCount = 2;
+	function addRol(id) {
+		colCount++;
+		title_n = "<td width='30'><input type='text' name='muti_att["+colCount+"].name' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
+		title_v = "<td width='30'><input type='text' name='muti_att["+colCount+"].value' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
+		$("#" + id + " tr").each(function(i, ot) {
+			if (i == 0) {
+				add_attr_c = $(title_n).appendTo(ot);
+				$.parser.parse(add_attr_c);
+			} else {
+				add_attr_c = $(title_v).appendTo(ot);
+				$.parser.parse(add_attr_c);
+			}
+		});
+	}
 </script>
 
 </head>
@@ -214,32 +272,25 @@ table {
 				<tr>
 					<td width="80">请选择分类:</td>
 					<td><input class="easyui-combobox" name="type"
-						data-options="
-        valueField: 'label',
-        textField: 'value',
-        groupField:'group',
+						data-options=" valueField: 'label',textField: 'value',
         data: [{
-            label: '充气娃娃',
+            label: '1',
             value: '充气娃娃',
-            group: '好东西'
+            selected:true
         },{
-            label: '铁锤',
-            value: '铁锤',
-            group: '好东西'
+            label: '2',
+            value: '铁锤'
         },{
-            label: '男装',
-            value: '男装',
-            group: '衣服'
+            label: '3',
+            value: '男装'
         },{
-            label: '女装',
-            value: '女装',
-            group: '衣服'
+            label: '4',
+            value: '女装'
         },{
-            label: '童装',
-            value: '童装',
-            group: '衣服'
+            label: '5',
+            value: '童装'
         },{
-            label: 'lua',
+            label: '6',
             value: 'Ruby'
         }]" />
 
@@ -247,57 +298,131 @@ table {
 				</tr>
 				<tr>
 					<td>产品标题:</td>
-					<td><input class="easyui-validatebox textbox" type="text" name="name" required validType="length[5,10]" invalidMessage="5-10个字符！" style="height: 25px; width: 300px"></input></td>
+					<td><input class="easyui-validatebox textbox" type="text"
+						name="name" required validType="length[5,10]"
+						invalidMessage="5-10个字符！" style="height: 25px; width: 300px"></input></td>
+				</tr>
+				<tr>
+					<td>商品简介:</td>
+					<td><input class="easyui-textbox" type="text" name="introduce"
+						data-options="multiline:true" required validType="length[5,10]"
+						invalidMessage="5-50个字符！" style="height: 80px; width: 300px"></input></td>
+				</tr>
+				<tr>
+					<td>商品价格:</td>
+					<td><input class="easyui-validatebox textbox" required
+						type="text" name="price" validType="length[1,10]"
+						invalidMessage="1-10个字符！" style="height: 25px; width: 100px">/元</td>
+				</tr>
+				<tr>
+					<td>商品折扣:</td>
+					<td><input class="easyui-validatebox textbox" required
+						type="text" name="offer" validType="length[1,3]"
+						invalidMessage="不能超过100！" style="height: 25px; width: 50px"
+						value="100">&nbsp;&nbsp;商品折扣(单位%，例如20，表示折扣20%)</td>
+				</tr>
+				<tr>
+					<td>商品库存:</td>
+					<td><input class="easyui-validatebox textbox" required
+						type="text" name="stock" validType="length[1,6]"
+						invalidMessage="1-6个字符！！" style="height: 25px; width: 50px"></td>
+				</tr>
+				<tr>
+					<td width="80">显示风格:</td>
+					<td><input class="easyui-combobox" name="type"
+						data-options=" valueField: 'label',textField: 'value',
+        data: [{
+            label: '1',
+            value: '横排',
+            selected:true
+        },{
+            label: '2',
+            value: '竖排'
+        }]" />
+
+					</td>
+				</tr>
+				<tr>
+					<td>快递方式:</td>
+					<td><input class="easyui-validatebox textbox" required
+						type="text" name="shippingType" validType="length[1,10]"
+						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px"></td>
+				</tr>
+				<tr>
+					<td>快递费用:</td>
+					<td><input class="easyui-validatebox textbox" required
+						type="text" name="shippingCost" validType="length[1,10]"
+						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px"></td>
+				</tr>
+				<tr>
+					<td>发货地址:</td>
+					<td><input class="easyui-validatebox textbox" required
+						type="text" name="address" validType="length[10,50]"
+						invalidMessage="10-50个字符！！" style="height: 25px; width: 400px"></td>
 				</tr>
 				<tr>
 					<td valign="top">宝贝属性:</td>
-					<td><div class="easyui-panel" style="background: #F7F7F7; width: 800px; height: 200px; padding: 10px;">
+					<td><div class="easyui-panel"
+							style="background: #F7F7F7; width: 830px; height: 300px; padding: 10px;">
 							<table id="attr_set">
 								<tr>
-									<td><span>品牌:</span> <input name="attrName" type="hidden" value="品牌"> <input name="attrValue" class="easyui-validatebox textbox" required
-										data-options="prompt:'请输入属性值...'" style="width: 80px; height: 25px"></td>
+									<td><input name="params"
+										class="easyui-validatebox textbox" required
+										data-options="prompt:'请输入属性值...'"
+										style="width: 120px; height: 25px" value="品牌:"></td>
 								</tr>
 								<tr>
-									<td><span>工艺:</span> <input name="attrName" type="hidden" value="工艺"> <input name="attrValue" class="easyui-validatebox textbox" required
-										data-options="prompt:'请输入属性值...'" style="width: 80px; height: 25px"></td>
+									<td><input name="params"
+										class="easyui-validatebox textbox" required
+										data-options="prompt:'请输入属性值...'"
+										style="width: 120px; height: 25px" value="工艺:"></td>
 								</tr>
 								<tr>
-									<td><span>风格:</span> <input name="attrName" type="hidden" value="风格"> <input name="attrValue" class="easyui-validatebox textbox" required
-										data-options="prompt:'请输入属性值...'" style="width: 80px; height: 25px"></td>
+									<td><input name="params"
+										class="easyui-validatebox textbox" required
+										data-options="prompt:'请输入属性值...'"
+										style="width: 120px; height: 25px" value="风格:"></td>
 								</tr>
 							</table>
-							<br>
-							<a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-add'" onclick="addAttr();return false;">添加基本属性</a>
-							<br>
+							<br> <a href="#" class="easyui-linkbutton"
+								data-options="iconCls:'icon-add'"
+								onclick="addAttr();return false;">添加基本属性</a> <br>
 						</div></td>
 				</tr>
 
 				<tr>
 					<td valign="top">橱窗图片:</td>
 					<td>
-						<div class="easyui-panel" style="background: #F7F7F7; width: 800px; height: 300px; padding: 10px;">
-							<div id="window_pic">
-							<ul>
-								<li>
-									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
-								</li>
-								<li>
-									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
-									
-								</li>
-								<li>
-									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
-								</li>
-								<li>
-									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
-								</li>
-								<li>
-									<div style="width:150px;height:150px;border:1px solid #0099CC;"></div>
-								</li>
-							</ul>
-						</div>
-						<div align="center" style="padding-top: 200px">
-								<button class="btn btn-primary start" type="button" onclick="openPic()">添加图片</button>
+						<div class="easyui-panel"
+							style="background: #F7F7F7; width: 830px; height: 280px;">
+							<div id="window_pic" style="padding: 10px;">
+								<ul>
+									<li>
+										<div
+											style="width: 150px; height: 150px; border: 1px solid #0099CC;"></div>
+									</li>
+									<li>
+										<div
+											style="width: 150px; height: 150px; border: 1px solid #0099CC;"></div>
+
+									</li>
+									<li>
+										<div
+											style="width: 150px; height: 150px; border: 1px solid #0099CC;"></div>
+									</li>
+									<li>
+										<div
+											style="width: 150px; height: 150px; border: 1px solid #0099CC;"></div>
+									</li>
+									<li>
+										<div
+											style="width: 150px; height: 150px; border: 1px solid #0099CC;"></div>
+									</li>
+								</ul>
+							</div>
+							<div align="center" style="padding-top: 200px">
+								<button type="button" class="easyui-linkbutton"
+									data-options="iconCls:'icon-add'" onclick="openPic()">添加图片</button>
 							</div>
 						</div>
 					</td>
@@ -306,14 +431,46 @@ table {
 				<tr>
 					<td valign="top">产品详情:</td>
 					<td>
-						<div id="p" class="easyui-panel" style="background: #F7F7F7; width: 800px; height: 200px; padding: 10px;"></div>
+						<div id="p" class="easyui-panel"
+							style="background: #F7F7F7; width: 830px; height: 200px; padding: 10px;">
+							<button type="button" onclick="addRow('m_table')">添加多属性</button>
+							<button type="button" onclick="addRol('m_table')">添加列</button>
+							<table id="m_table" border="1">
+								<tr>
+									<td width="50">名称<input type="hidden"
+										name="muti_att[0].name" value="名称"></td>
+									<td width="50">数量<input type="hidden"
+										name="muti_att[1].name" value="数量"></td>
+									<td width="50">价格<input type="hidden"
+										name="muti_att[2].name" value="价格"></td>
+									<td width="50">折扣<input type="hidden"
+										name="muti_att[3].name" value="折扣"></td>
+								</tr>
+								<tr>
+									<td><input type="text" name='muti_att[0].value'
+										class="easyui-textbox" missingMessage="该输入项不能为空" required
+										data-options="prompt:'请输入值...'" style="width:50px"></td>
+									<td><input type="text" name='muti_att[1].value'
+										class="easyui-textbox" missingMessage="该输入项不能为空" required
+										data-options="prompt:'请输入值...'" style="width:50px"></td>
+									<td><input type="text" name='muti_att[1].value'
+										class="easyui-textbox" missingMessage="该输入项不能为空" required
+										data-options="prompt:'请输入值...'" style="width:50px"></td>
+									<td><input type="text" name='muti_att[1].value'
+										class="easyui-textbox" missingMessage="该输入项不能为空" required
+										data-options="prompt:'请输入值...'" style="width:50px"></td>
+								</tr>
+							</table>
+
+						</div>
 					</td>
 				</tr>
 
 				<tr>
 					<td valign="top">细节信息:</td>
 					<td>
-						<div id="p" class="easyui-panel" style="background: #F7F7F7; width: 800px; height: 200px; padding: 10px;"></div>
+						<div id="p" class="easyui-panel"
+							style="background: #F7F7F7; width: 800px; height: 200px; padding: 10px;"></div>
 					</td>
 				</tr>
 
@@ -323,66 +480,70 @@ table {
 			</div>
 		</form>
 		<div style="text-align: center; padding: 5px">
-			<a href="javascript:void(0)" class="easyui-linkbutton" onclick="submitForm()">Submit</a> <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearForm()">Clear</a>
-		</div></div>
-		<div id="pic_select_div" style="float:left;position:absolute;left:100px;top:10px;">
+			<a href="javascript:void(0)" class="easyui-linkbutton"
+				onclick="submitForm()">Submit</a> <a href="javascript:void(0)"
+				class="easyui-linkbutton" onclick="clearForm()">Clear</a>
+		</div>
+	</div>
+	<div id="pic_select_div"
+		style="float: left; position: absolute; left: 100px; top: 10px;">
 		<div id="pic_select" class="easyui-pane">
 			<div class="container">
-    <!-- The file upload form used as target for the file upload widget -->
-    <form id="fileupload" action="upload" method="POST" enctype="multipart/form-data">
-        <!-- Redirect browsers with JavaScript disabled to the origin page -->
-        <noscript><input type="hidden" name="redirect" value="https://blueimp.github.io/jQuery-File-Upload/"></noscript>
-        <!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
-        <div class="row fileupload-buttonbar">
-            <div class="col-lg-7">
-                <!-- The fileinput-button span is used to style the file input field as button -->
-                <span class="btn btn-success fileinput-button">
-                    <i class="glyphicon glyphicon-plus"></i>
-                    <span>Add files...</span>
-                    <input type="file" name="files[]" multiple="">
-                </span>
-                <button type="submit" class="btn btn-primary start">
-                    <i class="glyphicon glyphicon-upload"></i>
-                    <span>Start upload</span>
-                </button>
-                <button type="reset" class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel upload</span>
-                </button>
-                <button type="button" class="btn btn-danger delete">
-                    <i class="glyphicon glyphicon-trash"></i>
-                    <span>Delete</span>
-                </button>
-                <input type="checkbox" class="toggle">
-                <!-- The global file processing state -->
-                <span class="fileupload-process"></span>
-            </div>
-            <!-- The global progress state -->
-            <div class="col-lg-5 fileupload-progress fade">
-            	<div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar progress-bar-success" style="width:0%;"></div>
-                </div>
-                <!-- The extended global progress state -->
-                <div class="progress-extended">&nbsp;</div>
-            </div>
-        </div>
-        <!-- The table listing the files available for upload/download -->
-        <table role="presentation" class="table table-striped"><tbody class="files"></tbody></table>
-    <br>
-    </form>
-</div>
-<!-- The blueimp Gallery widget -->
-<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
-    <div class="slides"></div>
-    <h3 class="title"></h3>
-    <a class="prev">‹</a>
-    <a class="next">›</a>
-    <a class="close">×</a>
-    <a class="play-pause"></a>
-    <ol class="indicator"></ol>
-</div>
-<!-- The template to display files available for upload -->
-<script id="template-upload" type="text/x-tmpl">
+				<!-- The file upload form used as target for the file upload widget -->
+				<form id="fileupload" action="upload" method="POST"
+					enctype="multipart/form-data">
+					<!-- Redirect browsers with JavaScript disabled to the origin page -->
+					<noscript>
+						<input type="hidden" name="redirect"
+							value="https://blueimp.github.io/jQuery-File-Upload/">
+					</noscript>
+					<!-- The fileupload-buttonbar contains buttons to add/delete files and start/cancel the upload -->
+					<div class="row fileupload-buttonbar">
+						<div class="col-lg-7">
+							<!-- The fileinput-button span is used to style the file input field as button -->
+							<span class="btn btn-success fileinput-button"><a
+								href="javascript:void(0)" class="easyui-linkbutton"
+								data-options="iconCls:'icon-add'" style="width: 80px">添加文件</a> <input
+								type="file" name="files[]" multiple=""> </span>
+							<button type="submit" class="easyui-linkbutton start"
+								data-options="iconCls:'icon-save'">开始上传</button>
+							<button type="reset" class="easyui-linkbutton cancel"
+								data-options="iconCls:'icon-remove'">取消上传</button>
+							<button type="button" class="easyui-linkbutton delete"
+								data-options="iconCls:'icon-cut'">删除选中项</button>
+							<input type="checkbox" class="toggle">
+							<!-- The global file processing state -->
+							<span class="fileupload-process"></span>
+						</div>
+						<!-- The global progress state -->
+						<div class="col-lg-5 fileupload-progress fade">
+							<div class="progress progress-striped active" role="progressbar"
+								aria-valuemin="0" aria-valuemax="100">
+								<div class="progress-bar progress-bar-success"
+									style="width: 0%;"></div>
+							</div>
+							<!-- The extended global progress state -->
+							<div class="progress-extended">&nbsp;</div>
+						</div>
+					</div>
+					<!-- The table listing the files available for upload/download -->
+					<table role="presentation" class="table table-striped">
+						<tbody class="files"></tbody>
+					</table>
+					<br>
+				</form>
+			</div>
+			<!-- The blueimp Gallery widget -->
+			<div id="blueimp-gallery"
+				class="blueimp-gallery blueimp-gallery-controls" data-filter=":even">
+				<div class="slides"></div>
+				<h3 class="title"></h3>
+				<a class="prev">‹</a> <a class="next">›</a> <a class="close">×</a> <a
+					class="play-pause"></a>
+				<ol class="indicator"></ol>
+			</div>
+			<!-- The template to display files available for upload -->
+			<script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
         <td style="width:200px">
@@ -398,23 +559,17 @@ table {
         </td>
         <td>
             {% if (!i && !o.options.autoUpload) { %}
-                <button class="btn btn-primary start" disabled>
-                    <i class="glyphicon glyphicon-upload"></i>
-                    <span>Start</span>
-                </button>
+ 				<button class="easyui-linkbutton start" data-options="iconCls:'icon-save'">上传</button>
             {% } %}
             {% if (!i) { %}
-                <button class="btn btn-warning cancel">
-                    <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel</span>
-                </button>
+                <button class="easyui-linkbutton cancel" data-options="iconCls:'icon-remove'">取消</button>
             {% } %}
         </td>
     </tr>
 {% } %}
 </script>
-<!-- The template to display files available for download -->
-<script id="template-download" type="text/x-tmpl">
+			<!-- The template to display files available for download -->
+			<script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
         <td style="width:200px">
@@ -453,13 +608,9 @@ table {
         </td>
     </tr>
 {% } %}
-</script>											
-</div>
-</div>
-	
-
-	
-	<!-- The main application script -->
-<script src="js/main.js"></script>
+</script>
+		</div>
+	</div>
+	<script src="js/main.js"></script>
 </body>
 </html>
