@@ -76,10 +76,10 @@
 		class="com.igame.security.manager.CustomSimpleMappingExceptionResolver">
 		<property name="exceptionMappings">
 			<props>
-				<prop key="com.igame.commons.util.SystemException">commons/error/500</prop>
-				<prop key="com.igame.commons.util.BusinessException">commons/error/errorpage</prop>
-				<prop key="java.lang.exception">commons/error/500</prop>
-				<prop key="org.springframework.security.access.AccessDeniedException">commons/error/403</prop>
+				<prop key="com.igame.commons.util.SystemException">500</prop>
+				<prop key="com.igame.commons.util.BusinessException">500</prop>
+				<prop key="java.lang.exception">500</prop>
+				<prop key="org.springframework.security.access.AccessDeniedException">500</prop>
 			</props>
 		</property>
 	</bean>

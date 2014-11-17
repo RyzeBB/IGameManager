@@ -1,10 +1,12 @@
 package com.igame.app.entity;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.annotation.JSONField;
 
 public class GoodsEntity implements JsonEntity {
 	private int id;// 商品ID
@@ -15,10 +17,14 @@ public class GoodsEntity implements JsonEntity {
 	private int price;// 商品原始价格
 	private int offer;// 商品折扣(单位%，例如20，表示折扣20%)
 	private String unit;// 价格单位
+	@JSONField(serialize = false)
 	private String mulVa1Json;// 多属性
 	private String icon;// 商品icon(根据排版风格1，风格2， 该Icon的 尺寸要求不一样)
+	@JSONField(serialize = false)
 	private String titlePicJson;// /商品主图片下载URL(可以有12张图片)
+	@JSONField(serialize = false)
 	private String detailePicJson;// 商品详情图片下载URL
+	@JSONField(serialize = false)
 	private String paramsJson;// 商品详细参数介绍
 	private String address;// 商品发货地
 	private int stock;// 商品库存
@@ -30,7 +36,7 @@ public class GoodsEntity implements JsonEntity {
 	private String serviecTel;// 客服电话/或微信号/或QQ号
 
 	// 原始对象操作
-	private List<MulVal> mulVa1;
+	private List<Map> mulVal;
 	private List<String> titlePic;
 	private List<String> detailePic;
 	private List<String> params;
@@ -38,7 +44,28 @@ public class GoodsEntity implements JsonEntity {
 	@Override
 	public void decode() {
 		if (StringUtils.isNotEmpty(mulVa1Json)) {
-			mulVa1 = JSON.parseArray(mulVa1Json, MulVal.class);
+			// List<JSONObject> array = JSON.parseArray(mulVa1Json,
+			// JSONObject.class);
+			// mulName = new ArrayList<String>();
+			// if (array.size() > 0) {
+			// int i = 0;
+			// for (JSONObject jsonObject : array) {
+			// if (i == 0) {
+			// Set<String> keys = jsonObject.keySet();
+			// for (String key : keys) {
+			// mulName.add(key);
+			// }
+			// }
+			// MulVal mulVal2 = new MulVal();
+			// List<String> vals = new ArrayList<String>();
+			// Collection<Object> obj = jsonObject.values();
+			// for (Object object : obj) {
+			// vals.add((String) object);
+			// }
+			// mulVal2.setValues(vals);
+			// }
+			// }
+			mulVal = JSON.parseArray(mulVa1Json, Map.class);
 		}
 
 		if (StringUtils.isNotEmpty(titlePicJson)) {
@@ -55,8 +82,8 @@ public class GoodsEntity implements JsonEntity {
 
 	@Override
 	public void encode() {
-		if (mulVa1 != null && !mulVa1.isEmpty()) {
-			mulVa1Json = JSON.toJSONString(mulVa1);
+		if (mulVal != null && !mulVal.isEmpty()) {
+			mulVa1Json = JSON.toJSONString(mulVal);
 		}
 		if (titlePic != null && !titlePic.isEmpty()) {
 			titlePicJson = JSON.toJSONString(titlePic);
@@ -237,12 +264,12 @@ public class GoodsEntity implements JsonEntity {
 		this.serviecTel = serviecTel;
 	}
 
-	public List<MulVal> getMulVa1() {
-		return mulVa1;
+	public List<Map> getMulVal() {
+		return mulVal;
 	}
 
-	public void setMulVa1(List<MulVal> mulVa1) {
-		this.mulVa1 = mulVa1;
+	public void setMulVal(List<Map> mulVal) {
+		this.mulVal = mulVal;
 	}
 
 	public List<String> getTitlePic() {

@@ -10,7 +10,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<org.springframework.security.version>3.2.5.RELEASE</org.springframework.security.version>
-		<org.springframework.version>3.2.11.RELEASE</org.springframework.version>
+		<org.springframework.version>3.2.3.RELEASE</org.springframework.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -175,6 +175,11 @@
 			<groupId>org.imgscalr</groupId>
 			<artifactId>imgscalr-lib</artifactId>
 			<version>4.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.5</version>
 		</dependency>
 	</dependencies>
 	<build>

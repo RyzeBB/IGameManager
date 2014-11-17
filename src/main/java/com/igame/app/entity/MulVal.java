@@ -1,26 +1,17 @@
 package com.igame.app.entity;
 
-import java.util.List;
 import java.util.Map;
 
 public class MulVal {
-	private String mulValName;
-	private List<Map<String, String>> attr;
+	private Map<String,String> values;
 
-	public String getMulValName() {
-		return mulValName;
+	public Map<String, String> getValues() {
+		return values;
 	}
 
-	public void setMulValName(String mulValName) {
-		this.mulValName = mulValName;
+	public void setValues(Map<String, String> values) {
+		this.values = values;
 	}
 
-	public List<Map<String, String>> getAttr() {
-		return attr;
-	}
-
-	public void setAttr(List<Map<String, String>> attr) {
-		this.attr = attr;
-	}
 
 }

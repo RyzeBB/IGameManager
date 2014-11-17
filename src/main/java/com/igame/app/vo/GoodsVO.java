@@ -11,11 +11,11 @@ public class GoodsVO {
 	private int price;// 商品原始价格
 	private int offer;// 商品折扣(单位%，例如20，表示折扣20%)
 	private String unit = "元";// 价格单位
-	private MutiAttr[] muti_att;// 多属性
+	// private String mulVa1Json;// 多属性
 	private String icon;// 商品icon(根据排版风格1，风格2， 该Icon的 尺寸要求不一样)
-	private List<String> titlePic;// /商品主图片下载URL(可以有12张图片)
-	private List<String> detailePic;// 商品详情图片下载URL
-	private List<String> params;// 商品详细参数介绍
+	// private String titlePicJson;// /商品主图片下载URL(可以有12张图片)
+	// private String detailePicJson;// 商品详情图片下载URL
+	// private String paramsJson;// 商品详细参数介绍
 	private String address;// 商品发货地
 	private int stock;// 商品库存
 	private int saleCount;// 已出售商品个数
@@ -24,6 +24,21 @@ public class GoodsVO {
 	private int disStyle;// 显示风格
 	private String serviecType;// 客服方式，1为电话，2为微信号，3为QQ号
 	private String serviecTel;// 客服电话/或微信号/或QQ号
+
+	// 原始对象操作
+	private List<MutiAttr> mulVal;
+	private List<String> mulName;
+	private List<String> titlePic;
+	private List<String> detailePic;
+	private List<String> params;
+
+	public List<String> getMulName() {
+		return mulName;
+	}
+
+	public void setMulName(List<String> mulName) {
+		this.mulName = mulName;
+	}
 
 	public int getId() {
 		return id;
@@ -89,44 +104,12 @@ public class GoodsVO {
 		this.unit = unit;
 	}
 
-	public MutiAttr[] getMuti_att() {
-		return muti_att;
-	}
-
-	public void setMuti_att(MutiAttr[] muti_att) {
-		this.muti_att = muti_att;
-	}
-
 	public String getIcon() {
 		return icon;
 	}
 
 	public void setIcon(String icon) {
 		this.icon = icon;
-	}
-
-	public List<String> getTitlePic() {
-		return titlePic;
-	}
-
-	public void setTitlePic(List<String> titlePic) {
-		this.titlePic = titlePic;
-	}
-
-	public List<String> getDetailePic() {
-		return detailePic;
-	}
-
-	public void setDetailePic(List<String> detailePic) {
-		this.detailePic = detailePic;
-	}
-
-	public List<String> getParams() {
-		return params;
-	}
-
-	public void setParams(List<String> params) {
-		this.params = params;
 	}
 
 	public String getAddress() {
@@ -193,4 +176,35 @@ public class GoodsVO {
 		this.serviecTel = serviecTel;
 	}
 
+	public List<MutiAttr> getMulVal() {
+		return mulVal;
+	}
+
+	public void setMulVal(List<MutiAttr> mulVal) {
+		this.mulVal = mulVal;
+	}
+
+	public List<String> getTitlePic() {
+		return titlePic;
+	}
+
+	public void setTitlePic(List<String> titlePic) {
+		this.titlePic = titlePic;
+	}
+
+	public List<String> getDetailePic() {
+		return detailePic;
+	}
+
+	public void setDetailePic(List<String> detailePic) {
+		this.detailePic = detailePic;
+	}
+
+	public List<String> getParams() {
+		return params;
+	}
+
+	public void setParams(List<String> params) {
+		this.params = params;
+	}
 }

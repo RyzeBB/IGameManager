@@ -16,8 +16,10 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import com.igame.security.entity.SecModule;
 import com.igame.security.entity.SecUser;
 import com.igame.security.service.SecUserService;
+
 /**
  * 登录成功后 业务处理（代替了loginController,可考虑采用controller）
+ * 
  * @author Allen
  */
 public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -32,9 +34,9 @@ public class MyAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucce
 		if (secUser != null) {
 			HttpSession session = request.getSession();
 			session.setAttribute("user", secUser);
-			List<SecModule> secModules =  secUserService.getModuleByUserId(myUser.getUserId());
-			logger.debug("===================== 可访问资源的个数:{}================= ",secModules.size());
-			session.setAttribute("modules",secModules);
+			List<SecModule> secModules = secUserService.getModuleByUserId(myUser.getUserId());
+			logger.debug("===================== 可访问资源的个数:{}================= ", secModules.size());
+			session.setAttribute("modules", secModules);
 		}
 		logger.debug("======= MyAuthenticationSuccessHandler 登录成功处理 =========== username = " + myUser.getUsername() + " , userid = " + myUser.getUserId());
 		super.onAuthenticationSuccess(request, response, authentication);

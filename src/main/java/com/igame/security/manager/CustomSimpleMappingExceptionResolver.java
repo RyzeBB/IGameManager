@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.validation.BindException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
@@ -19,9 +21,10 @@ import com.igame.commons.util.SystemException;
  * @author Allen
  */
 public class CustomSimpleMappingExceptionResolver extends SimpleMappingExceptionResolver {
-
+	private static final Logger logger = LoggerFactory.getLogger(CustomSimpleMappingExceptionResolver.class);
 	@Override
 	protected ModelAndView doResolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+		logger.error("doResolveException",ex);
 		// Expose ModelAndView for chosen error view.
 		String viewName = determineViewName(ex, request);
 		if (viewName != null) {
@@ -53,25 +56,27 @@ public class CustomSimpleMappingExceptionResolver extends SimpleMappingException
 			}
 		} else {// ajax请求方式
 			// JSP格式返回
-			if (!(request.getHeader("accept").indexOf("application/json") > -1 || (request.getHeader("X-Requested-With") != null && request.getHeader("X-Requested-With").indexOf("XMLHttpRequest") > -1))) {
-				
-				 Map<String, Object> model = new HashMap<String, Object>();  
-			        model.put("ex", ex);  
-			        // 根据不同错误转向不同页面  
-			        if(ex instanceof BusinessException) {  
-			            return new ModelAndView("commons/error/errorpage", model);  
-			        }else if(ex instanceof SystemException) {  
-			            return new ModelAndView("commons/error/500", model);  
-			        } else {  
-			            return new ModelAndView("commons/error/errorpage", model);  
-			        }  
+			if (!(request.getHeader("accept").indexOf("application/json") > -1 || (request
+					.getHeader("X-Requested-With") != null && request
+					.getHeader("X-Requested-With").indexOf("XMLHttpRequest") > -1))) {
+
+				Map<String, Object> model = new HashMap<String, Object>();
+				model.put("ex", ex);
+				// 根据不同错误转向不同页面
+				if (ex instanceof BusinessException) {
+					return new ModelAndView("commons/error/errorpage", model);
+				} else if (ex instanceof SystemException) {
+					return new ModelAndView("commons/error/500", model);
+				} else {
+					return new ModelAndView("commons/error/errorpage", model);
+				}
 			} else {// JSON格式返回
 				try {
 					response.setContentType("text/html;charset=UTF-8");
 					PrintWriter writer = response.getWriter();
-					if(ex instanceof BindException){
+					if (ex instanceof BindException) {
 						writer.write("参数异常...");
-					}else{
+					} else {
 						writer.write(ex.getMessage());
 					}
 					writer.flush();

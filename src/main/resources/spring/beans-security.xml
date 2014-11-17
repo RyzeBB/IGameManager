@@ -46,7 +46,7 @@
 	</http>
 	<!-- 权限异常处理 -->
 	<beans:bean id="accessDeniedHandler" class="com.igame.security.manager.MyAccessDeniedHandlerImpl">
-		<beans:property name="accessDeniedUrl" value="/commons/error/403.jsp" />
+		<beans:property name="accessDeniedUrl" value="/403.jsp" />
 	</beans:bean>
 
 	<!-- 配置过滤器 -->

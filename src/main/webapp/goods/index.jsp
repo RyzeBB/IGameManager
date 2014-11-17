@@ -117,10 +117,10 @@ table {
 	};
 
 	function submitForm() {
-		tag = $('#ff').form('validate');
+		tag = $('#fbean').form('validate');
 		if (tag) {
-			$('#ff').submit();
-// 			jsonuserinfo = $("#ff").serializeObject();
+			$('#fbean').submit();
+			// 			jsonuserinfo = $("#ff").serializeObject();
 			// 			var jsonuserinfo = $('#ff').serializeObject();
 			// 			$.ajaxSetup({
 			// 				contentType : 'application/json;charset=utf-8'
@@ -148,7 +148,7 @@ table {
 		alert(cdata);
 	}
 	function clearForm() {
-		$('#ff').form('clear');
+		$('#fbean').form('clear');
 	}
 
 	function addAttr() {
@@ -229,15 +229,16 @@ table {
 							});
 		}
 	}
-
+	var rowCount = 1;//属性行数
 	function addRow(id) {
 		tr_c = $("#" + id + " tr:last");
 		td_length = tr_c.children('td').length;
 		// 		content = "<tr>" + $("#" + id + " tr:last").html() + "</tr>";
 		content = "<tr>";
+		temp = "<td><input type=\"text\"  name='mulVal["+rowCount+"].values' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>";
+		rowCount++;
 		for (i = 0; i < td_length; i++) {
-			content = content
-					+ "<td><input type=\"text\"  name='muti_att["+i+"].value' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>";
+			content = content + temp;
 		}
 		content = content + "</tr>"
 		// 		alert(content);
@@ -247,17 +248,22 @@ table {
 	var colCount = 2;
 	function addRol(id) {
 		colCount++;
-		title_n = "<td width='30'><input type='text' name='muti_att["+colCount+"].name' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
-		title_v = "<td width='30'><input type='text' name='muti_att["+colCount+"].value' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
-		$("#" + id + " tr").each(function(i, ot) {
-			if (i == 0) {
-				add_attr_c = $(title_n).appendTo(ot);
-				$.parser.parse(add_attr_c);
-			} else {
-				add_attr_c = $(title_v).appendTo(ot);
-				$.parser.parse(add_attr_c);
-			}
-		});
+		title_n = "<td width='30'><input type='text' name='mulName' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
+
+		$("#" + id + " tr")
+				.each(
+						function(i, ot) {
+							if (i == 0) {
+								add_attr_c = $(title_n).appendTo(ot);
+								$.parser.parse(add_attr_c);
+							} else {
+								title_v = "<td width='30'><input type='text' name='mulVal["
+										+ (i - 1)
+										+ "].values' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
+								add_attr_c = $(title_v).appendTo(ot);
+								$.parser.parse(add_attr_c);
+							}
+						});
 	}
 </script>
 
@@ -267,7 +273,7 @@ table {
 
 	<div style="padding: 10px 60px 20px 20px">
 
-		<form id="ff" method="post" action="goods/createGoods">
+		<form id="fbean" method="POST" action="goods/createGoods">
 			<table cellpadding="5">
 				<tr>
 					<td width="80">请选择分类:</td>
@@ -329,7 +335,7 @@ table {
 				</tr>
 				<tr>
 					<td width="80">显示风格:</td>
-					<td><input class="easyui-combobox" name="type"
+					<td><input class="easyui-combobox" name="disStyle"
 						data-options=" valueField: 'label',textField: 'value',
         data: [{
             label: '1',
@@ -353,6 +359,18 @@ table {
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="shippingCost" validType="length[1,10]"
 						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px"></td>
+				</tr>
+				<tr>
+					<td>联系方式:</td>
+					<td><input class="easyui-validatebox textbox" required
+						type="text" name="serviecType" validType="length[1,10]"
+						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px" value="QQ"></td>
+				</tr>
+				<tr>
+					<td>联系号码:</td>
+					<td><input class="easyui-validatebox textbox" required
+						type="text" name="serviecTel" validType="length[1,15]"
+						invalidMessage="1-15个字符！！" style="height: 25px; width: 60px"></td>
 				</tr>
 				<tr>
 					<td>发货地址:</td>
@@ -435,30 +453,30 @@ table {
 							style="background: #F7F7F7; width: 830px; height: 200px; padding: 10px;">
 							<button type="button" onclick="addRow('m_table')">添加多属性</button>
 							<button type="button" onclick="addRol('m_table')">添加列</button>
-							<table id="m_table" border="1">
+							<table id="m_table" border="1px" cellspacing="0px" bordercolor="#000000" style="border-collapse:collapse">
 								<tr>
-									<td width="50">名称<input type="hidden"
-										name="muti_att[0].name" value="名称"></td>
-									<td width="50">数量<input type="hidden"
-										name="muti_att[1].name" value="数量"></td>
-									<td width="50">价格<input type="hidden"
-										name="muti_att[2].name" value="价格"></td>
-									<td width="50">折扣<input type="hidden"
-										name="muti_att[3].name" value="折扣"></td>
+									<td width="50">名称<input type="hidden" name="mulName"
+										value="名称"></td>
+									<td width="50">数量<input type="hidden" name="mulName"
+										value="数量"></td>
+									<td width="50">价格<input type="hidden" name="mulName"
+										value="价格"></td>
+									<td width="50">折扣<input type="hidden" name="mulName"
+										value="折扣"></td>
 								</tr>
 								<tr>
-									<td><input type="text" name='muti_att[0].value'
+									<td><input type="text" name='mulVal[0].values'
 										class="easyui-textbox" missingMessage="该输入项不能为空" required
-										data-options="prompt:'请输入值...'" style="width:50px"></td>
-									<td><input type="text" name='muti_att[1].value'
+										data-options="prompt:'请输入值...'" style="width: 50px"></td>
+									<td><input type="text" name='mulVal[0].values'
 										class="easyui-textbox" missingMessage="该输入项不能为空" required
-										data-options="prompt:'请输入值...'" style="width:50px"></td>
-									<td><input type="text" name='muti_att[1].value'
+										data-options="prompt:'请输入值...'" style="width: 50px"></td>
+									<td><input type="text" name='mulVal[0].values'
 										class="easyui-textbox" missingMessage="该输入项不能为空" required
-										data-options="prompt:'请输入值...'" style="width:50px"></td>
-									<td><input type="text" name='muti_att[1].value'
+										data-options="prompt:'请输入值...'" style="width: 50px"></td>
+									<td><input type="text" name='mulVal[0].values'
 										class="easyui-textbox" missingMessage="该输入项不能为空" required
-										data-options="prompt:'请输入值...'" style="width:50px"></td>
+										data-options="prompt:'请输入值...'" style="width: 50px"></td>
 								</tr>
 							</table>
 

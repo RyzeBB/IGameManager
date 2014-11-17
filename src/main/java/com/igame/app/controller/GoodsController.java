@@ -25,12 +25,14 @@ package com.igame.app.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.alibaba.fastjson.JSON;
+import com.igame.app.service.GoodsService;
 import com.igame.app.vo.GoodsVO;
 
 /**
@@ -40,23 +42,30 @@ import com.igame.app.vo.GoodsVO;
 @Controller
 @RequestMapping("/goods")
 public class GoodsController {
+	@Autowired
+	private GoodsService goodsService;
 
 	private static final Logger log = LoggerFactory.getLogger(GoodsController.class);
 
-//	@RequestMapping(value = "/createGoods", method = RequestMethod.POST,produces="application/json")
-//	@ResponseBody
-//	public String createGoods(@RequestBody GoodsVO goodsVO) {
-//		log.debug("====== +++++++++" );
-////		System.out.println(goodsVO.toJSONString());
-//		System.out.println(JSON.toJSON(goodsVO));
-//		return "hello";
-//	}
-	
+	// @RequestMapping(value = "/createGoods", method =
+	// RequestMethod.POST,produces="application/json")
+	// @ResponseBody
+	// public String createGoods(@RequestBody GoodsVO goodsVO) {
+	// log.debug("====== +++++++++" );
+	// // System.out.println(goodsVO.toJSONString());
+	// System.out.println(JSON.toJSON(goodsVO));
+	// return "hello";
+	// }
+
 	@RequestMapping(value = "/createGoods", method = RequestMethod.POST)
 	public String createGoods(@ModelAttribute("ff") GoodsVO goodsVO) {
-		log.debug("====== +++++++++" );
+		log.debug("====== +++++++++");
 		String json = JSON.toJSONString(goodsVO);
+		// GoodsEntity
 		System.out.println(json);
+		goodsService.addGoods(goodsVO);
+		// goodsEntity.encode();
+		System.out.println("================");
 		return "goods/success";
 	}
 
