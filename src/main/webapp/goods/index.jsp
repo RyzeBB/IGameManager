@@ -158,19 +158,23 @@ table {
 		var add_attr_c = $(content).appendTo("#attr_set");
 		$.parser.parse(add_attr_c);
 	}
-
-	function openPic() {
-		$("#pic_select").panel("open");
+	var img_zone = "window_pic";
+	function openPic(param) {
+		img_zone = param;
+		$("#pic_select").show();
 		var e = window.event || arguments[0];
 		var y = e.pageY || e.clientY + document.documentElement.scrollTop;
-		$("#pic_select_div").css({
+		y = y+20;
+		$("#pic_select").css({
 			'top' : y + 'px'
 		});
 	}
-
-	function choose_img(imgurl, c_o) {
-		if (c_o.checked) {
-			$("#window_pic ul li")
+	function closePic() {
+		$("#pic_select").hide();
+	}
+	
+	function choose_img(imgurl) {
+			$("#"+img_zone+" ul li")
 					.each(
 							function(i, o) {
 								if ($(o).children("div").html().trim() == "") {
@@ -184,50 +188,50 @@ table {
 									}
 								}
 							});
-		} else {
-			$("#window_pic ul li")
-					.each(
-							function(i, o) {
-								var input_ = $(o).children("div").children(
-										"input");
-								if (typeof (input_) != "undefined"
-										&& input_.val() == imgurl) {
-									if (i >= 4) {
-										$(o).children("div").html("");
-									} else {
-										$(o).children("div").html("");
-										$("#window_pic ul li")
-												.each(
-														function(j, oj) {
-															if (j >= i && j < 4) {
-																var next_content = $(
-																		oj)
-																		.next()
-																		.children(
-																				"div")
-																		.html();
-																if (next_content != "") {
-																	$(oj)
-																			.children(
-																					"div")
-																			.html(
-																					next_content);
-																	$(oj)
-																			.next()
-																			.children(
-																					"div")
-																			.html(
-																					"");
-																} else {
-																	return false;
-																}
-															}
-														});
-										return false;
-									}
-								}
-							});
-		}
+// 		} else {
+// 			$("#window_pic ul li")
+// 					.each(
+// 							function(i, o) {
+// 								var input_ = $(o).children("div").children(
+// 										"input");
+// 								if (typeof (input_) != "undefined"
+// 										&& input_.val() == imgurl) {
+// 									if (i >= 4) {
+// 										$(o).children("div").html("");
+// 									} else {
+// 										$(o).children("div").html("");
+// 										$("#window_pic ul li")
+// 												.each(
+// 														function(j, oj) {
+// 															if (j >= i && j < 4) {
+// 																var next_content = $(
+// 																		oj)
+// 																		.next()
+// 																		.children(
+// 																				"div")
+// 																		.html();
+// 																if (next_content != "") {
+// 																	$(oj)
+// 																			.children(
+// 																					"div")
+// 																			.html(
+// 																					next_content);
+// 																	$(oj)
+// 																			.next()
+// 																			.children(
+// 																					"div")
+// 																			.html(
+// 																					"");
+// 																} else {
+// 																	return false;
+// 																}
+// 															}
+// 														});
+// 										return false;
+// 									}
+// 								}
+// 							});
+// 		}
 	}
 	var rowCount = 1;//属性行数
 	function addRow(id) {
@@ -438,9 +442,11 @@ table {
 									</li>
 								</ul>
 							</div>
-							<div align="center" style="padding-top: 200px">
+							<div align="center" style="padding-top: 150px">
 								<button type="button" class="easyui-linkbutton"
-									data-options="iconCls:'icon-add'" onclick="openPic()">添加图片</button>
+									data-options="iconCls:'icon-add'" onclick="openPic('window_pic')">添加图片</button>
+									<button type="button" class="easyui-linkbutton"
+									data-options="iconCls:'icon-add'" onclick="closePic()">关闭界面</button>
 							</div>
 						</div>
 					</td>
@@ -503,9 +509,61 @@ table {
 				class="easyui-linkbutton" onclick="clearForm()">Clear</a>
 		</div>
 	</div>
-	<div id="pic_select_div"
-		style="float: left; position: absolute; left: 100px; top: 10px;">
-		<div id="pic_select" class="easyui-pane">
+	
+	<div id="pic_select" style="width:890px;height:500px;float:left;position:absolute;left:100px;top:10px;">
+	<div class="easyui-tabs" style="width:850px;" data-options="tools:'#tab-tools'">
+		<div title="选择图片" style="padding: 10px">
+			<div id="pic_content"
+				style="width: 800px; height: 335px; border: 1px solid #8CC1ED;">
+				<ul>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+					</li>
+					<li>
+						<div
+							style="width: 150px; height: 150px; border: 1px solid #0099CC; margin-top: 10px;"></div>
+					</li>
+				</ul>
+			</div>
+			<div id="pp" class="easyui-pagination"></div>
+		</div>
+		<div title="上传图片" style="padding: 10px">
+			<div id="pic_select_div" style="width: 800px; height: 335px; border: 1px solid #8CC1ED;">
 			<div class="container">
 				<!-- The file upload form used as target for the file upload widget -->
 				<form id="fileupload" action="upload" method="POST"
@@ -563,12 +621,12 @@ table {
 			<!-- The template to display files available for upload -->
 			<script id="template-upload" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
+
     <tr class="template-upload fade">
         <td style="width:200px">
             <span class="preview"></span>
         </td>
         <td style="width:100px">
-            <input type="checkbox" disabled="disabled">
             <strong class="error text-danger"></strong>
         </td>
         <td>
@@ -576,9 +634,15 @@ table {
             <div class="progress progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="progress-bar progress-bar-success" style="width:0%;"></div></div>
         </td>
         <td>
+	{% if (file.error || !o.options.autoUpload) { %}  
+       <button class="start" disabled=true>上传</button> 
+    {% } else { %}  
+		<button class="start">上传</button>
+ 	{% } %}  
             {% if (!i && !o.options.autoUpload) { %}
- 				<button class="easyui-linkbutton start" data-options="iconCls:'icon-save'">上传</button>
+ 				
             {% } %}
+			
             {% if (!i) { %}
                 <button class="easyui-linkbutton cancel" data-options="iconCls:'icon-remove'">取消</button>
             {% } %}
@@ -598,13 +662,8 @@ table {
             </span>
         </td>
         <td style="width:100px">
-                {% if (file.url) { %}
-                    <input type="checkbox" onclick="choose_img('{%=file.url%}',this)">
-                {% } else { %}
-                    <input type="checkbox" disabled="disabled">
-                {% } %}
             {% if (file.error) { %}
-                <div><span class="label label-danger">Error</span> {%=file.error%}</div>
+                <div><span class="label label-danger">错误</span> {%=file.error%}</div>
             {% } %}
         </td>
         <td>
@@ -614,13 +673,13 @@ table {
             {% if (file.deleteUrl) { %}
                 <button class="btn btn-danger delete" data-type="{%=file.deleteType%}" data-url="{%=file.deleteUrl%}"{% if (file.deleteWithCredentials) { %} data-xhr-fields='{"withCredentials":true}'{% } %}>
                     <i class="glyphicon glyphicon-trash"></i>
-                    <span>Delete</span>
+                    <span>删除</span>
                 </button>
                 <input type="checkbox" name="delete" value="1" class="toggle">
             {% } else { %}
                 <button class="btn btn-warning cancel">
                     <i class="glyphicon glyphicon-ban-circle"></i>
-                    <span>Cancel</span>
+                    <span>取消</span>
                 </button>
             {% } %}
         </td>
@@ -628,7 +687,38 @@ table {
 {% } %}
 </script>
 		</div>
+		</div>
 	</div>
+	<div id="tab-tools">
+        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'" onclick="closePic()"></a>
+    </div>
+	</div>
+	<script type="text/javascript">
+		$('#pp').pagination({
+			total : 100,
+			layout : [ 'first', 'prev', 'next', 'last', 'refresh' ],
+			showPageList : false,
+			showRefresh : false,
+			displayMsg : '',
+			onSelectPage : function(pageNumber, pageSize) {
+				$.get("upload?pageNumber="+pageNumber+"&pageSize="+pageSize, function(data){
+				 var json = eval('('+data+')');    
+					console.info(json);
+					console.info(json.files);
+					 $.each(json.files, function (index, item) {  
+		                 //循环获取数据    
+		                 img_url = item.thumbnailUrl;
+		                 img_content = "<img src='"+item.thumbnailUrl+"'style='width:148px;height:148px' onclick=choose_img('"+item.thumbnailUrl+"')>"
+		                 $("#pic_content ul li:eq("+index+")").children("div").html(img_content);
+						console.info(JSON.stringify(item));
+// 		                 $("#list").html($("#list").html() + "<br>" + name + " - " + idnumber + " - " + sex + "<br/>");  
+		             });  
+					//$("#pic_content").html("HELLO");
+				});
+			}
+		});
+		
+	</script>
 	<script src="js/main.js"></script>
 </body>
 </html>
