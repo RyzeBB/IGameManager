@@ -8,7 +8,7 @@ public class GoodsVO {
 	private String typeName;// 商品类型名称
 	private String name;// 商品名称
 	private String introduce;// 商品简介
-	private int price;// 商品原始价格
+	private double price;// 商品原始价格
 	private int offer;// 商品折扣(单位%，例如20，表示折扣20%)
 	private String unit = "元";// 价格单位
 	// private String mulVa1Json;// 多属性
@@ -80,11 +80,11 @@ public class GoodsVO {
 		this.introduce = introduce;
 	}
 
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 

@@ -25,13 +25,13 @@ package com.igame.app.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.SelectProvider;
 
 import com.igame.app.entity.GoodsEntity;
-import com.igame.app.entity.Image;
+import com.igame.app.mapper.provider.GoodsMapperProvider;
 
 /**
  *
@@ -41,6 +41,9 @@ public interface GoodsMapper {
 
 	@Select("SELECT id,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods")
 	public List<GoodsEntity> list();
+
+	@SelectProvider(type = GoodsMapperProvider.class, method = "listByIds")
+	public List<GoodsEntity> listByIds(List<Long> ids);
 
 	@Insert("INSERT INTO t_goods(type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel) VALUES(#{type},#{name},#{introduce},#{price},#{offer},#{unit},#{mulVa1Json},#{icon},#{titlePicJson},#{detailePicJson},#{paramsJson},#{address},#{stock},#{saleCount},#{shippingType},#{shippingCost},#{disStyle},#{serviecType},#{serviecTel})")
 	@Options(useGeneratedKeys = true, keyProperty = "id")

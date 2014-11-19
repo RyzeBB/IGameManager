@@ -1,7 +1,6 @@
 package com.igame.app.entity;
 
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,12 +8,16 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 
 public class GoodsEntity implements JsonEntity {
-	private int id;// 商品ID
+	private long id;// 商品ID
+	@JSONField(serialize = false)
+	private long appid;// 商家id
+	//是否为人气王商品
+//	private int hot;
 	private int type;// 商品类型ID
 	private String typeName;// 商品类型名称
 	private String name;// 商品名称
 	private String introduce;// 商品简介
-	private int price;// 商品原始价格
+	private double price;// 商品原始价格
 	private int offer;// 商品折扣(单位%，例如20，表示折扣20%)
 	private String unit;// 价格单位
 	@JSONField(serialize = false)
@@ -36,7 +39,7 @@ public class GoodsEntity implements JsonEntity {
 	private String serviecTel;// 客服电话/或微信号/或QQ号
 
 	// 原始对象操作
-	private List<Map> mulVal;
+	private List<MulVal> mulVal;
 	private List<String> titlePic;
 	private List<String> detailePic;
 	private List<String> params;
@@ -65,7 +68,7 @@ public class GoodsEntity implements JsonEntity {
 			// mulVal2.setValues(vals);
 			// }
 			// }
-			mulVal = JSON.parseArray(mulVa1Json, Map.class);
+			mulVal = JSON.parseArray(mulVa1Json, MulVal.class);
 		}
 
 		if (StringUtils.isNotEmpty(titlePicJson)) {
@@ -94,14 +97,6 @@ public class GoodsEntity implements JsonEntity {
 		if (params != null && !params.isEmpty()) {
 			paramsJson = JSON.toJSONString(params);
 		}
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public int getType() {
@@ -136,11 +131,11 @@ public class GoodsEntity implements JsonEntity {
 		this.introduce = introduce;
 	}
 
-	public int getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(int price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
@@ -264,11 +259,11 @@ public class GoodsEntity implements JsonEntity {
 		this.serviecTel = serviecTel;
 	}
 
-	public List<Map> getMulVal() {
+	public List<MulVal> getMulVal() {
 		return mulVal;
 	}
 
-	public void setMulVal(List<Map> mulVal) {
+	public void setMulVal(List<MulVal> mulVal) {
 		this.mulVal = mulVal;
 	}
 
@@ -294,6 +289,22 @@ public class GoodsEntity implements JsonEntity {
 
 	public void setParams(List<String> params) {
 		this.params = params;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getAppid() {
+		return appid;
+	}
+
+	public void setAppid(long appid) {
+		this.appid = appid;
 	}
 
 }

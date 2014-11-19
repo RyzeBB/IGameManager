@@ -8,8 +8,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSON;
 import com.igame.app.entity.GoodsEntity;
+import com.igame.app.entity.MulVal;
 import com.igame.app.mapper.GoodsMapper;
+import com.igame.app.mapper.HotGoodsMapper;
 import com.igame.app.vo.GoodsVO;
 import com.igame.app.vo.MutiAttr;
 
@@ -17,7 +20,12 @@ import com.igame.app.vo.MutiAttr;
 public class GoodsService {
 	@Autowired
 	private GoodsMapper goodsMapper;
-	
+	@Autowired
+	private HotGoodsMapper hotGoodsMapper;
+
+	/**
+	 * @param 添加商品
+	 */
 	public void addGoods(GoodsVO goodsVO) {
 		GoodsEntity entity = new GoodsEntity();
 		// entity.setId;// 商品ID
@@ -44,23 +52,72 @@ public class GoodsService {
 		entity.setTitlePic(goodsVO.getTitlePic());
 		entity.setDetailePic(goodsVO.getDetailePic());
 		entity.setParams(goodsVO.getParams());
-		List<Map> mulVal = new ArrayList<Map>();
-		if (goodsVO.getMulVal() != null && goodsVO.getMulVal().size()>0) {
+		List<MulVal> mulVals = new ArrayList<MulVal>();
+		if (goodsVO.getMulVal() != null && goodsVO.getMulVal().size() > 0) {
 			for (MutiAttr mutiAttr : goodsVO.getMulVal()) {
-//				MulVal mulVal = new MulVal();
-				 String[] values = mutiAttr.getValues();
-				 Map<String, String> attr_map = new HashMap<String, String>();
-				 for (int i = 0; i < values.length; i++) {
+				MulVal mulVal = new MulVal();
+				String[] values = mutiAttr.getValues();
+				Map<String, String> attr_map = new HashMap<String, String>();
+				for (int i = 0; i < values.length; i++) {
 					String key = goodsVO.getMulName().get(i);
 					attr_map.put(key, values[i]);
 				}
-				 mulVal.add(attr_map);
+				mulVal.setValues(attr_map);
+				values = mutiAttr.getImg();
+				if (values != null && values.length > 0) {
+					List<String> images = new ArrayList<String>();
+					for (String img : values) {
+						images.add(img);
+					}
+					mulVal.setImg(images);
+				}
+				mulVals.add(mulVal);
 			}
-			
 		}
-		entity.setMulVal(mulVal);
+		entity.setMulVal(mulVals);
 		entity.encode();
 		goodsMapper.create(entity);
 	}
 
+	public static void main(String[] args) {
+		List<MulVal> mulVals = new ArrayList<MulVal>();
+		MulVal mulVal = new MulVal();
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("名称", "红色");
+		map.put("价格", "10");
+		map.put("数量", "20");
+		map.put("折扣", "100");
+		mulVal.setValues(map);
+		List<String> list = new ArrayList<String>();
+		list.add("thumbnail/54");
+		list.add("thumbnail/54");
+		list.add("thumbnail/54");
+		list.add("thumbnail/54");
+		mulVal.setImg(list);
+		mulVals.add(mulVal);
+		String json = JSON.toJSONString(mulVals);
+		System.out.println(json);
+
+		List<MulVal> mulVals2 = JSON.parseArray(json, MulVal.class);
+		System.out.println(JSON.toJSONString(mulVals2));
+	}
+
+	/**
+	 * 获取人气王商品
+	 * 
+	 * @param appid
+	 * @return
+	 */
+	public List<GoodsEntity> getGoodsForHot(long appid) {
+		// 获取人气王商品列表
+		List<Long> goodsId = hotGoodsMapper.list(appid);
+		if (goodsId != null && !goodsId.isEmpty()) {
+			List<GoodsEntity> list = goodsMapper.listByIds(goodsId);
+			for (GoodsEntity goodsEntity : list) {
+				goodsEntity.decode();
+			}
+			return list;
+		}
+		return null;
+	}
 }

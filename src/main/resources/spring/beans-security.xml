@@ -19,6 +19,7 @@
 	<http pattern="/*.html" security="none"></http>
 	<http pattern="/commons/**" security="none"></http>
 	<http pattern="/404.html" security="none"></http>
+	<http pattern="/shop/**" security="none"></http>
 
 	<http auto-config="true" use-expressions="true" entry-point-ref="authenticationProcessingFilterEntryPoint" disable-url-rewriting="true">
 		<!-- 不拦截 -->
