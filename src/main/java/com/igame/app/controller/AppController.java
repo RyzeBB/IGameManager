@@ -30,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,8 +38,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.igame.app.entity.GoodsEntity;
+import com.igame.app.exception.AppException;
 import com.igame.app.service.GoodsService;
 import com.igame.app.vo.GoodsVO;
+import com.igame.app.vo.GoodsResponeVO;
+import com.igame.app.vo.RequestVO;
+import com.igame.app.vo.SaleRequest;
 
 /**
  *
@@ -62,13 +67,53 @@ public class AppController {
 	// return "hello";
 	// }
 
-	@RequestMapping(value = "/hot", method = RequestMethod.GET)
+	@RequestMapping(value = "/hot", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject createGoods() {
-		List<GoodsEntity> goods = goodsService.getGoodsForHot(1);
-		JSONObject object = new JSONObject();
-		object.put("productList", goods);
-		return object;
+	public GoodsResponeVO getHotGoods(@RequestBody RequestVO hotRequestVO) {
+		long appid = hotRequestVO.getAppid();
+		int actionCode = hotRequestVO.getActionCode();
+		try {
+			List<GoodsEntity> goods = goodsService.getGoodsForHot(appid);
+			GoodsResponeVO hotResponeVO = new GoodsResponeVO();
+			hotResponeVO.setActionCode(actionCode);
+			hotResponeVO.setProductList(goods);
+			return hotResponeVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new AppException(actionCode, "系统错误");
+		}
 	}
 
+	@RequestMapping(value = "/sale", method = RequestMethod.POST)
+	@ResponseBody
+	public GoodsResponeVO getSaleGoods(@RequestBody SaleRequest saleRequest) {
+		long appid = saleRequest.getAppid();
+		int actionCode = saleRequest.getActionCode();
+		try {
+			List<GoodsEntity> goods = goodsService.getGoodsForHot(appid);
+			GoodsResponeVO hotResponeVO = new GoodsResponeVO();
+			hotResponeVO.setActionCode(actionCode);
+			hotResponeVO.setProductList(goods);
+			return hotResponeVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new AppException(actionCode, "系统错误");
+		}
+	}
+
+	public static void main(String[] args) {
+		RequestVO requestVO = new RequestVO();
+		requestVO.setDeviceId("999988889");
+		requestVO.setActionCode(10001);
+		requestVO.setAppid(1L);
+		requestVO.setAppVersionCode("1.0.1");
+		requestVO.setChannel("腾讯平台");
+		requestVO.setSystemName("IOS");
+		requestVO.setDeviceModel("IPHONE6");
+		requestVO.setSystemVersion("IOS6");
+		
+		System.out.println(JSON.toJSON(requestVO));
+	}
 }

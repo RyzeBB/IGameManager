@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.igame.app.entity.GoodsEntity;
 import com.igame.app.entity.MulVal;
+import com.igame.app.exception.AppException;
 import com.igame.app.mapper.GoodsMapper;
 import com.igame.app.mapper.HotGoodsMapper;
 import com.igame.app.vo.GoodsVO;
@@ -109,6 +110,20 @@ public class GoodsService {
 	 * @return
 	 */
 	public List<GoodsEntity> getGoodsForHot(long appid) {
+		// 获取人气王商品列表
+		List<Long> goodsId = hotGoodsMapper.list(appid);
+		if (goodsId != null && !goodsId.isEmpty()) {
+			List<GoodsEntity> list = goodsMapper.listByIds(goodsId);
+			for (GoodsEntity goodsEntity : list) {
+				goodsEntity.decode();
+			}
+			return list;
+		}
+		return null;
+		
+	}
+
+	public List<GoodsEntity> getGoodsForSale(long appid, int pageNum, int pageCount) {
 		// 获取人气王商品列表
 		List<Long> goodsId = hotGoodsMapper.list(appid);
 		if (goodsId != null && !goodsId.isEmpty()) {
