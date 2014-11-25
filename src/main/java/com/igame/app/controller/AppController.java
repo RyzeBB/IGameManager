@@ -38,12 +38,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.igame.app.entity.GoodsEntity;
+import com.igame.app.entity.GoodsTypeEntity;
 import com.igame.app.exception.AppException;
 import com.igame.app.service.GoodsService;
+import com.igame.app.service.GoodsTypeService;
+import com.igame.app.vo.GoodsTypeResponeVO;
 import com.igame.app.vo.GoodsVO;
 import com.igame.app.vo.GoodsResponeVO;
 import com.igame.app.vo.RequestVO;
 import com.igame.app.vo.SaleRequest;
+import com.igame.app.vo.TypeListRequest;
 
 /**
  *
@@ -54,6 +58,8 @@ import com.igame.app.vo.SaleRequest;
 public class AppController {
 	@Autowired
 	private GoodsService goodsService;
+	@Autowired
+	private GoodsTypeService goodsTypeService;
 
 	private static final Logger log = LoggerFactory.getLogger(AppController.class);
 
@@ -72,6 +78,7 @@ public class AppController {
 	public GoodsResponeVO getHotGoods(@RequestBody RequestVO hotRequestVO) {
 		long appid = hotRequestVO.getAppid();
 		int actionCode = hotRequestVO.getActionCode();
+		log.debug("getHotGoods --> appid:{},actionCode:{}", appid, actionCode);
 		try {
 			List<GoodsEntity> goods = goodsService.getGoodsForHot(appid);
 			GoodsResponeVO hotResponeVO = new GoodsResponeVO();
@@ -81,6 +88,7 @@ public class AppController {
 		} catch (AppException e) {
 			throw e;
 		} catch (Exception e) {
+			log.error("getHotGoods error ", e);
 			throw new AppException(actionCode, "系统错误");
 		}
 	}
@@ -90,8 +98,14 @@ public class AppController {
 	public GoodsResponeVO getSaleGoods(@RequestBody SaleRequest saleRequest) {
 		long appid = saleRequest.getAppid();
 		int actionCode = saleRequest.getActionCode();
+		int pageNum = saleRequest.getPageNum();
+		int pageCount = saleRequest.getPageCount();
+		log.debug("getGoodsType --> appid:{},actionCode:{},pageNum:{},pageCount:{}", appid, actionCode, pageNum, pageCount);
 		try {
-			List<GoodsEntity> goods = goodsService.getGoodsForHot(appid);
+			if (pageCount <= 0 || pageNum <= 0) {
+				throw new AppException(actionCode, "分页参数错误");
+			}
+			List<GoodsEntity> goods = goodsService.getGoodsForSale(appid, pageNum, pageCount);
 			GoodsResponeVO hotResponeVO = new GoodsResponeVO();
 			hotResponeVO.setActionCode(actionCode);
 			hotResponeVO.setProductList(goods);
@@ -99,8 +113,57 @@ public class AppController {
 		} catch (AppException e) {
 			throw e;
 		} catch (Exception e) {
+			log.error("getSaleGoods error ", e);
 			throw new AppException(actionCode, "系统错误");
 		}
+	}
+
+	@RequestMapping(value = "/type", method = RequestMethod.POST)
+	@ResponseBody
+	public GoodsTypeResponeVO getGoodsType(@RequestBody RequestVO requestVO) {
+		long appid = requestVO.getAppid();
+		int actionCode = requestVO.getActionCode();
+		log.debug("getGoodsType --> appid:{},actionCode:{}", appid, actionCode);
+		try {
+			List<GoodsTypeEntity> typeEntities = goodsTypeService.getGoodsType(appid);
+			GoodsTypeResponeVO responeVO = new GoodsTypeResponeVO();
+			responeVO.setActionCode(actionCode);
+			responeVO.setTypeList(typeEntities);
+			return responeVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("getGoodsType error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
+
+	}
+
+	@RequestMapping(value = "/typelist", method = RequestMethod.POST)
+	@ResponseBody
+	public GoodsResponeVO getGoodsTypeList(@RequestBody TypeListRequest requestVO) {
+		long appid = requestVO.getAppid();
+		int actionCode = requestVO.getActionCode();
+		int pageNum = requestVO.getPageNum();
+		int pageCount = requestVO.getPageCount();
+		int type = requestVO.getType();
+		log.debug("getGoodsTypeList --> appid:{},actionCode:{},type:{},pageNum:{},pageCount:{}", appid, actionCode, type, pageNum, pageCount);
+		try {
+			if (pageCount <= 0 || pageNum <= 0) {
+				throw new AppException(actionCode, "分页参数错误");
+			}
+			List<GoodsEntity> typeEntities = goodsTypeService.getGoodsByType(appid, type, pageNum, pageCount);
+			GoodsResponeVO responeVO = new GoodsResponeVO();
+			responeVO.setActionCode(actionCode);
+			responeVO.setProductList(typeEntities);
+			return responeVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("getGoodsTypeList error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
+
 	}
 
 	public static void main(String[] args) {
@@ -113,7 +176,7 @@ public class AppController {
 		requestVO.setSystemName("IOS");
 		requestVO.setDeviceModel("IPHONE6");
 		requestVO.setSystemVersion("IOS6");
-		
+
 		System.out.println(JSON.toJSON(requestVO));
 	}
 }

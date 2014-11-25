@@ -25,16 +25,23 @@ package com.igame.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-/**
- * 人气王商品列表
- * 
- * @author jdmr
- */
-public interface HotGoodsMapper {
+import com.igame.app.entity.GoodsTypeEntity;
 
-	@Select("SELECT goods_id from t_hot_goods where appid = #{appid}")
-	public List<Long> list(long appid);
+/**
+ * 商品分类列表
+ * 
+ * @author Allen
+ *
+ */
+public interface GoodsTypeMapper {
+
+	@Select("SELECT * from t_type where appid = #{appid}")
+	public List<GoodsTypeEntity> listGoodsType(long appid);
+	
+	@Select("SELECT goods_id from t_type_goods where type=#{type} and appid = #{appid}")
+	public List<Long> listGoodsByType(@Param("appid")long appid,@Param("type")int type);
 
 }

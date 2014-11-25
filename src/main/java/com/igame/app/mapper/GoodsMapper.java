@@ -39,8 +39,8 @@ import com.igame.app.mapper.provider.GoodsMapperProvider;
  */
 public interface GoodsMapper {
 
-	@Select("SELECT id,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods")
-	public List<GoodsEntity> list();
+	@Select("SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid}")
+	public List<GoodsEntity> list(long appid);
 
 	@SelectProvider(type = GoodsMapperProvider.class, method = "listByIds")
 	public List<GoodsEntity> listByIds(List<Long> ids);

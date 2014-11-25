@@ -11,9 +11,8 @@ import org.springframework.stereotype.Service;
 import com.alibaba.fastjson.JSON;
 import com.igame.app.entity.GoodsEntity;
 import com.igame.app.entity.MulVal;
-import com.igame.app.exception.AppException;
 import com.igame.app.mapper.GoodsMapper;
-import com.igame.app.mapper.HotGoodsMapper;
+import com.igame.app.mapper.GoodsModuleMapper;
 import com.igame.app.vo.GoodsVO;
 import com.igame.app.vo.MutiAttr;
 
@@ -22,7 +21,7 @@ public class GoodsService {
 	@Autowired
 	private GoodsMapper goodsMapper;
 	@Autowired
-	private HotGoodsMapper hotGoodsMapper;
+	private GoodsModuleMapper goodsModuleMapper;
 
 	/**
 	 * @param 添加商品
@@ -111,7 +110,7 @@ public class GoodsService {
 	 */
 	public List<GoodsEntity> getGoodsForHot(long appid) {
 		// 获取人气王商品列表
-		List<Long> goodsId = hotGoodsMapper.list(appid);
+		List<Long> goodsId = goodsModuleMapper.listHotGoods(appid);
 		if (goodsId != null && !goodsId.isEmpty()) {
 			List<GoodsEntity> list = goodsMapper.listByIds(goodsId);
 			for (GoodsEntity goodsEntity : list) {
@@ -122,11 +121,21 @@ public class GoodsService {
 		return null;
 		
 	}
-
+	
+	/**
+	 * 查询天天惠商品
+	 * @param appid
+	 * @param pageNum
+	 * @param pageCount
+	 * @return
+	 */
 	public List<GoodsEntity> getGoodsForSale(long appid, int pageNum, int pageCount) {
-		// 获取人气王商品列表
-		List<Long> goodsId = hotGoodsMapper.list(appid);
+		//TODO 获取天天惠商品列表
+		List<Long> goodsId = goodsModuleMapper.listSaleGoods(appid);
 		if (goodsId != null && !goodsId.isEmpty()) {
+			if(goodsId.size() > pageCount){
+				goodsId = goodsId.subList(0, pageCount);
+			}
 			List<GoodsEntity> list = goodsMapper.listByIds(goodsId);
 			for (GoodsEntity goodsEntity : list) {
 				goodsEntity.decode();
@@ -135,4 +144,6 @@ public class GoodsService {
 		}
 		return null;
 	}
+	
+	
 }
