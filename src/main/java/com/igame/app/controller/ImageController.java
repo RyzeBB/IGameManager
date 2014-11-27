@@ -68,7 +68,7 @@ public class ImageController {
     
     @Autowired
     private ImageService imageService;
-    private String fileUploadDirectory = "/data/img";
+    private String fileUploadDirectory = "/data/cdn/app-65655558";
 
     @RequestMapping
     public String index() {
