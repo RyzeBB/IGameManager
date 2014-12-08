@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.igame.app.mapper.GoodsTypeMapper">
+
+	<select id="listGoodsType" parameterType="Long" resultType="GoodsTypeEntity">
+		SELECT * from t_type where appid = #{appid}
+	</select>
+	<insert id="insertGoodsType" parameterType="java.util.Map">
+		insert into t_type(appid,name,pic_url) values(#{appid},#{name},#{pic_url})
+	</insert>
+	<update id="updateGoodsType" parameterType="GoodsTypeEntity">
+		update t_type set appid=#{appid},name=#{name},pic_url=#{pic_url} where id = #{id}
+	</update>
+	
+	<select id="listGoodsByType" parameterType="java.util.Map" resultType="Long">
+		SELECT goods_id from t_type_goods where type=#{type} and appid = #{appid} limit #{start},#{end}
+	</select>
+	
+	<select id="getSizeByType" parameterType="java.util.Map" resultType="Long">
+		SELECT count(goods_id) from t_type_goods where type=#{type} and appid = #{appid}
+	</select>
+	
+
+	<delete id="deleteType" parameterType="java.util.List">
+		delete FROM t_type where id in
+		 <foreach item="item" index="index" collection="list" 
+                    open="(" separator="," close=")">
+                   #{item}
+          </foreach>
+	</delete>
+
+</mapper>

@@ -5,6 +5,7 @@
 
 	<typeAliases>
 		<package name="com.igame.security.entity" />
+		<package name="com.igame.app.entity" />
 	</typeAliases>
 	
 

@@ -25,8 +25,11 @@ package com.igame.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import com.igame.app.entity.GoodsTypeEntity;
 
@@ -38,10 +41,21 @@ import com.igame.app.entity.GoodsTypeEntity;
  */
 public interface GoodsTypeMapper {
 
-	@Select("SELECT * from t_type where appid = #{appid}")
+//	@Select("SELECT * from t_type where appid = #{appid}")
 	public List<GoodsTypeEntity> listGoodsType(long appid);
 	
-	@Select("SELECT goods_id from t_type_goods where type=#{type} and appid = #{appid}")
-	public List<Long> listGoodsByType(@Param("appid")long appid,@Param("type")int type);
+//	@Insert("insert into t_type(appid,name,pic_url) values(#{appid},#{name},#{pic_url})")
+	public void insertGoodsType(@Param("appid")long appid,@Param("name")String name,@Param("pic_url")String pic_url);
+	
+//	@Update("update t_type set appid=#{appid},name=#{name},pic_url=#{pic_url} where id = #{id}")
+	public void updateGoodsType(GoodsTypeEntity entity);
+	
+//	@Select("SELECT goods_id from t_type_goods where type=#{type} and appid = #{appid} limit #{start},#{end}")
+	public List<Long> listGoodsByType(@Param("appid")long appid,@Param("type")int type,@Param("start")int start,@Param("end")int end);
+
+//	@Select("SELECT count(goods_id) from t_type_goods where type=#{type} and appid = #{appid}")
+	public Long getSizeByType(@Param("appid")long appid,@Param("type")int type);
+	
+	public Long deleteType(List<Long> ids);
 
 }

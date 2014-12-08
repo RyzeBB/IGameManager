@@ -24,7 +24,7 @@ public class IRedis {
 //	protected ShardedJedisPool shardedJedisPool;// 切片连接池
 
 	public IRedis() {
-		initialPool();
+//		initialPool();
 //		initialShardedPool();
 
 	}

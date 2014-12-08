@@ -25,6 +25,8 @@ package com.igame.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
 
 import com.igame.app.entity.CouponEntity;
@@ -36,7 +38,15 @@ import com.igame.app.entity.CouponEntity;
  */
 public interface CouponMapper {
 
-	@Select("SELECT id,	appid,name,score,rmb,start_time,end_time FROM t_coupon where appid = #{appid}")
-	public List<CouponEntity> list(long appid);
+	@Select("SELECT id,	appid,name,score,rmb,start_time,end_time,descrip FROM t_app_coupon where appid = #{appid}")
+	public List<CouponEntity> listCoupon(long appid);
 
+	@Insert("insert into t_app_coupon(id,appid,name,score,rmb,start_time,end_time,descrip) values(#{id},#{appid},#{name},#{score},#{rmb},#{start_time},#{end_time},#{descrip})")
+	public void insertCoupon(CouponEntity couponEntity);
+
+	@Insert("update t_app_coupon set name=#{name},score=#{score},rmb=#{rmb},start_time=#{start_time},end_time=#{end_time},descrip=#{descrip} where id=#{id}")
+	public void updateCoupon(CouponEntity couponEntity);
+
+	@Delete("delete from t_app_coupon where id=#{id}")
+	public void deleteCoupon(long id);
 }

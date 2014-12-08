@@ -18,14 +18,19 @@ public class ImageService {
 		this.imageMapper = imageMapper;
 	}
 
-	public List<Image> list() {
-		return imageMapper.list();
+	public List<Image> list(long appid, int pageNumber, int pageSize) {
+		int start = (pageNumber - 1) * pageSize;
+		int end = pageNumber * pageSize;
+		return imageMapper.list(appid, start, end);
 	}
 
 	public Image create(Image image) {
 		imageMapper.create(image);
 		return image;
+	}
 
+	public long getSize(long appid) {
+		return imageMapper.getSize(appid);
 	}
 
 	public Image get(Long id) {

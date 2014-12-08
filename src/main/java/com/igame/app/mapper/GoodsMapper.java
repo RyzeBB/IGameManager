@@ -25,13 +25,9 @@ package com.igame.app.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Options;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.SelectProvider;
+import org.apache.ibatis.annotations.Param;
 
 import com.igame.app.entity.GoodsEntity;
-import com.igame.app.mapper.provider.GoodsMapperProvider;
 
 /**
  *
@@ -39,15 +35,29 @@ import com.igame.app.mapper.provider.GoodsMapperProvider;
  */
 public interface GoodsMapper {
 
-	@Select("SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid}")
+//	@Select("SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid}")
 	public List<GoodsEntity> list(long appid);
 
-	@SelectProvider(type = GoodsMapperProvider.class, method = "listByIds")
+	public long listSize(long appid);
+	
+//	@Select("SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where id = #{id}")
+	public GoodsEntity getGoodsById(long id);
+	
+//	@Select("SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid} limit #{start},#{end}")
+	public List<GoodsEntity> getGoodsByPage(@Param("appid")long appid,@Param("start")int start,@Param("end")int end);
+
+//	@SelectProvider(type = GoodsMapperProvider.class, method = "listByIds")
 	public List<GoodsEntity> listByIds(List<Long> ids);
 
-	@Insert("INSERT INTO t_goods(type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel) VALUES(#{type},#{name},#{introduce},#{price},#{offer},#{unit},#{mulVa1Json},#{icon},#{titlePicJson},#{detailePicJson},#{paramsJson},#{address},#{stock},#{saleCount},#{shippingType},#{shippingCost},#{disStyle},#{serviecType},#{serviecTel})")
-	@Options(useGeneratedKeys = true, keyProperty = "id")
+//	@Insert("INSERT INTO t_goods(type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel) VALUES(#{type},#{name},#{introduce},#{price},#{offer},#{unit},#{mulVa1Json},#{icon},#{titlePicJson},#{detailePicJson},#{paramsJson},#{address},#{stock},#{saleCount},#{shippingType},#{shippingCost},#{disStyle},#{serviecType},#{serviecTel})")
+//	@Options(useGeneratedKeys = true, keyProperty = "id")
 	public long create(GoodsEntity goodsEntity);
+	
+//	@Update("update t_goods set type=#{type},name=#{name},introduce=#{introduce},price=#{price},offer=#{offer},unit=#{unit},mulVa1Json=#{mulVa1Json},icon=#{icon},titlePicJson=#{titlePicJson},detailePicJson=#{detailePicJson},paramsJson=#{paramsJson},address=#{address},stock=#{stock},saleCount=#{saleCount},shippingType=#{shippingType},shippingCost=#{shippingCost},disStyle=#{disStyle},serviecType=#{serviecType},serviecTel=#{serviecTel} where id=#{id}")
+	public long update(GoodsEntity goodsEntity);
+
+//	@DeleteProvider(type = GoodsMapperProvider2.class, method = "delByIds")
+	public int delByIds(List<Long> ids);
 
 	// @Update("UPDATE t_images SET name=#{name},thumbnailFilename = #{thumbnailFilename},newFilename = #{newFilename},contentType = #{contentType},size = #{size},thumbnailSize = #{thumbnailSize},lastUpdated = sysdate where id = #{id}")
 	// @Select("select * from t_images where id = #{id}")

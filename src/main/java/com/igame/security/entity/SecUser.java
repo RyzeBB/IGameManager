@@ -16,10 +16,11 @@ public class SecUser implements Serializable {
 
 	private String password;
 
+	private long appid;
+
 	private Date createTime;
 
 	private Date expireTime;
-
 
 	public int getId() {
 		return id;
@@ -47,6 +48,14 @@ public class SecUser implements Serializable {
 
 	public Date getCreateTime() {
 		return createTime;
+	}
+
+	public long getAppid() {
+		return appid;
+	}
+
+	public void setAppid(long appid) {
+		this.appid = appid;
 	}
 
 	public void setCreateTime(Date createTime) {

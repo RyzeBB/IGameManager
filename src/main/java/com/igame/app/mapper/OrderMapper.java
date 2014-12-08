@@ -25,34 +25,29 @@ package com.igame.app.mapper;
 
 import java.util.List;
 
-import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
-import com.igame.app.entity.Image;
+import com.igame.app.entity.OrderEntity;
 
 /**
- *
+ * 人气王商品列表
+ * 
  * @author jdmr
  */
-public interface ImageMapper {
+public interface OrderMapper {
 
-	@Select("select * from t_images where appid = #{appid} limit #{start},#{end}")
-	public List<Image> list(@Param("appid") long appid, @Param("start") int start, @Param("end") int end);
+	@Select("SELECT * from t_order where appid = #{appid}")
+	public List<OrderEntity> listOrderByAppid(long appid);
 
-	@Select("select count(*) from t_images where appid = #{appid}")
-	public long getSize(long appid);
+	@Select("SELECT * from t_order where deviceId = #{deviceId}")
+	public List<OrderEntity> listOrderByDeviceId(String deviceId);
 
-	@Insert("INSERT INTO t_images(id,appid,name,thumbnailFilename,newFilename,contentType,size,thumbnailSize,dateCreated,lastUpdated) VALUES(#{id},#{appid},#{name},#{thumbnailFilename},#{newFilename},#{contentType},#{size},#{thumbnailSize},SYSDATE(),SYSDATE())")
-	// @Options(useGeneratedKeys = true, keyProperty = "id")
-	public long create(Image image);
+	@Insert("insert into t_order(id,appid,deviceId,gid,billno,ico,name,price,create_time,pay_time,state,back_goods) values(#{id},#{appid},#{deviceId},#{gid},#{billno},#{ico},#{name},#{price},#{create_time},#{pay_time},#{state},#{back_goods})")
+	public long inserOrder(OrderEntity orderEntity);
 
-	// @Update("UPDATE t_images SET name=#{name},thumbnailFilename = #{thumbnailFilename},newFilename = #{newFilename},contentType = #{contentType},size = #{size},thumbnailSize = #{thumbnailSize},lastUpdated = sysdate where id = #{id}")
-	@Select("select * from t_images where id = #{id}")
-	public Image get(Long id);
-
-	@Delete("delete from t_images where id = #{id}")
-	public void delete(long id);
+	@Update("update t_order set create_time=#{create_time},pay_time=#{pay_time},state=#{state}) where id = #{id}")
+	public long updateOrder(OrderEntity orderEntity);
 
 }

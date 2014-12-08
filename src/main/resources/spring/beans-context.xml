@@ -74,12 +74,15 @@
 			<tx:method name="create*" propagation="REQUIRED" />
 			<tx:method name="insert*" propagation="REQUIRED" />
 			<tx:method name="init*" propagation="REQUIRED" />
+			<tx:method name="modify*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="del*" propagation="REQUIRED" />
 			<tx:method name="*" read-only="true" />
 		</tx:attributes>
 	</tx:advice>
 
 	<aop:config proxy-target-class="true">
 		<aop:advisor advice-ref="txAdvice"
-			pointcut="execution(* com.igame.security.service.*.*(..))" />
+			pointcut="execution(* com.igame.*.service.*.*(..))" />
 	</aop:config>
 </beans>

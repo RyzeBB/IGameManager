@@ -92,4 +92,21 @@ $(function () {
 //    	    closable:true
 //    });
     $('#pic_select').hide();
+    $.get("upload?pageNumber=1&pageSize=10", function(data){
+		 var temp_json = eval('('+data+')');    
+			//console.info(json);
+			//console.info(json.files);
+		 $('#pp').pagination('refresh',{	// change options and refresh pager bar information
+				total: temp_json.count
+			});
+			 $.each(temp_json.files, function (index, item) {  
+                //循环获取数据    
+//				 var temp_img_url = item.thumbnailUrl;
+				 var temp_img_content = "<img src='"+item.thumbnailUrl+"'  class='divImg1' onclick=choose_img('"+item.thumbnailUrl+"')>"
+                $("#pic_content ul li:eq("+index+")").children("div").html(temp_img_content);
+				//console.info(JSON.stringify(item));
+//                 $("#list").html($("#list").html() + "<br>" + name + " - " + idnumber + " - " + sex + "<br/>");  
+            });  
+			//$("#pic_content").html("HELLO");
+		});
 });

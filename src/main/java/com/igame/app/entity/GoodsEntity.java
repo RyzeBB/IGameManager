@@ -1,5 +1,6 @@
 package com.igame.app.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -7,7 +8,11 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class GoodsEntity implements JsonEntity {
+public class GoodsEntity implements JsonEntity,Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long id;// 商品ID
 	@JSONField(serialize = false)
 	private long appid;// 商家id

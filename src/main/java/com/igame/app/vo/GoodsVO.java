@@ -3,7 +3,7 @@ package com.igame.app.vo;
 import java.util.List;
 
 public class GoodsVO {
-	private int id;// 商品ID
+	private long id;// 商品ID
 	private int type;// 商品类型ID
 	private String typeName;// 商品类型名称
 	private String name;// 商品名称
@@ -40,11 +40,11 @@ public class GoodsVO {
 		this.mulName = mulName;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

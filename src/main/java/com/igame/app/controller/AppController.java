@@ -29,22 +29,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.igame.app.entity.GoodsEntity;
 import com.igame.app.entity.GoodsTypeEntity;
 import com.igame.app.exception.AppException;
 import com.igame.app.service.GoodsService;
-import com.igame.app.service.GoodsTypeService;
-import com.igame.app.vo.GoodsTypeResponeVO;
-import com.igame.app.vo.GoodsVO;
+import com.igame.app.vo.GoodsIdsRequest;
 import com.igame.app.vo.GoodsResponeVO;
+import com.igame.app.vo.GoodsTypeResponeVO;
 import com.igame.app.vo.RequestVO;
 import com.igame.app.vo.SaleRequest;
 import com.igame.app.vo.TypeListRequest;
@@ -58,8 +54,6 @@ import com.igame.app.vo.TypeListRequest;
 public class AppController {
 	@Autowired
 	private GoodsService goodsService;
-	@Autowired
-	private GoodsTypeService goodsTypeService;
 
 	private static final Logger log = LoggerFactory.getLogger(AppController.class);
 
@@ -73,6 +67,12 @@ public class AppController {
 	// return "hello";
 	// }
 
+	/**
+	 * 获取人气旺商品
+	 * 
+	 * @param hotRequestVO
+	 * @return
+	 */
 	@RequestMapping(value = "/hot", method = RequestMethod.POST)
 	@ResponseBody
 	public GoodsResponeVO getHotGoods(@RequestBody RequestVO hotRequestVO) {
@@ -80,10 +80,8 @@ public class AppController {
 		int actionCode = hotRequestVO.getActionCode();
 		log.debug("getHotGoods --> appid:{},actionCode:{}", appid, actionCode);
 		try {
-			List<GoodsEntity> goods = goodsService.getGoodsForHot(appid);
-			GoodsResponeVO hotResponeVO = new GoodsResponeVO();
+			GoodsResponeVO hotResponeVO = goodsService.getGoodsForHot(appid);
 			hotResponeVO.setActionCode(actionCode);
-			hotResponeVO.setProductList(goods);
 			return hotResponeVO;
 		} catch (AppException e) {
 			throw e;
@@ -93,6 +91,12 @@ public class AppController {
 		}
 	}
 
+	/**
+	 * 获取天天惠商品
+	 * 
+	 * @param saleRequest
+	 * @return
+	 */
 	@RequestMapping(value = "/sale", method = RequestMethod.POST)
 	@ResponseBody
 	public GoodsResponeVO getSaleGoods(@RequestBody SaleRequest saleRequest) {
@@ -105,10 +109,8 @@ public class AppController {
 			if (pageCount <= 0 || pageNum <= 0) {
 				throw new AppException(actionCode, "分页参数错误");
 			}
-			List<GoodsEntity> goods = goodsService.getGoodsForSale(appid, pageNum, pageCount);
-			GoodsResponeVO hotResponeVO = new GoodsResponeVO();
+			GoodsResponeVO hotResponeVO = goodsService.getGoodsForSale(appid, pageNum, pageCount);
 			hotResponeVO.setActionCode(actionCode);
-			hotResponeVO.setProductList(goods);
 			return hotResponeVO;
 		} catch (AppException e) {
 			throw e;
@@ -118,6 +120,37 @@ public class AppController {
 		}
 	}
 
+	/**
+	 * 根据商品id获取商品
+	 * 
+	 * @param saleRequest
+	 * @return
+	 */
+	@RequestMapping(value = "/ids", method = RequestMethod.POST)
+	@ResponseBody
+	public GoodsResponeVO getGoodsByids(@RequestBody GoodsIdsRequest idsRequest) {
+		long appid = idsRequest.getAppid();
+		int actionCode = idsRequest.getActionCode();
+		List<Long> ids = idsRequest.getIds();
+		log.debug("getGoodsByids --> appid:{},actionCode:{},", appid, actionCode);
+		try {
+			GoodsResponeVO hotResponeVO = goodsService.getGoodsByids(appid, ids);
+			hotResponeVO.setActionCode(actionCode);
+			return hotResponeVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("getSaleGoods error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
+	}
+
+	/**
+	 * 获取商品分类
+	 * 
+	 * @param requestVO
+	 * @return
+	 */
 	@RequestMapping(value = "/type", method = RequestMethod.POST)
 	@ResponseBody
 	public GoodsTypeResponeVO getGoodsType(@RequestBody RequestVO requestVO) {
@@ -125,7 +158,7 @@ public class AppController {
 		int actionCode = requestVO.getActionCode();
 		log.debug("getGoodsType --> appid:{},actionCode:{}", appid, actionCode);
 		try {
-			List<GoodsTypeEntity> typeEntities = goodsTypeService.getGoodsType(appid);
+			List<GoodsTypeEntity> typeEntities = goodsService.getGoodsType(appid);
 			GoodsTypeResponeVO responeVO = new GoodsTypeResponeVO();
 			responeVO.setActionCode(actionCode);
 			responeVO.setTypeList(typeEntities);
@@ -139,6 +172,12 @@ public class AppController {
 
 	}
 
+	/**
+	 * 根据分类获取商品
+	 * 
+	 * @param requestVO
+	 * @return
+	 */
 	@RequestMapping(value = "/typelist", method = RequestMethod.POST)
 	@ResponseBody
 	public GoodsResponeVO getGoodsTypeList(@RequestBody TypeListRequest requestVO) {
@@ -152,10 +191,8 @@ public class AppController {
 			if (pageCount <= 0 || pageNum <= 0) {
 				throw new AppException(actionCode, "分页参数错误");
 			}
-			List<GoodsEntity> typeEntities = goodsTypeService.getGoodsByType(appid, type, pageNum, pageCount);
-			GoodsResponeVO responeVO = new GoodsResponeVO();
+			GoodsResponeVO responeVO = goodsService.getGoodsByType(appid, type, pageNum, pageCount);
 			responeVO.setActionCode(actionCode);
-			responeVO.setProductList(typeEntities);
 			return responeVO;
 		} catch (AppException e) {
 			throw e;

@@ -19,5 +19,5 @@ public class GoodsMapperProvider {
 		sb.append(")");
 		return sb.toString();
 	}
-
+	
 }

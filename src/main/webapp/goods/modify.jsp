@@ -1,38 +1,30 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
-<%
-	String path = request.getContextPath();
-	String basePath = request.getScheme() + "://"
-			+ request.getServerName() + ":" + request.getServerPort()
-			+ path + "/";
-%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <head>
-<base href="<%=basePath%>">
-<title>My starting page</title>
+<title>更新产品</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
 <meta http-equiv="description" content="This is my page">
-<link rel="stylesheet" type="text/css"
-	href="js/themes/default/easyui.css">
-<link rel="stylesheet" type="text/css" href="js/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="../../js/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css" href="../../js/themes/icon.css">
 
 <!-- Bootstrap styles -->
 <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
 <!-- Generic page styles -->
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="../../css/style.css">
 <!-- blueimp Gallery styles -->
-<link rel="stylesheet" href="css/blueimp-gallery.min.css">
+<link rel="stylesheet" href="../../css/blueimp-gallery.min.css">
 <!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
-<link rel="stylesheet" href="css/jquery.fileupload.css">
-<link rel="stylesheet" href="css/jquery.fileupload-ui.css">
+<link rel="stylesheet" href="../../css/jquery.fileupload.css">
+<link rel="stylesheet" href="../../css/jquery.fileupload-ui.css">
 <!-- CSS adjustments for browsers with JavaScript disabled -->
 <noscript>
-	<link rel="stylesheet" href="css/jquery.fileupload-noscript.css">
+	<link rel="stylesheet" href="../../css/jquery.fileupload-noscript.css">
 </noscript>
 <noscript>
-	<link rel="stylesheet" href="css/jquery.fileupload-ui-noscript.css">
+	<link rel="stylesheet" href="../../css/jquery.fileupload-ui-noscript.css">
 </noscript>
 <style type="text/css">
 table {
@@ -54,43 +46,43 @@ ul[class="vertical-line"] li div img{
 }
 
 </style>
-<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="../../js/jquery.min.js"></script>
 
 <!-- The jQuery UI widget factory, can be omitted if jQuery UI is already included -->
-<script src="js/jquery.ui.widget.js"></script>
+<script src="../../js/jquery.ui.widget.js"></script>
 <!-- The Templates plugin is included to render the upload/download listings -->
-<script src="js/tmpl.min.js"></script>
+<script src="../../js/tmpl.min.js"></script>
 <!-- The Load Image plugin is included for the preview images and image resizing functionality -->
-<script src="js/load-image.all.min.js"></script>
+<script src="../../js/load-image.all.min.js"></script>
 <!-- The Canvas to Blob plugin is included for image resizing functionality -->
-<script src="js/canvas-to-blob.min.js"></script>
+<script src="../../js/canvas-to-blob.min.js"></script>
 <!-- Bootstrap JS is not required, but included for the responsive demo navigation -->
 <!-- <script src="js/bootstrap.min.js"></script> -->
 <!-- blueimp Gallery script -->
-<script src="js/jquery.blueimp-gallery.min.js"></script>
+<script src="../../js/jquery.blueimp-gallery.min.js"></script>
 <!-- The Iframe Transport is required for browsers without support for XHR file uploads -->
-<script src="js/jquery.iframe-transport.js"></script>
+<script src="../../js/jquery.iframe-transport.js"></script>
 <!-- The basic File Upload plugin -->
-<script src="js/jquery.fileupload.js"></script>
+<script src="../../js/jquery.fileupload.js"></script>
 <!-- The File Upload processing plugin -->
-<script src="js/jquery.fileupload-process.js"></script>
+<script src="../../js/jquery.fileupload-process.js"></script>
 <!-- The File Upload image preview & resize plugin -->
-<script src="js/jquery.fileupload-image.js"></script>
+<script src="../../js/jquery.fileupload-image.js"></script>
 <!-- The File Upload audio preview plugin -->
-<script src="js/jquery.fileupload-audio.js"></script>
+<script src="../../js/jquery.fileupload-audio.js"></script>
 <!-- The File Upload video preview plugin -->
-<script src="js/jquery.fileupload-video.js"></script>
+<script src="../../js/jquery.fileupload-video.js"></script>
 <!-- The File Upload validation plugin -->
-<script src="js/jquery.fileupload-validate.js"></script>
+<script src="../../js/jquery.fileupload-validate.js"></script>
 <!-- The File Upload user interface plugin -->
-<script src="js/jquery.fileupload-ui.js"></script>
+<script src="../../js/jquery.fileupload-ui.js"></script>
 
 <!-- The XDomainRequest Transport is included for cross-domain file deletion for IE 8 and IE 9 -->
 <!--[if (gte IE 8)&(lt IE 10)]>
 <script src="js/cors/jquery.xdr-transport.js"></script>
 <![endif]-->
-<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="js/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../js/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../js/locale/easyui-lang-zh_CN.js"></script>
 
 <script type="text/javascript">
 	// 	$.fn.serializeObject = function() {
@@ -135,25 +127,6 @@ ul[class="vertical-line"] li div img{
 		tag = $('#fbean').form('validate');
 		if (tag) {
 			$('#fbean').submit();
-			// 			jsonuserinfo = $("#ff").serializeObject();
-			// 			var jsonuserinfo = $('#ff').serializeObject();
-			// 			$.ajaxSetup({
-			// 				contentType : 'application/json;charset=utf-8'
-			// 			});
-			// 			$.ajax({
-			// 				type : "post",
-			// 				url : $("#ff").attr("action"),
-			// 				data : JSON.stringify(jsonuserinfo),
-			// // 				data : jsonuserinfo,
-			// 				dataType : "json",
-			// 				contentType : "application/json;charset=utf-8",
-			// 				success : function(msg) {
-			// 					alert("success")
-			// 				},
-			// 				error : function(XMLHttpRequest, textStatus, errorThrown) {
-			// 					alert("失败");
-			// 				}
-			// 			});
 		} else {
 			return;
 		}
@@ -192,6 +165,11 @@ ul[class="vertical-line"] li div img{
 	function closePic() {
 		$("#pic_select").hide();
 	}
+	function initImg(param,name,imgurl){
+		img_zone = param;
+		img_name = name;
+		choose_img(imgurl);
+	}
 	
 	function choose_img(imgurl) {
 		flag = false;
@@ -199,7 +177,7 @@ ul[class="vertical-line"] li div img{
 					.each(
 							function(i, o) {
 								if ($(o).children("div").html().trim() == "") {
-									var content = "<img src= '"+imgurl+"'><input type='hidden' name='"+img_name+"' value='"+imgurl+"'>";
+									var content = "<img src= '../../"+imgurl+"'><input type='hidden' name='"+img_name+"' value='"+imgurl+"'>";
 									content = content+"<div style='width: 20px; height:20px;float:left; position:absolute; left:2px; top:2px;' align='center'><a href='javascript:void(0)' title='移除' onclick='removePic(this)'><font color='red' size='3'><b>X</b></font></a></div>";
 									$(o).children("div").html(content);
 									flag = true;
@@ -207,52 +185,8 @@ ul[class="vertical-line"] li div img{
 								}
 							});
 			if(!flag){
-				alert("图片选择超过上限");
+				alert("图片选择超过上限"+img_zone);
 			}
-// 		} else {
-// 			$("#window_pic ul li")
-// 					.each(
-// 							function(i, o) {
-// 								var input_ = $(o).children("div").children(
-// 										"input");
-// 								if (typeof (input_) != "undefined"
-// 										&& input_.val() == imgurl) {
-// 									if (i >= 4) {
-// 										$(o).children("div").html("");
-// 									} else {
-// 										$(o).children("div").html("");
-// 										$("#window_pic ul li")
-// 												.each(
-// 														function(j, oj) {
-// 															if (j >= i && j < 4) {
-// 																var next_content = $(
-// 																		oj)
-// 																		.next()
-// 																		.children(
-// 																				"div")
-// 																		.html();
-// 																if (next_content != "") {
-// 																	$(oj)
-// 																			.children(
-// 																					"div")
-// 																			.html(
-// 																					next_content);
-// 																	$(oj)
-// 																			.next()
-// 																			.children(
-// 																					"div")
-// 																			.html(
-// 																					"");
-// 																} else {
-// 																	return false;
-// 																}
-// 															}
-// 														});
-// 										return false;
-// 									}
-// 								}
-// 							});
-// 		}
 	}
 	function removePic(item) {
 		$(item).parent().parent().html("");
@@ -288,7 +222,7 @@ ul[class="vertical-line"] li div img{
 	var colCount = 2;
 	function addRol(id) {
 		colCount++;
-		title_n = "<td width='30'><input type='text' name='mulName' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
+		title_n = "<td width='50'><input type='text' name='mulName' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
 
 		$("#" + id + " tr")
 				.each(
@@ -305,21 +239,88 @@ ul[class="vertical-line"] li div img{
 							}
 						});
 	}
+	
+	$(function () {
+	    'use strict';
+
+	    // Initialize the jQuery File Upload widget:
+	    $('#fileupload').fileupload({
+	        // Uncomment the following to send cross-domain cookies:
+	        //xhrFields: {withCredentials: true},
+//	        url: 'upload',
+	    });
+
+	    // Enable iframe cross-domain access via redirect option:
+	    $('#fileupload').fileupload(
+	        'option',
+	        'redirect',
+	        window.location.href.replace(
+	            /\/[^\/]*$/,
+	            '/cors/result.html?%s'
+	        )
+	    );
+	    	
+	    	 $('#fileupload').fileupload('option', {
+	             maxFileSize: 5000000,
+	             maxNumberOfFiles:20,
+	             acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i
+	         });
+	        // Load existing files:
+	        $('#fileupload').addClass('fileupload-processing');
+	    $('#pic_select').hide();
+	    $.get("../../upload?pageNumber=1&pageSize=10", function(data){
+			 var temp_json = eval('('+data+')');    
+				//console.info(json);
+				//console.info(json.files);
+			 $('#pp').pagination('refresh',{	// change options and refresh pager bar information
+					total: temp_json.count
+				});
+				 $.each(temp_json.files, function (index, item) {  
+	                //循环获取数据    
+//					 var temp_img_url = item.thumbnailUrl;
+					 var temp_img_content = "<img src='../../"+item.thumbnailUrl+"'  class='divImg1' onclick=choose_img('"+item.thumbnailUrl+"')>"
+	                $("#pic_content ul li:eq("+index+")").children("div").html(temp_img_content);
+					//console.info(JSON.stringify(item));
+//	                 $("#list").html($("#list").html() + "<br>" + name + " - " + idnumber + " - " + sex + "<br/>");  
+	            });  
+				//$("#pic_content").html("HELLO");
+			});
+	    
+		<c:if test="${!empty goods.titlePic}">
+			<c:forEach items="${goods.titlePic}" var="tp" varStatus="status">
+				initImg('window_pic','titlePic','${tp}');
+			</c:forEach>
+		</c:if>
+		
+		<c:if test="${!empty goods.mulVal}">
+			<c:forEach items="${goods.mulVal}" var="ml" varStatus="status">
+				<c:if test="${!empty ml.img}">
+					<c:forEach items="${ml.img}" var="pl" varStatus="status2">
+						initImg('window_pic_${status.index}','mulVal[${status.index}].img','${pl}');
+					</c:forEach>
+				</c:if> 
+			</c:forEach>
+		</c:if>
+		
+		<c:if test="${!empty goods.detailePic}">
+		<c:forEach items="${goods.detailePic}" var="tp" varStatus="status">
+			initImg('pic_other','detailePic','${tp}');
+		</c:forEach>
+	</c:if>
+	});
+	
 </script>
-
 </head>
-
 <body>
-
 	<div style="padding: 10px 60px 20px 20px">
-
-		<form id="fbean" method="POST" action="goods/createGoods">
+		<form id="fbean" method="POST" action="../../goods/modify">
+			<input type="hidden"  name="id" value="${goods.id}"> 
 			<table cellpadding="5">
 				<tr>
 					<td width="80">请选择分类:</td>
-					<td><input class="easyui-combobox" name="type" 
+					<td><input class="easyui-combobox" name="type" value="${goods.type}"
 						data-options="required:true,editable:false,
-						url:'goods/type',
+						url:'../../goods/type',
                     	method:'get',
                     	valueField: 'id',
                     	textField: 'name'"/>
@@ -329,41 +330,40 @@ ul[class="vertical-line"] li div img{
 					<td>产品标题:</td>
 					<td><input class="easyui-validatebox textbox" type="text"
 						name="name" required validType="length[5,10]" 
-						invalidMessage="5-10个字符！" style="height: 25px; width: 300px"></input></td>
+						invalidMessage="5-10个字符！" style="height: 25px; width: 300px" value="${goods.name}"></input></td>
 				</tr>
 				<tr>
 					<td>商品简介:</td>
 					<td><input class="easyui-textbox" type="text" name="introduce"
 						data-options="multiline:true" required validType="length[5,10]"
-						invalidMessage="5-50个字符！" style="height: 80px; width: 300px"></input></td>
+						invalidMessage="5-50个字符！" style="height: 80px; width: 300px" value="${goods.introduce}"></input></td>
 				</tr>
 				<tr>
 					<td>商品价格:</td>
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="price" validType="length[1,10]"
-						invalidMessage="1-10个字符！" style="height: 25px; width: 100px">/元</td>
+						invalidMessage="1-10个字符！" style="height: 25px; width: 100px" value="${goods.price}">/元</td>
 				</tr>
 				<tr>
 					<td>商品折扣:</td>
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="offer" validType="length[1,3]"
 						invalidMessage="不能超过100！" style="height: 25px; width: 50px"
-						value="100">&nbsp;&nbsp;商品折扣(单位%，例如20，表示折扣20%)</td>
+						 value="${goods.offer}">&nbsp;&nbsp;商品折扣(单位%，例如20，表示折扣20%)</td>
 				</tr>
 				<tr>
 					<td>商品库存:</td>
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="stock" validType="length[1,6]"
-						invalidMessage="1-6个字符！！" style="height: 25px; width: 50px"></td>
+						invalidMessage="1-6个字符！！" style="height: 25px; width: 50px" value="${goods.stock}"></td>
 				</tr>
 				<tr>
 					<td width="80">显示风格:</td>
-					<td><input class="easyui-combobox" name="disStyle"
-						data-options=" valueField: 'label',textField: 'value',
+					<td><input class="easyui-combobox" name="disStyle" value="${goods.disStyle}"
+						data-options="width:'60px',panelHeight:'50px',valueField: 'label',textField: 'value',
         data: [{
             label: '1',
             value: '横排',
-            selected:true
         },{
             label: '2',
             value: '竖排'
@@ -375,38 +375,39 @@ ul[class="vertical-line"] li div img{
 					<td>快递方式:</td>
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="shippingType" validType="length[1,10]"
-						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px"></td>
+						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px" value="${goods.shippingType}"></td>
 				</tr>
 				<tr>
 					<td>快递费用:</td>
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="shippingCost" validType="length[1,10]"
-						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px"></td>
+						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px" value="${goods.shippingCost}"></td>
 				</tr>
 				<tr>
 					<td>联系方式:</td>
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="serviecType" validType="length[1,10]"
-						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px" value="QQ"></td>
+						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px" value="${goods.serviecType}"></td>
 				</tr>
 				<tr>
 					<td>联系号码:</td>
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="serviecTel" validType="length[1,15]"
-						invalidMessage="1-15个字符！！" style="height: 25px; width: 60px"></td>
+						invalidMessage="1-15个字符！！" style="height: 25px; width: 60px" value="${goods.serviecTel}"></td>
 				</tr>
 				<tr>
 					<td>发货地址:</td>
 					<td><input class="easyui-validatebox textbox" required
 						type="text" name="address" validType="length[10,50]"
-						invalidMessage="10-50个字符！！" style="height: 25px; width: 400px"></td>
+						invalidMessage="10-50个字符！！" style="height: 25px; width: 400px" value="${goods.address}"></td>
 				</tr>
 				<tr>
 					<td valign="top">宝贝属性:</td>
 					<td><div class="easyui-panel"
 							style="background: #F7F7F7; width: 830px; height: 300px; padding: 10px;">
 							<table id="attr_set">
-								<tr>
+							<c:if test="${empty goods.params}">
+							<tr>
 									<td><input name="params"
 										class="easyui-validatebox textbox" required
 										data-options="prompt:'请输入属性值...'"
@@ -424,6 +425,18 @@ ul[class="vertical-line"] li div img{
 										data-options="prompt:'请输入属性值...'"
 										style="width: 120px; height: 25px" value="风格:"></td>
 								</tr>
+							</c:if>
+								
+								<c:if test="${!empty goods.params}">
+									<c:forEach items="${goods.params}" var="p" varStatus="status">
+									<tr>
+									<td><input name="params"
+										class="easyui-validatebox textbox" required
+										data-options="prompt:'请输入属性值...'"
+										style="width: 120px; height: 25px" value="${p}"></td>
+								</tr>
+									</c:forEach>
+								</c:if>
 							</table>
 							<br> <a href="#" class="easyui-linkbutton"
 								data-options="iconCls:'icon-add'"
@@ -477,7 +490,8 @@ ul[class="vertical-line"] li div img{
 							<button type="button"  class="easyui-linkbutton" onclick="addRow('m_table')">添加多属性</button>
 							<button id="attr_button" type="button" class="easyui-linkbutton" onclick="addRol('m_table')"  data-options="iconCls:'icon-add',disabled:true">添加列</button>
 							<table id="m_table" border="1px" bordercolor="#0099CC" cellspacing="0px" bordercolor="#000000" style="border-collapse:collapse">
-								<tr>
+								<c:if test="${empty goods.mulName}">
+									<tr>
 									<td width="80">SKU<input type="hidden" name="mulName"
 										value="sku"></td>
 									<td width="80">数量<input type="hidden" name="mulName"
@@ -488,6 +502,36 @@ ul[class="vertical-line"] li div img{
 										value="offer"></td>
 									<td width="350" align="center">图片</td>
 								</tr>
+								</c:if>
+								<c:if test="${!empty goods.mulName}">
+								<tr>
+									<td width="80">SKU<input type="hidden" name="mulName"
+										value="sku"></td>
+									<td width="80">数量<input type="hidden" name="mulName"
+										value="num"></td>
+									<td width="80">价格<input type="hidden" name="mulName"
+										value="price"></td>
+									<td width="80">折扣<input type="hidden" name="mulName"
+										value="offer"></td>
+									<c:forEach items="${goods.mulName}" var="ml" varStatus="status">
+										<c:if test="${ml != 'sku' && ml != 'num' && ml != 'price' && ml != 'offer'}">
+											<td width="80"><input name="mulName" class="easyui-textbox" missingMessage="该输入项不能为空" required data-options="prompt:'请输入值...'" style="width:50px" value="${ml}"></td>
+										</c:if>
+									</c:forEach>
+									<td width="350" align="center">图片</td>
+								</tr>
+								</c:if>
+								<c:if test="${!empty goods.mulVal}">
+								<c:forEach items="${goods.mulVal}" var="ml" varStatus="status">
+									<tr>
+									<c:forEach items="${ml.values}" var="vl" varStatus="statuskey">
+											<td width="80"><input name="mulVal[${status.index }].values" class="easyui-textbox" missingMessage="该输入项不能为空" required data-options="prompt:'请输入值...'" style="width:50px" value="${vl}"></td>
+									</c:forEach>
+									<td><div id="window_pic_${status.index }" style='padding: 10px;'><ul class='vertical-line'><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li></ul></div>
+				<div align='center' style='padding-top: 150px'><button type='button' class='easyui-linkbutton' data-options="iconCls:'icon-add'" onclick="openPic('window_pic_${status.index }','mulVal[${status.index }].img')">添加图片</button></div>
+									</tr>
+								</c:forEach>
+								</c:if>
 								<!-- <tr>
 									<td height="200"><input type="text" name='mulVal[0].values'
 										class="easyui-textbox" missingMessage="该输入项不能为空" required
@@ -502,24 +546,7 @@ ul[class="vertical-line"] li div img{
 										class="easyui-textbox" missingMessage="该输入项不能为空" required
 										data-options="prompt:'请输入值...'" style="width: 70px"></td>
 									<td>
-										<div id="attr_pic_0" style="padding: 10px;">
-											<ul>
-												<li>
-													<div
-														style="width: 150px; height: 150px; border: 1px solid #0099CC;"></div>
-												</li>
-												<li>
-													<div
-														style="width: 150px; height: 150px; border: 1px solid #0099CC;"></div>
-			
-												</li>
-											</ul>
-										</div>
-										<div align="center" style="padding-top: 150px">
-											<button type="button" class="easyui-linkbutton"
-												data-options="iconCls:'icon-add'" onclick="openPic('attr_pic_0','mulVal[0].img')">添加图片</button>
-												
-										</div>
+										
 									</td>
 								</tr> -->
 							</table>
@@ -778,7 +805,7 @@ ul[class="vertical-line"] li div img{
 			displayMsg : '',
 			onSelectPage : function(pageNumber, pageSize) {
 				console.info(pageNumber + " -- "+pageSize)
-				$.get("upload?pageNumber="+pageNumber+"&pageSize="+pageSize, function(data){
+				$.get("../../upload?pageNumber="+pageNumber+"&pageSize="+pageSize, function(data){
 				   json = eval('('+data+')');    
 					//console.info(json);
 					//console.info(json.files);
@@ -791,7 +818,7 @@ ul[class="vertical-line"] li div img{
 					 $.each(json.files, function (index, item) {  
 		                 //循环获取数据    
 		                 img_url = item.thumbnailUrl;
-		                 img_content = "<img src='"+item.thumbnailUrl+"'  class='divImg1' onclick=choose_img('"+item.thumbnailUrl+"')>"
+		                 img_content = "<img src='../../"+item.thumbnailUrl+"'  class='divImg1' onclick=choose_img('"+item.thumbnailUrl+"')>"
 		                 $("#pic_content ul li:eq("+index+")").children("div").html(img_content);
 						//console.info(JSON.stringify(item));
 // 		                 $("#list").html($("#list").html() + "<br>" + name + " - " + idnumber + " - " + sex + "<br/>");  
@@ -802,6 +829,6 @@ ul[class="vertical-line"] li div img{
 		});
 		
 	</script>
-	<script src="js/main.js"></script>
+	
 </body>
 </html>

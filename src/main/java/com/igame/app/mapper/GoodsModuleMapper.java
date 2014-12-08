@@ -25,7 +25,10 @@ package com.igame.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
+
+import com.igame.app.entity.GoodsEntity;
 
 /**
  * 人气王商品列表
@@ -36,8 +39,14 @@ public interface GoodsModuleMapper {
 
 	@Select("SELECT goods_id from t_hot_goods where appid = #{appid}")
 	public List<Long> listHotGoods(long appid);
-	
-	@Select("SELECT goods_id from t_sale_goods where appid = #{appid}")
-	public List<Long> listSaleGoods(long appid);
+
+	@Select("SELECT goods_id from t_sale_goods where appid = #{appid} limit #{start},#{end}")
+	public List<Long> listSaleGoods(@Param("appid")long appid,@Param("start")int start,@Param("end")int end);
+
+	@Select("SELECT count(goods_id) from t_sale_goods where appid = #{appid}")
+	public Long getSize(long appid);
+
+	@Select("SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid} limit #{start},#{end}")
+	public List<GoodsEntity> listSaleGoodsByPage(@Param("appid") long appid, @Param("start") int start, @Param("end") int end);
 
 }

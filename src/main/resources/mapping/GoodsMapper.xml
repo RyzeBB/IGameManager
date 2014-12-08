@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.igame.app.mapper.GoodsMapper">
+
+	<select id="list" parameterType="Long" resultType="GoodsEntity">
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid}
+	</select>
+	
+	<select id="listSize" parameterType="Long" resultType="long">
+		SELECT count(id) FROM t_goods where appid = #{appid}
+	</select>
+	
+	<select id="getGoodsById" parameterType="Long" resultType="GoodsEntity">
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where id = #{id}
+	</select>
+	
+	<select id="getGoodsByPage" parameterType="java.util.Map" resultType="GoodsEntity">
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid} limit #{start},#{end}
+	</select>
+
+	<select id="listByIds" parameterType="java.util.List" resultType="GoodsEntity">
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where id in
+		 <foreach item="item" index="index" collection="list" 
+                    open="(" separator="," close=")">
+                   #{item}
+            </foreach>
+	</select>
+
+	<insert id="create" parameterType="GoodsEntity">
+		INSERT INTO t_goods(type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel) VALUES(#{type},#{name},#{introduce},#{price},#{offer},#{unit},#{mulVa1Json},#{icon},#{titlePicJson},#{detailePicJson},#{paramsJson},#{address},#{stock},#{saleCount},#{shippingType},#{shippingCost},#{disStyle},#{serviecType},#{serviecTel})
+		<selectKey resultType="java.lang.Long"  order="AFTER" keyProperty="id" >
+       		SELECT LAST_INSERT_ID() AS ID   
+    	</selectKey>
+      
+	</insert>
+		
+	<update id="update" parameterType="GoodsEntity">
+		update t_goods 
+		set type=#{type},
+			name=#{name},
+			introduce=#{introduce},
+			price=#{price},
+			offer=#{offer},
+			unit=#{unit},
+			mulVa1Json=#{mulVa1Json},
+			icon=#{icon},
+			titlePicJson=#{titlePicJson},
+			detailePicJson=#{detailePicJson},
+			paramsJson=#{paramsJson},
+			address=#{address},
+			stock=#{stock},
+			saleCount=#{saleCount},
+			shippingType=#{shippingType},
+			shippingCost=#{shippingCost},
+			disStyle=#{disStyle},
+			serviecType=#{serviecType},
+			serviecTel=#{serviecTel} 
+		where id=#{id}
+	</update>
+
+
+	<delete id="delByIds" parameterType="java.util.List">
+		delete FROM t_goods where id in
+		 <foreach item="item" index="index" collection="list" 
+                    open="(" separator="," close=")">
+                   #{item}
+          </foreach>
+	</delete>
+
+</mapper>

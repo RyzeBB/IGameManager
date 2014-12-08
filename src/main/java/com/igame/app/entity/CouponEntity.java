@@ -2,17 +2,27 @@ package com.igame.app.entity;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
 /**
  * @author Allen 店铺优惠卷
  */
 public class CouponEntity {
 	private long id;
+	@JSONField(serialize = false)
 	private long appid;
 	private String name;
 	private int score;
 	private int rmb;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date start_time;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date end_time;
+	private String descrip;
 
 	public long getId() {
 		return id;
@@ -68,6 +78,14 @@ public class CouponEntity {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDescrip() {
+		return descrip;
+	}
+
+	public void setDescrip(String descrip) {
+		this.descrip = descrip;
 	}
 
 }

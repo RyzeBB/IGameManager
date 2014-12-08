@@ -42,6 +42,15 @@
 	<!--启动Spring MVC的注解功能,设置编码方式，防止乱码 -->
 	<bean
 		class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean
+				class="org.springframework.web.bind.support.ConfigurableWebBindingInitializer">
+				<property name="conversionService">
+					<bean
+						class="org.springframework.format.support.FormattingConversionServiceFactoryBean"></bean>
+				</property>
+			</bean>
+		</property>
 		<property name="messageConverters">
 			<list>
 				<bean
