@@ -10,16 +10,19 @@ import java.util.Date;
  */
 public class OrderEntity {
 	private long id;
-	private long gid;
 	private String deviceId;
 	private long appid;
 	private long billno;
-	private String ico;
-	private String name;
-	private int price;
-	private Date create_time;
-	private Date pay_time;
-	private int state;
+	private String payitem;// 物品id*price*num=sku#id*price*num=sku
+	private String goods_url;// id*url#id*url 商品图片
+	private String descrip;// 备注
+	private int price;// 价格
+	private int coupon;// 优惠卷金额
+	private String addr;// 收货地址
+	private Date create_time;// 下单时间
+	private Date pay_time;// 支付时间
+	private int state;// 状态 0表示正常 1表示关闭 2表示支付成功 3表示退款中 4表示退款成功
+	private String msg;// 留言
 	private String back_goods;
 
 	public long getId() {
@@ -30,20 +33,20 @@ public class OrderEntity {
 		this.id = id;
 	}
 
+	public String getAddr() {
+		return addr;
+	}
+
+	public void setAddr(String addr) {
+		this.addr = addr;
+	}
+
 	public String getDeviceId() {
 		return deviceId;
 	}
 
 	public void setDeviceId(String deviceId) {
 		this.deviceId = deviceId;
-	}
-
-	public long getGid() {
-		return gid;
-	}
-
-	public void setGid(long gid) {
-		this.gid = gid;
 	}
 
 	public long getAppid() {
@@ -62,20 +65,28 @@ public class OrderEntity {
 		this.billno = billno;
 	}
 
-	public String getIco() {
-		return ico;
+	public String getPayitem() {
+		return payitem;
 	}
 
-	public void setIco(String ico) {
-		this.ico = ico;
+	public void setPayitem(String payitem) {
+		this.payitem = payitem;
 	}
 
-	public String getName() {
-		return name;
+	public String getGoods_url() {
+		return goods_url;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setGoods_url(String goods_url) {
+		this.goods_url = goods_url;
+	}
+
+	public String getDescrip() {
+		return descrip;
+	}
+
+	public void setDescrip(String descrip) {
+		this.descrip = descrip;
 	}
 
 	public int getPrice() {
@@ -84,6 +95,14 @@ public class OrderEntity {
 
 	public void setPrice(int price) {
 		this.price = price;
+	}
+
+	public int getCoupon() {
+		return coupon;
+	}
+
+	public void setCoupon(int coupon) {
+		this.coupon = coupon;
 	}
 
 	public Date getCreate_time() {
@@ -108,6 +127,14 @@ public class OrderEntity {
 
 	public void setState(int state) {
 		this.state = state;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 
 	public String getBack_goods() {

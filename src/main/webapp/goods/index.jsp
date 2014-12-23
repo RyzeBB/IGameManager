@@ -333,28 +333,25 @@ ul[class="vertical-line"] li div img{
 				</tr>
 				<tr>
 					<td>商品简介:</td>
-					<td><input class="easyui-textbox" type="text" name="introduce"
-						data-options="multiline:true" required validType="length[5,10]"
-						invalidMessage="5-50个字符！" style="height: 80px; width: 300px"></input></td>
+					<td><input class="easyui-textbox" missingMessage="该输入项为必须输入项" type="text" name="introduce"
+						data-options="multiline:true,required:true,validType:'length[5,50]',invalidMessage:'5-50个字符！'"
+						 style="height: 80px; width: 300px"></input></td>
 				</tr>
 				<tr>
 					<td>商品价格:</td>
-					<td><input class="easyui-validatebox textbox" required
-						type="text" name="price" validType="length[1,10]"
-						invalidMessage="1-10个字符！" style="height: 25px; width: 100px">/元</td>
+					<td><input class="easyui-numberbox" precision="2" required
+						type="text" name="price" style="height: 25px; width: 100px">/元</td>
 				</tr>
 				<tr>
 					<td>商品折扣:</td>
-					<td><input class="easyui-validatebox textbox" required
-						type="text" name="offer" validType="length[1,3]"
-						invalidMessage="不能超过100！" style="height: 25px; width: 50px"
+					<td><input class="easyui-numberbox" min="1" max="100" precision="0" required
+						type="text" name="offer" style="height: 25px; width: 50px"
 						value="100">&nbsp;&nbsp;商品折扣(单位%，例如20，表示折扣20%)</td>
 				</tr>
 				<tr>
 					<td>商品库存:</td>
-					<td><input class="easyui-validatebox textbox" required
-						type="text" name="stock" validType="length[1,6]"
-						invalidMessage="1-6个字符！！" style="height: 25px; width: 50px"></td>
+					<td><input class="easyui-numberbox" min="1" max="100000" precision="0" required
+						type="text" name="stock" style="height: 25px; width: 50px"></td>
 				</tr>
 				<tr>
 					<td width="80">显示风格:</td>
@@ -379,9 +376,8 @@ ul[class="vertical-line"] li div img{
 				</tr>
 				<tr>
 					<td>快递费用:</td>
-					<td><input class="easyui-validatebox textbox" required
-						type="text" name="shippingCost" validType="length[1,10]"
-						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px"></td>
+					<td><input class="easyui-numberbox" precision="0" required
+						type="text" name="shippingCost" style="height: 25px; width: 60px"></td>
 				</tr>
 				<tr>
 					<td>联系方式:</td>

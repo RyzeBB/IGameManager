@@ -5,7 +5,7 @@ package com.igame.app.vo;
  */
 public class ResponseVO {
 	public static final int CODE_SUCCESS = 0;
-	public static final int CODE_ERROR = 0;
+	public static final int CODE_ERROR = 1;
 
 	private int actionCode;// 上行指令码
 	private int resultCode = CODE_SUCCESS;// 返回结果代码 0：成功 1：失败

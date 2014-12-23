@@ -133,6 +133,20 @@ public class DateUtil {
 		return false;
 	}
 
+	/**
+	 * 今天0点
+	 * 
+	 * @return
+	 */
+	public static Date getStartTime() {
+		Calendar todayStart = Calendar.getInstance();
+		todayStart.set(Calendar.HOUR, 0);
+		todayStart.set(Calendar.MINUTE, 0);
+		todayStart.set(Calendar.SECOND, 0);
+		todayStart.set(Calendar.MILLISECOND, 0);
+		return todayStart.getTime();
+	}
+
 	public static int sub(Date a, Date b) {
 		Calendar ca = Calendar.getInstance();
 		Calendar cb = Calendar.getInstance();
@@ -204,6 +218,7 @@ public class DateUtil {
 	public static String formatDate() {
 		return formatDate(new Date(), DAY_HOUR_FORMAT_STRING);
 	}
+
 	public static String formatDate(Date date) {
 		return formatDate(date, DAY_HOUR_FORMAT_STRING);
 	}
@@ -217,18 +232,17 @@ public class DateUtil {
 		return dateformat1.format(date);
 	}
 
-	public static Date str2Date(String date) throws ParseException{
-		
+	public static Date str2Date(String date) throws ParseException {
+
 		return str2Date(date, DAY_HOUR_FORMAT_STRING);
-		
+
 	}
-	
-	public static Date str2Date(String date, String format) throws ParseException{
-		 SimpleDateFormat df = new SimpleDateFormat(format);
-		 return df.parse(date); 
+
+	public static Date str2Date(String date, String format) throws ParseException {
+		SimpleDateFormat df = new SimpleDateFormat(format);
+		return df.parse(date);
 	}
-	
-	
+
 	/**
 	 * @return 今天指定时间
 	 */
@@ -251,8 +265,7 @@ public class DateUtil {
 		Calendar time = Calendar.getInstance();
 		time.setTime(d);
 		GregorianCalendar ca = new GregorianCalendar();
-		ca.set(time.get(Calendar.YEAR), time.get(Calendar.MONTH),
-				time.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		ca.set(time.get(Calendar.YEAR), time.get(Calendar.MONTH), time.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
 		ca.add(Calendar.DAY_OF_YEAR, 1);
 		return ca.getTime();
 	}
@@ -261,7 +274,7 @@ public class DateUtil {
 		SimpleDateFormat format = new SimpleDateFormat(str);
 		return format.format(new java.util.Date());
 	}
-	
+
 	/**
 	 * 返回当前日期的字符串 yyMMdd
 	 * 
@@ -270,9 +283,11 @@ public class DateUtil {
 	public static String getCurrentDate() {
 		return getCurrentDate("yyMMdd");
 	}
+
 	public static String getCurrentDateForLog() {
 		return getCurrentDate("MM-dd-HH-mm-ss");
 	}
+
 	public static String getCurrentDateForTestLog() {
 		return getCurrentDate("MM-dd   HH:mm:ss   SSS");
 	}

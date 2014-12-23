@@ -65,10 +65,13 @@ public class GoodsService {
 		List<Long> ids = goodsTypeMapper.listGoodsByType(appid, type, start, end);
 		List<GoodsEntity> entities = null;
 		if (ids != null && !ids.isEmpty()) {
-			if (ids.size() > pageCount) {
-				ids = ids.subList(0, pageCount);
-			}
+//			if (ids.size() > pageCount) {
+//				ids = ids.subList(0, pageCount);
+//			}
 			entities = goodsMapper.listByIds(ids);
+			for (GoodsEntity goodsEntity : entities) {
+				goodsEntity.decode();
+			}
 			responeVO.setProductList(entities);
 			long total = goodsTypeMapper.getSizeByType(appid, type);
 			responeVO.setTotal((int) total);

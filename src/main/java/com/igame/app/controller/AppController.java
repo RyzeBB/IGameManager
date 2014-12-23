@@ -35,15 +35,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
+import com.igame.app.entity.BuyerCouponEntity;
 import com.igame.app.entity.GoodsTypeEntity;
 import com.igame.app.exception.AppException;
+import com.igame.app.service.BuyerService;
 import com.igame.app.service.GoodsService;
+import com.igame.app.service.SignService;
+import com.igame.app.vo.BuyerResponeVO;
+import com.igame.app.vo.GoodsBuyRequestVO;
 import com.igame.app.vo.GoodsIdsRequest;
 import com.igame.app.vo.GoodsResponeVO;
 import com.igame.app.vo.GoodsTypeResponeVO;
 import com.igame.app.vo.RequestVO;
+import com.igame.app.vo.ResponseVO;
 import com.igame.app.vo.SaleRequest;
+import com.igame.app.vo.SignInfoResponeVO;
+import com.igame.app.vo.SignResponeVO;
 import com.igame.app.vo.TypeListRequest;
+import com.igame.commons.util.BusinessException;
 
 /**
  *
@@ -54,6 +63,10 @@ import com.igame.app.vo.TypeListRequest;
 public class AppController {
 	@Autowired
 	private GoodsService goodsService;
+	@Autowired
+	private SignService signService;
+	@Autowired
+	private BuyerService buyerService;
 
 	private static final Logger log = LoggerFactory.getLogger(AppController.class);
 
@@ -170,6 +183,122 @@ public class AppController {
 			throw new AppException(actionCode, "系统错误");
 		}
 
+	}
+
+	/**
+	 * 获取签到信息
+	 * 
+	 * @param requestVO
+	 * @return
+	 */
+	@RequestMapping(value = "/signinfo", method = RequestMethod.POST)
+	@ResponseBody
+	public SignInfoResponeVO getSign(@RequestBody RequestVO requestVO) {
+		long appid = requestVO.getAppid();
+		String deviceId = requestVO.getDeviceId();
+		int actionCode = requestVO.getActionCode();
+		log.debug("getSign --> appid:{},actionCode:{}", appid, actionCode);
+		try {
+			SignInfoResponeVO signResponeVO = signService.getSignInfo(appid, deviceId);
+			signResponeVO.setActionCode(actionCode);
+			return signResponeVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("getGoodsType error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
+	}
+
+	/**
+	 * 开始签到
+	 * 
+	 * @param requestVO
+	 * @return
+	 */
+	@RequestMapping(value = "/sign", method = RequestMethod.POST)
+	@ResponseBody
+	public SignResponeVO sign(@RequestBody RequestVO requestVO) {
+		long appid = requestVO.getAppid();
+		String deviceId = requestVO.getDeviceId();
+		int actionCode = requestVO.getActionCode();
+		log.debug("sign --> appid:{},actionCode:{}", appid, actionCode);
+		try {
+			SignResponeVO signResponeVO = signService.modifySignInfo(appid, deviceId);
+			signResponeVO.setActionCode(actionCode);
+			return signResponeVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (BusinessException e) {
+			throw new AppException(actionCode, e.getMessage());
+		} catch (Exception e) {
+			log.error("getGoodsType error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
+
+	}
+
+	@RequestMapping(value = "/appcoupon", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseVO getAppCoupon(@RequestBody RequestVO requestVO) {
+		long appid = requestVO.getAppid();
+		String deviceId = requestVO.getDeviceId();
+		int actionCode = requestVO.getActionCode();
+		log.debug("getAppCoupon --> appid:{},actionCode:{}", appid, actionCode);
+		try {
+			ResponseVO responseVO = signService.modifyCouPon(appid, deviceId);
+			responseVO.setActionCode(actionCode);
+			return responseVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (BusinessException e) {
+			throw new AppException(actionCode, e.getMessage());
+		} catch (Exception e) {
+			log.error("getGoodsType error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseVO getInfo(@RequestBody RequestVO requestVO) {
+		long appid = requestVO.getAppid();
+		String deviceId = requestVO.getDeviceId();
+		int actionCode = requestVO.getActionCode();
+		log.debug("getAppCoupon --> appid:{},actionCode:{}", appid, actionCode);
+		try {
+			BuyerResponeVO responseVO = buyerService.getInfo(appid, deviceId);
+			responseVO.setActionCode(actionCode);
+			return responseVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (Exception e) {
+			log.error("getGoodsType error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
+	}
+
+	@RequestMapping(value = "/buy", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseVO buyGoods(@RequestBody GoodsBuyRequestVO requestVO) {
+		long appid = requestVO.getAppid();
+		String deviceId = requestVO.getDeviceId();
+		int actionCode = requestVO.getActionCode();
+
+		log.debug("getAppCoupon --> appid:{},actionCode:{}", appid, actionCode);
+		try {
+			ResponseVO responeVO = buyerService.addBuyInfo(appid, deviceId, requestVO.getItems(), requestVO.getCid(),requestVO.getAddr(), requestVO.getMsg());
+			responeVO.setActionCode(actionCode);
+			return responeVO;
+		} catch (AppException e) {
+			throw e;
+		} catch (BusinessException e) {
+			log.error("getGoodsType error ", e);
+			throw new AppException(actionCode, e.getMessage());
+		} catch (Exception e) {
+			log.error("getGoodsType error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
 	}
 
 	/**

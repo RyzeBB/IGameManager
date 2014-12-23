@@ -23,33 +23,27 @@
  */
 package com.igame.app.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.igame.app.entity.OrderEntity;
+import com.igame.app.entity.SignEntity;
 
 /**
- * 人气王商品列表
+ * 签到
  * 
- * @author jdmr
+ * @author
  */
-public interface OrderMapper {
+public interface SignMapper {
 
-	@Select("SELECT * from t_order where appid = #{appid}")
-	public List<OrderEntity> listOrderByAppid(long appid);
+	@Select("SELECT * from t_sign where deviceId=#{deviceId} and appid = #{appid}")
+	public SignEntity getSign(@Param("appid") long appid, @Param("deviceId") String deviceId);
 
-	@Select("SELECT * from t_order where deviceId = #{deviceId} and appid = #{appid}")
-	public List<OrderEntity> listOrderByDeviceId(@Param("deviceId") String deviceId, @Param("appid") long appid);
+	@Insert("insert into t_sign(appid,deviceId,score,last_sign) values(#{appid},#{deviceId},#{score},#{last_sign})")
+	public long insertSign(SignEntity signEntity);
 
-	@Insert("insert into t_order(id,appid,deviceId,billno,payitem,goods_url,descrip,price,coupon,addr,create_time,pay_time,state,msg,back_goods) values(#{id},#{appid},#{deviceId},#{billno},#{payitem},#{goods_url},#{descrip},#{price},#{coupon},#{addr},#{create_time},#{pay_time},#{state},#{msg},#{back_goods})")
-	public long inserOrder(OrderEntity orderEntity);
-
-	@Update("update t_order set create_time=#{create_time},pay_time=#{pay_time},state=#{state}) where id = #{id}")
-	public long updateOrder(OrderEntity orderEntity);
-
+	@Update("update t_sign set score=#{score},last_sign=#{last_sign} where id = #{id} ")
+	public long updateSign(SignEntity signEntity);
 
 }

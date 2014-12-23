@@ -25,31 +25,33 @@ package com.igame.app.mapper;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.igame.app.entity.OrderEntity;
+import com.igame.app.entity.BuyerCouponEntity;
 
 /**
- * 人气王商品列表
+ * 买家优惠卷
  * 
  * @author jdmr
  */
-public interface OrderMapper {
+public interface BuyerCouponMapper {
 
-	@Select("SELECT * from t_order where appid = #{appid}")
-	public List<OrderEntity> listOrderByAppid(long appid);
+	@Select("SELECT	id,appid,deviceId,name,rmb,score,state,create_time,used_time FROM t_user_coupon where appid = #{appid} and deviceId = #{deviceId} and state = 0")
+	public List<BuyerCouponEntity> listCoupon(@Param("appid") long appid, @Param("deviceId") String deviceId);
+	
+	@Select("SELECT	id,appid,deviceId,name,rmb,score,state,create_time,used_time FROM t_user_coupon where id = #{id}")
+	public BuyerCouponEntity listCouponByid(long id);
 
-	@Select("SELECT * from t_order where deviceId = #{deviceId} and appid = #{appid}")
-	public List<OrderEntity> listOrderByDeviceId(@Param("deviceId") String deviceId, @Param("appid") long appid);
+	@Insert("insert into t_user_coupon(appid,deviceId,name,rmb,score,state,create_time,used_time) values(#{appid},#{deviceId},#{name},#{rmb},#{score},#{state},#{create_time},#{used_time})")
+	public void insertCoupon(BuyerCouponEntity buyerCouponEntity);
 
-	@Insert("insert into t_order(id,appid,deviceId,billno,payitem,goods_url,descrip,price,coupon,addr,create_time,pay_time,state,msg,back_goods) values(#{id},#{appid},#{deviceId},#{billno},#{payitem},#{goods_url},#{descrip},#{price},#{coupon},#{addr},#{create_time},#{pay_time},#{state},#{msg},#{back_goods})")
-	public long inserOrder(OrderEntity orderEntity);
+	@Update("update t_user_coupon set appid=#{appid},deviceId=#{deviceId},name=#{name},rmb=#{rmb},score=#{score},state=#{state},create_time=#{create_time},used_time=#{used_time} where id=#{id}")
+	public void updateCoupon(BuyerCouponEntity couponEntity);
 
-	@Update("update t_order set create_time=#{create_time},pay_time=#{pay_time},state=#{state}) where id = #{id}")
-	public long updateOrder(OrderEntity orderEntity);
-
-
+	@Delete("delete from t_user_coupon where id=#{id}")
+	public void deleteCoupon(long id);
 }
