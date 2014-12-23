@@ -35,8 +35,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.alibaba.fastjson.JSON;
-import com.igame.app.entity.BuyerCouponEntity;
 import com.igame.app.entity.GoodsTypeEntity;
+import com.igame.app.entity.OrderEntity;
 import com.igame.app.exception.AppException;
 import com.igame.app.service.BuyerService;
 import com.igame.app.service.GoodsService;
@@ -46,6 +46,7 @@ import com.igame.app.vo.GoodsBuyRequestVO;
 import com.igame.app.vo.GoodsIdsRequest;
 import com.igame.app.vo.GoodsResponeVO;
 import com.igame.app.vo.GoodsTypeResponeVO;
+import com.igame.app.vo.OrderResponeVO;
 import com.igame.app.vo.RequestVO;
 import com.igame.app.vo.ResponseVO;
 import com.igame.app.vo.SaleRequest;
@@ -287,7 +288,7 @@ public class AppController {
 
 		log.debug("getAppCoupon --> appid:{},actionCode:{}", appid, actionCode);
 		try {
-			ResponseVO responeVO = buyerService.addBuyInfo(appid, deviceId, requestVO.getItems(), requestVO.getCid(),requestVO.getAddr(), requestVO.getMsg());
+			ResponseVO responeVO = buyerService.addBuyInfo(appid, deviceId, requestVO.getItems(), requestVO.getCid(), requestVO.getAddr(), requestVO.getMsg());
 			responeVO.setActionCode(actionCode);
 			return responeVO;
 		} catch (AppException e) {
@@ -295,6 +296,29 @@ public class AppController {
 		} catch (BusinessException e) {
 			log.error("getGoodsType error ", e);
 			throw new AppException(actionCode, e.getMessage());
+		} catch (Exception e) {
+			log.error("getGoodsType error ", e);
+			throw new AppException(actionCode, "系统错误");
+		}
+	}
+
+	@RequestMapping(value = "order", method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseVO buyGoods(@RequestBody RequestVO requestVO) {
+		long appid = requestVO.getAppid();
+		String deviceId = requestVO.getDeviceId();
+		int actionCode = requestVO.getActionCode();
+
+		log.debug("getAppCoupon --> appid:{},actionCode:{}", appid, actionCode);
+		try {
+			OrderResponeVO responeVO = new OrderResponeVO();
+			responeVO.setActionCode(actionCode);
+			List<OrderEntity> orderEntities = buyerService.getOrderByCustom(appid, deviceId);
+			responeVO.setActionCode(actionCode);
+			responeVO.setOrders(orderEntities);
+			return responeVO;
+		} catch (AppException e) {
+			throw e;
 		} catch (Exception e) {
 			log.error("getGoodsType error ", e);
 			throw new AppException(actionCode, "系统错误");

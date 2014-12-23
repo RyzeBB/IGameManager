@@ -42,11 +42,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.igame.app.entity.GoodsEntity;
 import com.igame.app.entity.GoodsTypeEntity;
+import com.igame.app.entity.OrderEntity;
+import com.igame.app.exception.AppException;
+import com.igame.app.service.BuyerService;
 import com.igame.app.service.GoodsService;
 import com.igame.app.vo.GoodsVO;
+import com.igame.app.vo.OrderResponeVO;
+import com.igame.app.vo.RequestVO;
+import com.igame.app.vo.ResponseVO;
 import com.igame.security.entity.SecUser;
 
 /**
@@ -58,6 +65,8 @@ import com.igame.security.entity.SecUser;
 public class GoodsController {
 	@Autowired
 	private GoodsService goodsService;
+	@Autowired
+	private BuyerService buyerService;
 
 	private static final Logger log = LoggerFactory.getLogger(GoodsController.class);
 
@@ -86,16 +95,16 @@ public class GoodsController {
 		goodsService.modifyGoods(goodsVO, appid);
 		return "goods/success";
 	}
-	
+
 	@RequestMapping(value = "/delete", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject delGoods(@RequestBody List<Long> ids,HttpSession session) {
+	public JSONObject delGoods(@RequestBody List<Long> ids, HttpSession session) {
 		long appid = ((SecUser) session.getAttribute("user")).getAppid();
-		log.debug("modifyGoods --> appid:{},ids:{}", appid,ids);
+		log.debug("modifyGoods --> appid:{},ids:{}", appid, ids);
 		goodsService.delete(appid, ids);
 		JSONObject object = new JSONObject();
 		object.put("success", true);
-		object.put("msg", "成功删除 "+ids.size()+" 条记录  ");
+		object.put("msg", "成功删除 " + ids.size() + " 条记录  ");
 		return object;
 	}
 
@@ -111,33 +120,35 @@ public class GoodsController {
 		long appid = ((SecUser) session.getAttribute("user")).getAppid();
 		return goodsService.getGoodsType(appid);
 	}
-	
+
 	@RequestMapping(value = "/save", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject save(@RequestParam("name")String name,@RequestParam("pic_url")String pic_url,HttpSession session) {
+	public JSONObject save(@RequestParam("name") String name, @RequestParam("pic_url") String pic_url, HttpSession session) {
 		long appid = ((SecUser) session.getAttribute("user")).getAppid();
-		goodsService.addType(appid,name,pic_url);
+		goodsService.addType(appid, name, pic_url);
 		JSONObject object = new JSONObject();
-		object.put("ret",0);
+		object.put("ret", 0);
 		return object;
 	}
+
 	@RequestMapping(value = "/update", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject update(@ModelAttribute("fm") GoodsTypeEntity goodsTypeEntity,HttpSession session) {
+	public JSONObject update(@ModelAttribute("fm") GoodsTypeEntity goodsTypeEntity, HttpSession session) {
 		long appid = ((SecUser) session.getAttribute("user")).getAppid();
 		goodsTypeEntity.setAppid(appid);
 		goodsService.modifyType(goodsTypeEntity);
 		JSONObject object = new JSONObject();
-		object.put("ret",0);
+		object.put("ret", 0);
 		return object;
 	}
+
 	@RequestMapping(value = "/delType", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject deleteType(@RequestBody List<Long> ids,HttpSession session) {
+	public JSONObject deleteType(@RequestBody List<Long> ids, HttpSession session) {
 		long appid = ((SecUser) session.getAttribute("user")).getAppid();
-		goodsService.deleteType(appid,ids);
+		goodsService.deleteType(appid, ids);
 		JSONObject object = new JSONObject();
-		object.put("ret",0);
+		object.put("ret", 0);
 		return object;
 	}
 
@@ -165,6 +176,23 @@ public class GoodsController {
 		GoodsVO goods = goodsService.getGoodsById(id);
 		model.addAttribute("goods", goods);
 		return "goods/modify";
+	}
+
+	/**
+	 * 获取订单信息
+	 * 
+	 * @param session
+	 * @return
+	 */
+	@RequestMapping(value = "order", method = RequestMethod.POST)
+	@ResponseBody
+	public List<OrderEntity> buyGoods(HttpSession session) {
+		long appid = ((SecUser) session.getAttribute("user")).getAppid();
+		List<OrderEntity> orderEntities = buyerService.getOrderByApp(appid);
+		for (OrderEntity orderEntity : orderEntities) {
+			System.err.println(JSON.toJSON(orderEntity));
+		}
+		return orderEntities;
 	}
 
 }

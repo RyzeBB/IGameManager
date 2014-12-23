@@ -45,7 +45,7 @@ public interface OrderMapper {
 	@Select("SELECT * from t_order where deviceId = #{deviceId} and appid = #{appid}")
 	public List<OrderEntity> listOrderByDeviceId(@Param("deviceId") String deviceId, @Param("appid") long appid);
 
-	@Insert("insert into t_order(id,appid,deviceId,billno,payitem,goods_url,descrip,price,coupon,addr,create_time,pay_time,state,msg,back_goods) values(#{id},#{appid},#{deviceId},#{billno},#{payitem},#{goods_url},#{descrip},#{price},#{coupon},#{addr},#{create_time},#{pay_time},#{state},#{msg},#{back_goods})")
+	@Insert("insert into t_order(id,appid,deviceId,billno,payitem,descrip,price,coupon,addr,create_time,pay_time,state,msg) values(#{id},#{appid},#{deviceId},#{billno},#{payitem},#{descrip},#{price},#{coupon},#{addr},#{create_time},#{pay_time},#{state},#{msg})")
 	public long inserOrder(OrderEntity orderEntity);
 
 	@Update("update t_order set create_time=#{create_time},pay_time=#{pay_time},state=#{state}) where id = #{id}")

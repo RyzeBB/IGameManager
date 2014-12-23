@@ -3,18 +3,17 @@ package com.igame.app.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
 import com.igame.app.entity.BuyerCouponEntity;
 import com.igame.app.entity.GoodsEntity;
 import com.igame.app.entity.MulVal;
 import com.igame.app.entity.OrderEntity;
+import com.igame.app.entity.OrderEntity.BuyItem;
 import com.igame.app.mapper.BuyerCouponMapper;
 import com.igame.app.mapper.GoodsMapper;
 import com.igame.app.mapper.OrderMapper;
@@ -69,15 +68,17 @@ public class BuyerService {
 				coupon_rmb = buyerCouponEntity.getRmb();
 			}
 		}
-		StringBuffer payItems = new StringBuffer();// 购买商品的信息 id 价格 数量
-		StringBuffer itemsImgs = new StringBuffer();// 图片信息
-		StringBuffer itemBackUp = new StringBuffer();// 商品备份信息
+		// StringBuffer payItems = new StringBuffer();// 购买商品的信息 id 价格 数量
+		// StringBuffer itemsImgs = new StringBuffer();// 图片信息
+		// StringBuffer itemBackUp = new StringBuffer();// 商品备份信息
 
 		// List<GoodsEntity> goodsList = new
 		// ArrayList<GoodsEntity>(items.size());
-
+		List<BuyItem> buyItems = new ArrayList<OrderEntity.BuyItem>();
+		List<GoodsEntity> goodses = new ArrayList<GoodsEntity>();
 		int priceAll = 0;
 		for (Item item : items) {
+			BuyItem buyItem = new BuyItem();
 			GoodsEntity goods = goodsMapper.getGoodsById(item.getGid());
 			if (goods == null) {
 				throw new BusinessException("商品已下架");
@@ -121,16 +122,22 @@ public class BuyerService {
 				// id*price*num=sku#id*price*num=sku
 				price = price * offer / 100;
 				priceAll += price;
-				payItems.append(item.getGid()).append("*").append(price).append("*").append(num).append("=").append(item.getSku()).append("#");
-				itemsImgs.append(item.getGid()).append("*").append(img).append("#");
-				itemBackUp.append(JSON.toJSONString(goods)).append("APP=APP");
+				buyItem.setId(item.getGid());
+				buyItem.setNum(num);
+				buyItem.setPrice(price);
+				buyItem.setSku(item.getSku());
+				buyItem.setImg(img);
+				buyItem.setBackup(goods);
+				buyItems.add(buyItem);
 				goods.setSaleCount(goods.getSaleCount() + 1);
-				goodsMapper.update(goods);
-				// goodsList.add(goods);
+				goodses.add(goods);
 			}
 		}
 		if (coupon_rmb != 0 && coupon_rmb > priceAll) {
 			throw new BusinessException("优惠卷使用不合法");
+		}
+		for (GoodsEntity goodsEntity : goodses) {
+			goodsMapper.update(goodsEntity);
 		}
 
 		// 遍历物品生成订单
@@ -140,12 +147,44 @@ public class BuyerService {
 		entity.setCoupon(coupon_rmb);
 		entity.setMsg(msg);
 		entity.setCreate_time(new Date());
-		entity.setPayitem(payItems.toString());
-		entity.setGoods_url(itemsImgs.toString());
-		entity.setBack_goods(itemBackUp.toString());
+		entity.setItems(buyItems);
 		entity.setPrice(priceAll - coupon_rmb);
 		entity.setAddr(addr);
+		entity.encode();
 		orderMapper.inserOrder(entity);
 		return responeVO;
+	}
+
+	/**
+	 * 商家获取订单信息
+	 * 
+	 * @param appid
+	 * @return
+	 */
+	public List<OrderEntity> getOrderByApp(long appid) {
+		List<OrderEntity> entities = orderMapper.listOrderByAppid(appid);
+		if (entities != null) {
+			for (OrderEntity orderEntity : entities) {
+				orderEntity.decode();
+			}
+		}
+		return entities;
+	}
+
+	/**
+	 * 用户以获取订单信息
+	 * 
+	 * @param appid
+	 * @param deviceId
+	 * @return
+	 */
+	public List<OrderEntity> getOrderByCustom(long appid, String deviceId) {
+		List<OrderEntity> entities = orderMapper.listOrderByDeviceId(deviceId, appid);
+		if (entities != null) {
+			for (OrderEntity orderEntity : entities) {
+				orderEntity.decode();
+			}
+		}
+		return entities;
 	}
 }
