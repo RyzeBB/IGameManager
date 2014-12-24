@@ -19,22 +19,18 @@ public class OrderEntity {
 	private String deviceId;
 	private long appid;
 	private long billno;
-	@JSONField(serialize=false)
-	private String payitem;// 物品id*price*num=sku#id*price*num=sku
-	// private String goods_url;// id*url#id*url 商品图片
-	private String descrip;// 备注
-	private int price;// 价格
+	@JSONField(serialize = false)
+	private String payitem;// 购买物品详情
+	private String descrip;// 备注 快递单号 后续可能都丢在这个里面
+	private int price;// 总价格
 	private int coupon;// 优惠卷金额
 	private String addr;// 收货地址
 	@JSONField(format = "yyyy-MM-dd HH:mm:ss")
 	private Date create_time;// 下单时间
 	private Date pay_time;// 支付时间
-	private int state;// 状态 0表示正常 1表示关闭 2表示支付成功 3表示退款中 4表示退款成功
+	private int state;// 状态 0表示正常 1表示关闭 2表示支付成功 3表示退款中 4表示退款成功 5等待确认收货 6交易成功
 	private String msg;// 留言
-	private String back_goods;
-//	private List<GoodsEntity> goodses;
-
-	private List<BuyItem> items;
+	private List<BuyItem> items;// 商品信息
 
 	public void decode() {
 		if (StringUtils.isNotBlank(payitem)) {
@@ -42,11 +38,6 @@ public class OrderEntity {
 		} else {
 			items = null;
 		}
-//		if (StringUtils.isNotBlank(back_goods)) {
-//			goodses = JSON.parseArray(back_goods, GoodsEntity.class);
-//		} else {
-//			goodses = null;
-//		}
 	}
 
 	public void encode() {
@@ -55,11 +46,11 @@ public class OrderEntity {
 		} else {
 			payitem = null;
 		}
-//		if (goodses != null && !goodses.isEmpty()) {
-//			payitem = JSON.toJSONString(items);
-//		} else {
-//			payitem = null;
-//		}
+		// if (goodses != null && !goodses.isEmpty()) {
+		// payitem = JSON.toJSONString(items);
+		// } else {
+		// payitem = null;
+		// }
 	}
 
 	public List<BuyItem> getItems() {
@@ -182,21 +173,13 @@ public class OrderEntity {
 		this.msg = msg;
 	}
 
-	public String getBack_goods() {
-		return back_goods;
-	}
-
-	public void setBack_goods(String back_goods) {
-		this.back_goods = back_goods;
-	}
-
 	public static class BuyItem {
 		// id*price*num=sku#id*price*num=sku
-		private long id;
-		private double price;
-		private int num;
+		private long id;// 商品id
+		private double price;// 价格
+		private int num;// 数量
 		private String sku;
-		private String img;
+		private String img;// 图片地址
 
 		private GoodsEntity backup;
 
