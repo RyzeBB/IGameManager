@@ -202,6 +202,7 @@ ul[class="vertical-line"] li div img{
 		content = "<tr>";
 		temp1 = "<td>SKU-"+rowCount+"<input type='hidden' name='mulVal[0].values' value='SKU-"+rowCount+"'></td>";
 		temp = "<td><input type=\"text\"  name='mulVal["+rowCount+"].values' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:70px\"></td>";
+		temp_v = "<td><input type=\"text\"  name='mulVal["+rowCount+"].values' class='easyui-numberbox' min='1' max='100000' precision='0' required data-options=\"prompt:'请输入值...'\" style=\"width:70px\"></td>";
 		temp4= "<td><div id='window_pic_"+rowCount +"' style='padding: 10px;'><ul class='vertical-line'><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li></ul></div>"+
 				"<div align='center' style='padding-top: 150px'><button type='button' class='easyui-linkbutton' data-options=\"iconCls:'icon-add'\" onclick=\"openPic('window_pic_"+rowCount+"','mulVal["+rowCount+"].img')\">添加图片</button></div>";
 		rowCount++;
@@ -210,6 +211,8 @@ ul[class="vertical-line"] li div img{
 				content = content + temp1;
 			}else if(i==4){
 				content = content + temp4;
+			}else if(i<4){
+				content = content + temp_v;
 			}else{
 				content = content + temp;
 			}
@@ -340,20 +343,20 @@ ul[class="vertical-line"] li div img{
 				</tr>
 				<tr>
 					<td>商品价格:</td>
-					<td><input class="easyui-validatebox textbox" required
+					<td><input  class="easyui-numberbox" precision="2" required
 						type="text" name="price" validType="length[1,10]"
 						invalidMessage="1-10个字符！" style="height: 25px; width: 100px" value="${goods.price}">/元</td>
 				</tr>
 				<tr>
 					<td>商品折扣:</td>
-					<td><input class="easyui-validatebox textbox" required
+					<td><input class="easyui-numberbox" min="1" max="100" precision="0" required
 						type="text" name="offer" validType="length[1,3]"
 						invalidMessage="不能超过100！" style="height: 25px; width: 50px"
 						 value="${goods.offer}">&nbsp;&nbsp;商品折扣(单位%，例如20，表示折扣20%)</td>
 				</tr>
 				<tr>
 					<td>商品库存:</td>
-					<td><input class="easyui-validatebox textbox" required
+					<td><input class="easyui-numberbox" min="1" max="100000" precision="0" required
 						type="text" name="stock" validType="length[1,6]"
 						invalidMessage="1-6个字符！！" style="height: 25px; width: 50px" value="${goods.stock}"></td>
 				</tr>
@@ -379,7 +382,7 @@ ul[class="vertical-line"] li div img{
 				</tr>
 				<tr>
 					<td>快递费用:</td>
-					<td><input class="easyui-validatebox textbox" required
+					<td><input class="easyui-numberbox" precision="0" required
 						type="text" name="shippingCost" validType="length[1,10]"
 						invalidMessage="1-10个字符！！" style="height: 25px; width: 60px" value="${goods.shippingCost}"></td>
 				</tr>
@@ -525,7 +528,15 @@ ul[class="vertical-line"] li div img{
 								<c:forEach items="${goods.mulVal}" var="ml" varStatus="status">
 									<tr>
 									<c:forEach items="${ml.values}" var="vl" varStatus="statuskey">
+										<c:if test="${status.index ==0}">
+										<c:if test="${statuskey.index ==0}">
 											<td width="80"><input name="mulVal[${status.index }].values" class="easyui-textbox" missingMessage="该输入项不能为空" required data-options="prompt:'请输入值...'" style="width:50px" value="${vl}"></td>
+										</c:if>
+										<c:if test="${statuskey.index !=0}">
+											<td width="80"><input name="mulVal[${status.index }].values" class="easyui-numberbox" min='1' max='100000' precision='0' missingMessage="该输入项不能为空" required data-options="prompt:'请输入值...'" style="width:50px" value="${vl}"></td>
+										</c:if>
+										</c:if>
+										
 									</c:forEach>
 									<td><div id="window_pic_${status.index }" style='padding: 10px;'><ul class='vertical-line'><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li></ul></div>
 				<div align='center' style='padding-top: 150px'><button type='button' class='easyui-linkbutton' data-options="iconCls:'icon-add'" onclick="openPic('window_pic_${status.index }','mulVal[${status.index }].img')">添加图片</button></div>

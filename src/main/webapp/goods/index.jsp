@@ -132,9 +132,18 @@ ul[class="vertical-line"] li div img{
 	};
 
 	function submitForm() {
+		ss = $('input[name="titlePic"]');
+		if(ss.length ==0){
+			 $.messager.alert('警告','请选择主图!!','error');  
+			 return;
+		}
+		
 		tag = $('#fbean').form('validate');
 		if (tag) {
-			$('#fbean').submit();
+			//判断是否有主图
+			ss = $("#titlePic")
+			alert(ss.length);
+// 			$('#fbean').submit();
 			// 			jsonuserinfo = $("#ff").serializeObject();
 			// 			var jsonuserinfo = $('#ff').serializeObject();
 			// 			$.ajaxSetup({
@@ -268,6 +277,7 @@ ul[class="vertical-line"] li div img{
 		content = "<tr>";
 		temp1 = "<td>SKU-"+rowCount+"<input type='hidden' name='mulVal[0].values' value='SKU-"+rowCount+"'></td>";
 		temp = "<td><input type=\"text\"  name='mulVal["+rowCount+"].values' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:70px\"></td>";
+		temp_v = "<td><input type=\"text\"  name='mulVal["+rowCount+"].values' class='easyui-numberbox' min='1' max='100000' precision='0' required data-options=\"prompt:'请输入值...'\" style=\"width:70px\"></td>";
 		temp4= "<td><div id='window_pic_"+rowCount +"' style='padding: 10px;'><ul class='vertical-line'><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li></ul></div>"+
 				"<div align='center' style='padding-top: 150px'><button type='button' class='easyui-linkbutton' data-options=\"iconCls:'icon-add'\" onclick=\"openPic('window_pic_"+rowCount+"','mulVal["+rowCount+"].img')\">添加图片</button></div>";
 		rowCount++;
@@ -276,6 +286,8 @@ ul[class="vertical-line"] li div img{
 				content = content + temp1;
 			}else if(i==4){
 				content = content + temp4;
+			}else if(i<4){
+				content = content + temp_v;
 			}else{
 				content = content + temp;
 			}

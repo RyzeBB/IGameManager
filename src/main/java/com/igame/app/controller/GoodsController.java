@@ -54,6 +54,7 @@ import com.igame.app.vo.GoodsVO;
 import com.igame.app.vo.OrderResponeVO;
 import com.igame.app.vo.RequestVO;
 import com.igame.app.vo.ResponseVO;
+import com.igame.commons.util.BusinessException;
 import com.igame.security.entity.SecUser;
 
 /**
@@ -186,13 +187,20 @@ public class GoodsController {
 	 */
 	@RequestMapping(value = "order", method = RequestMethod.POST)
 	@ResponseBody
-	public List<OrderEntity> buyGoods(HttpSession session) {
+	public List<OrderEntity> getOrders(HttpSession session) {
 		long appid = ((SecUser) session.getAttribute("user")).getAppid();
 		List<OrderEntity> orderEntities = buyerService.getOrderByApp(appid);
-		for (OrderEntity orderEntity : orderEntities) {
-			System.err.println(JSON.toJSON(orderEntity));
-		}
 		return orderEntities;
+	}
+
+	@RequestMapping(value = "morder", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject modifyOrder(@RequestParam("id") long id, @RequestParam("state") int state, @RequestParam("descrip") String descrip, HttpSession session) throws BusinessException {
+		long appid = ((SecUser) session.getAttribute("user")).getAppid();
+		buyerService.modifyOrder(id, appid, state, descrip);
+		JSONObject object = new JSONObject(1);
+		object.put("state", "success");
+		return object;
 	}
 
 }

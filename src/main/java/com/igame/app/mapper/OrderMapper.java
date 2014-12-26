@@ -24,6 +24,7 @@
 package com.igame.app.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
@@ -42,14 +43,23 @@ public interface OrderMapper {
 	@Select("SELECT * from t_order where appid = #{appid}")
 	public List<OrderEntity> listOrderByAppid(long appid);
 
+	@Select("SELECT * from t_order where id = #{id}")
+	public OrderEntity getOrderById(long id);
+
 	@Select("SELECT * from t_order where deviceId = #{deviceId} and appid = #{appid}")
 	public List<OrderEntity> listOrderByDeviceId(@Param("deviceId") String deviceId, @Param("appid") long appid);
 
 	@Insert("insert into t_order(id,appid,deviceId,billno,payitem,descrip,price,coupon,addr,create_time,pay_time,state,msg) values(#{id},#{appid},#{deviceId},#{billno},#{payitem},#{descrip},#{price},#{coupon},#{addr},#{create_time},#{pay_time},#{state},#{msg})")
 	public long inserOrder(OrderEntity orderEntity);
 
-	@Update("update t_order set create_time=#{create_time},pay_time=#{pay_time},state=#{state}) where id = #{id}")
-	public long updateOrder(OrderEntity orderEntity);
+	/**
+	 * 更新订单状态
+	 * @param orderEntity
+	 * @param state_old
+	 * @return
+	 */
+	@Update("update t_order set descrip=#{descrip},state=#{state} where id = #{id} and state = #{state_old}")
+	public long updateOrder(Map<String, Object> params);
 
 
 }

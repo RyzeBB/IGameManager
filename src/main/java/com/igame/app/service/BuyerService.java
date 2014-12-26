@@ -2,8 +2,11 @@ package com.igame.app.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.ibatis.annotations.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -153,6 +156,31 @@ public class BuyerService {
 		entity.encode();
 		orderMapper.inserOrder(entity);
 		return responeVO;
+	}
+
+	public void modifyOrder(long id, long appid, int state, String descrip) throws BusinessException {
+		OrderEntity entity = orderMapper.getOrderById(id);
+		if (entity == null) {
+			throw new BusinessException("订单不存在");
+		} else {
+			if (entity.getAppid() != appid) {
+				throw new BusinessException("非法操作");
+			}
+
+			int old_state = entity.getState();
+			entity.setState(state);
+			entity.setDescrip(descrip);
+//			@Update("update t_order set descrip=#{descrip},state=#{state}) where id = #{id} and state = #{state_old}")
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("id", id);
+			params.put("state", state);
+			params.put("descrip", descrip);
+			params.put("state_old", old_state);
+			long flag = orderMapper.updateOrder(params);
+			if (flag != 1) {
+				throw new BusinessException("更新失败，请刷新界面");
+			}
+		}
 	}
 
 	/**
