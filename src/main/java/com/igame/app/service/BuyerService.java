@@ -126,7 +126,7 @@ public class BuyerService {
 				price = price * offer / 100;
 				priceAll += price;
 				buyItem.setId(item.getGid());
-				buyItem.setNum(num);
+				buyItem.setNum(item.getNum());
 				buyItem.setPrice(price);
 				buyItem.setSku(item.getSku());
 				buyItem.setImg(img);
@@ -155,6 +155,10 @@ public class BuyerService {
 		entity.setAddr(addr);
 		entity.encode();
 		orderMapper.inserOrder(entity);
+		if(buyerCouponEntity!=null){
+			buyerCouponEntity.setState(1);
+			buyerCouponMapper.updateCoupon(buyerCouponEntity);
+		}
 		return responeVO;
 	}
 

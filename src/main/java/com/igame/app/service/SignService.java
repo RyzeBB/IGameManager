@@ -12,6 +12,7 @@ import com.igame.app.entity.BuyerCouponEntity;
 import com.igame.app.mapper.BuyerCouponMapper;
 import com.igame.app.mapper.CouponMapper;
 import com.igame.app.mapper.SignMapper;
+import com.igame.app.vo.BuyerResponeVO;
 import com.igame.app.vo.ResponseVO;
 import com.igame.app.vo.SignInfoResponeVO;
 import com.igame.app.vo.SignResponeVO;
@@ -118,6 +119,10 @@ public class SignService {
 		} else {
 			throw new BusinessException("积分不够");
 		}
-		return new ResponseVO();
+		BuyerResponeVO responeVO = new BuyerResponeVO();
+		List<BuyerCouponEntity> es = buyerCouponMapper.listCoupon(appid, deviceId);
+		responeVO.setCoupon(es);
+		
+		return responeVO;
 	}
 }

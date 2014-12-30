@@ -43,7 +43,7 @@ public interface BuyerCouponMapper {
 	@Select("SELECT	id,appid,deviceId,name,rmb,score,state,create_time,used_time FROM t_user_coupon where appid = #{appid} and deviceId = #{deviceId} and state = 0")
 	public List<BuyerCouponEntity> listCoupon(@Param("appid") long appid, @Param("deviceId") String deviceId);
 	
-	@Select("SELECT	id,appid,deviceId,name,rmb,score,state,create_time,used_time FROM t_user_coupon where id = #{id}")
+	@Select("SELECT	id,appid,deviceId,name,rmb,score,state,create_time,used_time FROM t_user_coupon where id = #{id} and state > 0")
 	public BuyerCouponEntity listCouponByid(long id);
 
 	@Insert("insert into t_user_coupon(appid,deviceId,name,rmb,score,state,create_time,used_time) values(#{appid},#{deviceId},#{name},#{rmb},#{score},#{state},#{create_time},#{used_time})")
