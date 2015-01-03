@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.annotation.JSONField;
 
-public class GoodsEntity implements JsonEntity,Serializable {
+public class GoodsEntity implements JsonEntity, Serializable {
 	/**
 	 * 
 	 */
@@ -16,14 +16,16 @@ public class GoodsEntity implements JsonEntity,Serializable {
 	private long id;// 商品ID
 	@JSONField(serialize = false)
 	private long appid;// 商家id
-	//是否为人气王商品
-//	private int hot;
+	// 是否为人气王商品
+	// private int hot;
 	private int type;// 商品类型ID
 	private String typeName;// 商品类型名称
 	private String name;// 商品名称
 	private String introduce;// 商品简介
 	private double price;// 商品原始价格
 	private int offer;// 商品折扣(单位%，例如20，表示折扣20%)
+	private int hot_type;// 人气王产品
+	private int sale_type;// 天天惠产品
 	private String unit;// 价格单位
 	@JSONField(serialize = false)
 	private String mulVa1Json;// 多属性
@@ -42,6 +44,22 @@ public class GoodsEntity implements JsonEntity,Serializable {
 	private int disStyle;// 显示风格
 	private String serviecType;// 客服方式，1为电话，2为微信号，3为QQ号
 	private String serviecTel;// 客服电话/或微信号/或QQ号
+
+	public int getHot_type() {
+		return hot_type;
+	}
+
+	public void setHot_type(int hot_type) {
+		this.hot_type = hot_type;
+	}
+
+	public int getSale_type() {
+		return sale_type;
+	}
+
+	public void setSale_type(int sale_type) {
+		this.sale_type = sale_type;
+	}
 
 	// 原始对象操作
 	private List<MulVal> mulVal;

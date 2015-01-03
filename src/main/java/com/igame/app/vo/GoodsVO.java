@@ -22,9 +22,12 @@ public class GoodsVO {
 	private String shippingType;// 快递方式(如果这个值为null，表示免运费)
 	private int shippingCost;// 快递费
 	private int disStyle;// 显示风格
+	private int hot_type;// 人气王产品
+	private int sale_type;// 天天惠产品
 	private String serviecType;// 客服方式，1为电话，2为微信号，3为QQ号
 	private String serviecTel;// 客服电话/或微信号/或QQ号
 
+	
 	// 原始对象操作
 	private List<MutiAttr> mulVal;
 	private List<String> mulName;
@@ -54,6 +57,22 @@ public class GoodsVO {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public int getHot_type() {
+		return hot_type;
+	}
+
+	public void setHot_type(int hot_type) {
+		this.hot_type = hot_type;
+	}
+
+	public int getSale_type() {
+		return sale_type;
+	}
+
+	public void setSale_type(int sale_type) {
+		this.sale_type = sale_type;
 	}
 
 	public String getTypeName() {

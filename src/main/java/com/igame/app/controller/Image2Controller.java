@@ -69,8 +69,8 @@ public class Image2Controller {
 	@Autowired
 	private ImageService imageService;
 	// private String fileUploadDirectory = "/data/cdn/app-65655558";
-//	private String fileUploadDirectory = "D:/temp";
-	private String fileUploadDirectory = "/data/cdn";
+	private String fileUploadDirectory = "D:/temp";
+//	private String fileUploadDirectory = "/data/cdn";
 
 	@RequestMapping(value = "/upload", method = RequestMethod.GET)
 	public @ResponseBody Map list(@RequestParam("pageNumber") int pageNumber, @RequestParam("pageSize") int pageSize) {

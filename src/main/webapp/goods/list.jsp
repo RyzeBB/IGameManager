@@ -13,6 +13,24 @@
 <script type="text/javascript" src="../js/locale/easyui-lang-zh_CN.js"></script>
 
 <script type="text/javascript">
+	function modify_type(item,_id,type){
+		$.ajax({  
+            url : 'mtype/'+_id+'/'+type+'/'+item.checked,  
+            contentType: "application/json;charset=UTF-8",
+            dataType : 'json',  
+            method: 'post',
+            success : function(r) {  
+                if (r.state) {  
+                    $.messager.show({  
+                        msg : r.state,  
+                        title : '成功'  
+                    });  
+                } else {  
+                    $.messager.alert('错误', r.err, 'error');  
+                }  
+            }  
+        }); 
+	}
 	$(function() {
 		$("#test").datagrid({  
             loadMsg:'数据加载中....',  
@@ -30,9 +48,14 @@
             ]],  
             columns:[[ 
                 {title:'基本信息',colspan:7,width:600},  
-                {field:'opt',title:'操作',width:100,align:'center', rowspan:2,  
+                {field:'opt',title:'操作',width:200,align:'center', rowspan:2,  
                     formatter:function(value,rec){  
-                    	 return '<a href="../goods/listone/'+rec.id+'" >编辑</a> ';   
+                    	editStr = '<a href="../goods/listone/'+rec.id+'" >编辑商品</a> ';
+                    	hot_check=rec.hot_type == 1? "checked":"";
+                    	hotStr = '<input type="checkbox" '+hot_check+' onclick=modify_type(this,'+rec.id+',1)>/人气王&nbsp;&nbsp;';
+                    	sale_check=rec.sale_type == 1? "checked":"";
+                    	saleStr = '<input type="checkbox" '+sale_check+' onclick=modify_type(this,'+rec.id+',2)>/热卖&nbsp;&nbsp;';
+                    	 return hotStr+saleStr+editStr;   
                     }  
                 }  
             ],[  

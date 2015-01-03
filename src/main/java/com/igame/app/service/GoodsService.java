@@ -19,6 +19,7 @@ import com.igame.app.mapper.GoodsTypeMapper;
 import com.igame.app.vo.GoodsResponeVO;
 import com.igame.app.vo.GoodsVO;
 import com.igame.app.vo.MutiAttr;
+import com.igame.commons.util.BusinessException;
 import com.igame.redis.RedisTemplate;
 
 @Service
@@ -65,9 +66,9 @@ public class GoodsService {
 		List<Long> ids = goodsTypeMapper.listGoodsByType(appid, type, start, end);
 		List<GoodsEntity> entities = null;
 		if (ids != null && !ids.isEmpty()) {
-//			if (ids.size() > pageCount) {
-//				ids = ids.subList(0, pageCount);
-//			}
+			// if (ids.size() > pageCount) {
+			// ids = ids.subList(0, pageCount);
+			// }
 			entities = goodsMapper.listByIds(ids);
 			for (GoodsEntity goodsEntity : entities) {
 				goodsEntity.decode();
@@ -138,6 +139,37 @@ public class GoodsService {
 		// redisTemplate.hset(GOODS_KEY + appid, String.valueOf(entity.getId()),
 		// entity);
 		// redisTemplate.zadd(GOODS_KEY_ID + appid, entity.getId());
+	}
+
+	/**
+	 * 将商品置成人气旺产品或者天天惠产品
+	 * 
+	 * @param goodsId
+	 * @param type
+	 *            1表示人气王 2表示天天惠
+	 * @param state
+	 *            0表示否 1表示是
+	 * @param appid
+	 * @throws BusinessException
+	 */
+	public void modifyGoodsState(long goodsId, int type, boolean state, long appid) throws BusinessException {
+		GoodsEntity entity = goodsMapper.getGoodsById(goodsId);
+		if (entity == null) {
+			throw new BusinessException("商品不存在");
+		}
+		if (type == 1) {
+			Map<String, Object> params = new HashMap<String, Object>(2);
+			params.put("hot_type", state ? 1 : 0);
+			params.put("id", goodsId);
+			goodsMapper.updateForHot(params);
+		} else if (type == 2) {
+			Map<String, Object> params = new HashMap<String, Object>(2);
+			params.put("sale_type", state ? 1 : 0);
+			params.put("id", goodsId);
+			goodsMapper.updateForSale(params);
+		} else {
+			throw new BusinessException("参数错误");
+		}
 	}
 
 	public void modifyGoods(GoodsVO goodsVO, long appid) {
@@ -238,9 +270,11 @@ public class GoodsService {
 		GoodsResponeVO hotResponeVO = new GoodsResponeVO();
 		// Set<Long> goodsId = redisTemplate.zrangeLong(GOODS_KEY_ID + appid, 0,
 		// -1);
-		List<Long> goodsId = goodsModuleMapper.listHotGoods(appid);
-		if (goodsId != null && !goodsId.isEmpty()) {
-			List<GoodsEntity> list = goodsMapper.listByIds(goodsId);
+		// List<Long> goodsId = goodsModuleMapper.listHotGoods(appid);
+		// if (goodsId != null && !goodsId.isEmpty()) {
+		// List<GoodsEntity> list = goodsMapper.listByIds(goodsId);
+		List<GoodsEntity> list = goodsMapper.getGoodsByPageByHot(appid);
+		if (list != null && !list.isEmpty()) {
 			for (GoodsEntity goodsEntity : list) {
 				goodsEntity.decode();
 			}
@@ -248,6 +282,7 @@ public class GoodsService {
 			hotResponeVO.setProductList(list);
 			hotResponeVO.setTotal((int) size);
 		}
+		// }
 		return hotResponeVO;
 	}
 
@@ -289,6 +324,7 @@ public class GoodsService {
 		if (list != null && !list.isEmpty()) {
 			for (GoodsEntity goodsEntity : list) {
 				goodsEntity.decode();
+				// System.out.println(goodsEntity.getHot_type()+"=========== "+goodsEntity.getSale_type());
 			}
 			return list;
 		}
@@ -316,19 +352,22 @@ public class GoodsService {
 		int start = (pageNum - 1) * pageCount;
 		int end = pageNum * pageCount;
 		GoodsResponeVO hotResponeVO = new GoodsResponeVO();
-		List<Long> goodsId = goodsModuleMapper.listSaleGoods(appid, start, end);
-		if (goodsId != null && !goodsId.isEmpty()) {
-			if (goodsId.size() > pageCount) {
-				goodsId = goodsId.subList(0, pageCount);
+//		List<Long> goodsId = goodsModuleMapper.listSaleGoods(appid, start, end);
+//		if (goodsId != null && !goodsId.isEmpty()) {
+//			if (goodsId.size() > pageCount) {
+//				goodsId = goodsId.subList(0, pageCount);
+//			}
+//			List<GoodsEntity> list = goodsMapper.listByIds(goodsId);
+			List<GoodsEntity> list = goodsMapper.getGoodsByPageBySale(appid, start, end);
+			if(list!=null && !list.isEmpty()){
+				for (GoodsEntity goodsEntity : list) {
+					goodsEntity.decode();
+				}
+				long size = goodsModuleMapper.getSize(appid);
+				hotResponeVO.setProductList(list);
+				hotResponeVO.setTotal((int) size);
 			}
-			List<GoodsEntity> list = goodsMapper.listByIds(goodsId);
-			for (GoodsEntity goodsEntity : list) {
-				goodsEntity.decode();
-			}
-			long size = goodsModuleMapper.getSize(appid);
-			hotResponeVO.setProductList(list);
-			hotResponeVO.setTotal((int) size);
-		}
+//		}
 		return hotResponeVO;
 	}
 
@@ -350,7 +389,10 @@ public class GoodsService {
 			goodsVO.setUnit(goodsEntity.getUnit());// 价格单位
 			// entity.setMulVa1Json;// 多属性
 			goodsVO.setIcon(goodsEntity.getIcon());// 商品icon(根据排版风格1，风格2， 该Icon的
-													// 尺寸要求不一样)
+			// 尺寸要求不一样)
+			goodsVO.setHot_type(goodsEntity.getHot_type());
+			goodsVO.setSale_type(goodsEntity.getSale_type());
+
 			// entity.setTitlePicJson;// /商品主图片下载URL(可以有12张图片)
 			// entity.setDetailePicJson;// 商品详情图片下载URL
 			// entity.setParamsJson;// 商品详细参数介绍

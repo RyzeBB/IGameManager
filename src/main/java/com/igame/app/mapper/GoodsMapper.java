@@ -24,6 +24,7 @@
 package com.igame.app.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -45,6 +46,24 @@ public interface GoodsMapper {
 	
 //	@Select("SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid} limit #{start},#{end}")
 	public List<GoodsEntity> getGoodsByPage(@Param("appid")long appid,@Param("start")int start,@Param("end")int end);
+	
+	/**
+	 * 人气王商品
+	 * @param appid
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public List<GoodsEntity> getGoodsByPageByHot(long appid);
+	
+	/**
+	 * 热卖
+	 * @param appid
+	 * @param start
+	 * @param end
+	 * @return
+	 */
+	public List<GoodsEntity> getGoodsByPageBySale(@Param("appid")long appid,@Param("start")int start,@Param("end")int end);
 
 //	@SelectProvider(type = GoodsMapperProvider.class, method = "listByIds")
 	public List<GoodsEntity> listByIds(List<Long> ids);
@@ -55,6 +74,10 @@ public interface GoodsMapper {
 	
 //	@Update("update t_goods set type=#{type},name=#{name},introduce=#{introduce},price=#{price},offer=#{offer},unit=#{unit},mulVa1Json=#{mulVa1Json},icon=#{icon},titlePicJson=#{titlePicJson},detailePicJson=#{detailePicJson},paramsJson=#{paramsJson},address=#{address},stock=#{stock},saleCount=#{saleCount},shippingType=#{shippingType},shippingCost=#{shippingCost},disStyle=#{disStyle},serviecType=#{serviecType},serviecTel=#{serviecTel} where id=#{id}")
 	public long update(GoodsEntity goodsEntity);
+	
+	public long updateForHot(Map<String, Object> params);
+	
+	public long updateForSale(Map<String, Object> params);
 
 //	@DeleteProvider(type = GoodsMapperProvider2.class, method = "delByIds")
 	public int delByIds(List<Long> ids);

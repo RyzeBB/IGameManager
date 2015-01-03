@@ -4,7 +4,7 @@
 <mapper namespace="com.igame.app.mapper.GoodsMapper">
 
 	<select id="list" parameterType="Long" resultType="GoodsEntity">
-		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid}
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel,sale_type,hot_type FROM t_goods where appid = #{appid}
 	</select>
 	
 	<select id="listSize" parameterType="Long" resultType="long">
@@ -12,15 +12,21 @@
 	</select>
 	
 	<select id="getGoodsById" parameterType="Long" resultType="GoodsEntity">
-		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where id = #{id}
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel,sale_type,hot_type FROM t_goods where id = #{id}
 	</select>
 	
 	<select id="getGoodsByPage" parameterType="java.util.Map" resultType="GoodsEntity">
-		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where appid = #{appid} limit #{start},#{end}
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel,sale_type,hot_type FROM t_goods where appid = #{appid} limit #{start},#{end}
+	</select>
+	<select id="getGoodsByPageByHot" parameterType="Long" resultType="GoodsEntity">
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel,sale_type,hot_type FROM t_goods where appid = #{appid} and hot_type = 1 
+	</select>
+	<select id="getGoodsByPageBySale" parameterType="java.util.Map" resultType="GoodsEntity">
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel,sale_type,hot_type FROM t_goods where appid = #{appid} and sale_type = 1 limit #{start},#{end}
 	</select>
 
 	<select id="listByIds" parameterType="java.util.List" resultType="GoodsEntity">
-		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where id in
+		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel,sale_type,hot_type FROM t_goods where id in
 		 <foreach item="item" index="index" collection="list" 
                     open="(" separator="," close=")">
                    #{item}
@@ -34,6 +40,18 @@
     	</selectKey>
       
 	</insert>
+		
+	<update id="updateForHot" parameterType="java.util.Map">
+		update t_goods 
+			set hot_type=#{hot_type}
+		where id=#{id}
+	</update>
+	
+	<update id="updateForSale" parameterType="java.util.Map">
+		update t_goods 
+			set sale_type=#{sale_type}
+		where id=#{id}
+	</update>
 		
 	<update id="update" parameterType="GoodsEntity">
 		update t_goods 

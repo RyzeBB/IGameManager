@@ -42,18 +42,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.igame.app.entity.GoodsEntity;
 import com.igame.app.entity.GoodsTypeEntity;
 import com.igame.app.entity.OrderEntity;
-import com.igame.app.exception.AppException;
 import com.igame.app.service.BuyerService;
 import com.igame.app.service.GoodsService;
 import com.igame.app.vo.GoodsVO;
-import com.igame.app.vo.OrderResponeVO;
-import com.igame.app.vo.RequestVO;
-import com.igame.app.vo.ResponseVO;
 import com.igame.commons.util.BusinessException;
 import com.igame.security.entity.SecUser;
 
@@ -193,11 +188,31 @@ public class GoodsController {
 		return orderEntities;
 	}
 
+	/**
+	 * 修改订单状态
+	 * 
+	 * @param id
+	 * @param state
+	 * @param descrip
+	 * @param session
+	 * @return
+	 * @throws BusinessException
+	 */
 	@RequestMapping(value = "morder", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject modifyOrder(@RequestParam("id") long id, @RequestParam("state") int state, @RequestParam("descrip") String descrip, HttpSession session) throws BusinessException {
 		long appid = ((SecUser) session.getAttribute("user")).getAppid();
 		buyerService.modifyOrder(id, appid, state, descrip);
+		JSONObject object = new JSONObject(1);
+		object.put("state", "success");
+		return object;
+	}
+
+	@RequestMapping(value = "/mtype/{id}/{type}/{state}", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject modifyGoodsState(@PathVariable("id") long id, @PathVariable("type") int type,@PathVariable("state") boolean state, HttpSession session) throws BusinessException {
+		long appid = ((SecUser) session.getAttribute("user")).getAppid();
+		goodsService.modifyGoodsState(id, type, state, appid);
 		JSONObject object = new JSONObject(1);
 		object.put("state", "success");
 		return object;
