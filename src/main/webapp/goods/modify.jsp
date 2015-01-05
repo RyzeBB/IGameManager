@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@ page language="java" import="java.util.*" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
 <html>
 <head>
 <title>更新产品</title>
@@ -145,16 +146,22 @@ ul[class="vertical-line"] li div img{
 	function addAttr() {
 		content = "<tr><td>"
 				+ "<input name=\"params\" class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'例如: 品牌:coco',validType:'length[2,6]' \" style=\"width:120px;height:25px\">"
+				+ "<a href='#' class='easyui-linkbutton' data-options=\"iconCls:\'icon-remove\'\" onclick=\"removeAttr(this);return false;\">移除基本属性</a>"
 				+ "</td></tr>";
 		var add_attr_c = $(content).appendTo("#attr_set");
 		$.parser.parse(add_attr_c);
 	}
+	function removeAttr(item){
+		$(item).parent().parent().remove();
+	}
+	
 	var img_zone = "window_pic";
 	var img_name = "titlePic";
 	function openPic(param,name) {
 		img_zone = param;
 		img_name = name;
-		$("#pic_select").show();
+		//$("#pic_select").show();
+		 $('#dlg').dialog('open').dialog('center').dialog('setTitle','图片选择');
 		var e = window.event || arguments[0];
 		var y = e.pageY || e.clientY + document.documentElement.scrollTop;
 		y = y+20;
@@ -193,14 +200,24 @@ ul[class="vertical-line"] li div img{
 	}
 	
 // 	function 
+	
 	var rowCount = 0;//属性行数
+	function removeRow(id){
+		if(rowCount<=0){
+			alert("不能删除");
+			return false;
+		}
+		$('#'+id+' tr:last').remove();
+		rowCount--;
+	}
 	function addRow(id) {
 		$("#attr_button").linkbutton("enable"); 
 		tr_c = $("#" + id + " tr:last");
 		td_length = tr_c.children('td').length;
 		// 		content = "<tr>" + $("#" + id + " tr:last").html() + "</tr>";
 		content = "<tr>";
-		temp1 = "<td>SKU-"+rowCount+"<input type='hidden' name='mulVal[0].values' value='SKU-"+rowCount+"'></td>";
+		temp1 = "<td>SKU-"+rowCount+"<input type='hidden' name='mulVal[0].values' value='SKU-"+rowCount+"'/>"
+		+"</td>";
 		temp = "<td><input type=\"text\"  name='mulVal["+rowCount+"].values' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:70px\"></td>";
 		temp_v = "<td><input type=\"text\"  name='mulVal["+rowCount+"].values' class='easyui-numberbox' min='1' max='100000' precision='0' required data-options=\"prompt:'请输入值...'\" style=\"width:70px\"></td>";
 		temp4= "<td><div id='window_pic_"+rowCount +"' style='padding: 10px;'><ul class='vertical-line'><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li><li><div style='width: 150px; height: 150px; border: 1px solid #0099CC;position:relative'></div></li></ul></div>"+
@@ -222,10 +239,29 @@ ul[class="vertical-line"] li div img{
 		n_node = $(content).appendTo($("#" + id));
 		$.parser.parse(n_node);
 	};
-	var colCount = 2;
+	var colCount = 5;
+	function removeRol(id){
+		if(colCount <=5){
+			alert("不能删除");
+			return false;
+		}
+		$('#'+id+' tr').each(function(){
+			$("td:last",this).remove();
+			});
+			colCount--;
+	}
 	function addRol(id) {
+		if(rowCount <=0){
+			alert("不能添加");
+			return false;
+		}
+		if(colCount>=8){
+			alert("已达到添加上限");
+			return false;
+		}
 		colCount++;
-		title_n = "<td width='50'><input type='text' name='mulName' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\"></td>"
+		title_n = "<td width='50'><input type='text' name='mulName' class=\"easyui-textbox\" missingMessage=\"该输入项不能为空\" required data-options=\"prompt:'请输入值...'\" style=\"width:50px\">"
+		+"</td>";
 
 		$("#" + id + " tr")
 				.each(
@@ -294,9 +330,13 @@ ul[class="vertical-line"] li div img{
 				initImg('window_pic','titlePic','${tp}');
 			</c:forEach>
 		</c:if>
-		
+		<c:if test="${!empty goods.mulName}">
+			colCount = ${fn:length(goods.mulName)} +1;
+			console.info("colCount :"+colCount);
+		</c:if>
 		<c:if test="${!empty goods.mulVal}">
 			<c:forEach items="${goods.mulVal}" var="ml" varStatus="status">
+			rowCount++;
 				<c:if test="${!empty ml.img}">
 					<c:forEach items="${ml.img}" var="pl" varStatus="status2">
 						initImg('window_pic_${status.index}','mulVal[${status.index}].img','${pl}');
@@ -491,7 +531,9 @@ ul[class="vertical-line"] li div img{
 						<div id="p" class="easyui-panel"
 							style="background: #F7F7F7; width: 830px; height:500px; padding: 10px;">
 							<button type="button"  class="easyui-linkbutton" onclick="addRow('m_table')">添加多属性</button>
-							<button id="attr_button" type="button" class="easyui-linkbutton" onclick="addRol('m_table')"  data-options="iconCls:'icon-add',disabled:true">添加列</button>
+							<button type="button"  class="easyui-linkbutton" onclick="removeRow('m_table')">移除多属性</button>
+							<button id="attr_button" type="button" class="easyui-linkbutton" onclick="addRol('m_table')"  data-options="iconCls:'icon-add'">添加列</button>
+							<button type="button"  class="easyui-linkbutton" onclick="removeRol('m_table')">移除列</button>
 							<table id="m_table" border="1px" bordercolor="#0099CC" cellspacing="0px" bordercolor="#000000" style="border-collapse:collapse">
 								<c:if test="${empty goods.mulName}">
 									<tr>
@@ -613,19 +655,17 @@ ul[class="vertical-line"] li div img{
 				</tr>
 
 			</table>
-			<div style="text-align: center; padding: 5px">
-				<input type="submit" value="提交">
-			</div>
 		</form>
 		<div style="text-align: center; padding: 5px">
 			<a href="javascript:void(0)" class="easyui-linkbutton"
-				onclick="submitForm()">增加商品</a> <a href="javascript:void(0)"
+				onclick="submitForm()">更新商品</a> <a href="javascript:void(0)"
 				class="easyui-linkbutton" onclick="clearForm()">清除</a>
 		</div>
 	</div>
 	
-	<div id="pic_select" style="width:890px;height:500px;float:left;position:absolute;left:100px;top:10px;">
-	<div class="easyui-tabs" style="width:850px;" data-options="tools:'#tab-tools'">
+<!-- 	<div id="pic_select" style="width:890px;height:500px;float:left;position:absolute;left:100px;top:10px;"> -->
+	<div id="dlg" class="easyui-dialog" style="width:890px;height:460px;" closed="true">
+	<div class="easyui-tabs" style="width:850px;">
 		<div title="选择图片" style="padding: 10px" onLoad="picLoad()">
 			<div id="pic_content"
 				style="width: 800px; height: 335px; border: 1px solid #8CC1ED;">
@@ -803,9 +843,6 @@ ul[class="vertical-line"] li div img{
 		</div>
 		</div>
 	</div>
-	<div id="tab-tools">
-        <a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-cancel'" onclick="closePic()"></a>
-    </div>
 	</div>
 	<script type="text/javascript">
 		$('#pp').pagination({

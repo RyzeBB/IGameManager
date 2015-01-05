@@ -50,6 +50,7 @@ import com.igame.app.service.BuyerService;
 import com.igame.app.service.GoodsService;
 import com.igame.app.vo.GoodsVO;
 import com.igame.commons.util.BusinessException;
+import com.igame.commons.util.SystemException;
 import com.igame.security.entity.SecUser;
 
 /**
@@ -158,7 +159,11 @@ public class GoodsController {
 	@ResponseBody
 	public Map<String, Object> getGoodsByPage(@RequestParam(required = false, value = "rows", defaultValue = "10") int pageSize,
 			@RequestParam(required = false, value = "page", defaultValue = "1") int pageNum, HttpSession session) {
-		long appid = ((SecUser) session.getAttribute("user")).getAppid();
+		Object secUser = session.getAttribute("user");
+		if (secUser == null) {
+			throw new SystemException("未登录");
+		}
+		long appid = ((SecUser) secUser).getAppid();
 		List<GoodsEntity> goods = goodsService.getGoodsByPage(appid, pageNum, pageSize);
 		Map<String, Object> object = new HashMap<String, Object>(2);
 		object.put("total", goodsService.listSize(appid));
@@ -210,7 +215,7 @@ public class GoodsController {
 
 	@RequestMapping(value = "/mtype/{id}/{type}/{state}", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject modifyGoodsState(@PathVariable("id") long id, @PathVariable("type") int type,@PathVariable("state") boolean state, HttpSession session) throws BusinessException {
+	public JSONObject modifyGoodsState(@PathVariable("id") long id, @PathVariable("type") int type, @PathVariable("state") boolean state, HttpSession session) throws BusinessException {
 		long appid = ((SecUser) session.getAttribute("user")).getAppid();
 		goodsService.modifyGoodsState(id, type, state, appid);
 		JSONObject object = new JSONObject(1);

@@ -10,6 +10,9 @@
 	<select id="listSize" parameterType="Long" resultType="long">
 		SELECT count(id) FROM t_goods where appid = #{appid}
 	</select>
+	<select id="listSizeForSale" parameterType="Long" resultType="long">
+		SELECT count(id) FROM t_goods where appid = #{appid} and sale_type = 1
+	</select>
 	
 	<select id="getGoodsById" parameterType="Long" resultType="GoodsEntity">
 		SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel,sale_type,hot_type FROM t_goods where id = #{id}

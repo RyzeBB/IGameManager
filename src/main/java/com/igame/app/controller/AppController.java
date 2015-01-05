@@ -25,6 +25,7 @@ package com.igame.app.controller;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -200,6 +201,9 @@ public class AppController {
 		int actionCode = requestVO.getActionCode();
 		log.debug("getSign --> appid:{},actionCode:{}", appid, actionCode);
 		try {
+			if(StringUtils.isBlank(deviceId)){
+				throw new AppException(actionCode, "用户帐号为空");
+			}
 			SignInfoResponeVO signResponeVO = signService.getSignInfo(appid, deviceId);
 			signResponeVO.setActionCode(actionCode);
 			return signResponeVO;
@@ -225,12 +229,17 @@ public class AppController {
 		int actionCode = requestVO.getActionCode();
 		log.debug("sign --> appid:{},actionCode:{}", appid, actionCode);
 		try {
+			if(StringUtils.isBlank(deviceId)){
+				throw new AppException(actionCode, "用户帐号为空");
+			}
 			SignResponeVO signResponeVO = signService.modifySignInfo(appid, deviceId);
 			signResponeVO.setActionCode(actionCode);
 			return signResponeVO;
 		} catch (AppException e) {
+			log.error("getGoodsType error ", e);
 			throw e;
 		} catch (BusinessException e) {
+			log.error("getGoodsType error ", e);
 			throw new AppException(actionCode, e.getMessage());
 		} catch (Exception e) {
 			log.error("getGoodsType error ", e);
@@ -268,6 +277,9 @@ public class AppController {
 		int actionCode = requestVO.getActionCode();
 		log.debug("getAppCoupon --> appid:{},actionCode:{}", appid, actionCode);
 		try {
+			if(StringUtils.isBlank(deviceId)){
+				throw new AppException(actionCode, "用户帐号为空");
+			}
 			BuyerResponeVO responseVO = buyerService.getInfo(appid, deviceId);
 			responseVO.setActionCode(actionCode);
 			return responseVO;
@@ -288,6 +300,9 @@ public class AppController {
 
 		log.debug("getAppCoupon --> appid:{},actionCode:{}", appid, actionCode);
 		try {
+			if(StringUtils.isBlank(deviceId)){
+				throw new AppException(actionCode, "用户帐号为空");
+			}
 			ResponseVO responeVO = buyerService.addBuyInfo(appid, deviceId, requestVO.getItems(), requestVO.getCid(), requestVO.getAddr(), requestVO.getMsg());
 			responeVO.setActionCode(actionCode);
 			return responeVO;
@@ -304,13 +319,16 @@ public class AppController {
 
 	@RequestMapping(value = "order", method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseVO buyGoods(@RequestBody RequestVO requestVO) {
+	public ResponseVO getOrders(@RequestBody RequestVO requestVO) {
 		long appid = requestVO.getAppid();
 		String deviceId = requestVO.getDeviceId();
 		int actionCode = requestVO.getActionCode();
 
 		log.debug("getAppCoupon --> appid:{},actionCode:{}", appid, actionCode);
 		try {
+			if(StringUtils.isBlank(deviceId)){
+				throw new AppException(actionCode, "用户帐号为空");
+			}
 			OrderResponeVO responeVO = new OrderResponeVO();
 			responeVO.setActionCode(actionCode);
 			List<OrderEntity> orderEntities = buyerService.getOrderByCustom(appid, deviceId);

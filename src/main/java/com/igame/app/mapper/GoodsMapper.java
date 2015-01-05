@@ -41,6 +41,13 @@ public interface GoodsMapper {
 
 	public long listSize(long appid);
 	
+	/**
+	 * 热卖商品总数
+	 * @param appid
+	 * @return
+	 */
+	public long listSizeForSale(long appid);
+	
 //	@Select("SELECT id,appid,type,name,introduce,price,offer,unit,mulVa1Json,icon,titlePicJson,detailePicJson,paramsJson,address,stock,saleCount,shippingType,shippingCost,disStyle,serviecType,serviecTel FROM t_goods where id = #{id}")
 	public GoodsEntity getGoodsById(long id);
 	

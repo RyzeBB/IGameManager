@@ -278,9 +278,9 @@ public class GoodsService {
 			for (GoodsEntity goodsEntity : list) {
 				goodsEntity.decode();
 			}
-			long size = goodsMapper.listSize(appid);
+//			long size = goodsMapper.listSize(appid);
 			hotResponeVO.setProductList(list);
-			hotResponeVO.setTotal((int) size);
+//			hotResponeVO.setTotal((int) size);
 		}
 		// }
 		return hotResponeVO;
@@ -363,7 +363,7 @@ public class GoodsService {
 				for (GoodsEntity goodsEntity : list) {
 					goodsEntity.decode();
 				}
-				long size = goodsModuleMapper.getSize(appid);
+				long size = goodsMapper.listSizeForSale(appid);
 				hotResponeVO.setProductList(list);
 				hotResponeVO.setTotal((int) size);
 			}

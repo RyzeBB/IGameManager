@@ -68,8 +68,8 @@
             // Error and info messages:
             messages: {
                 maxNumberOfFiles: 'Maximum number of files exceeded',
-                acceptFileTypes: 'File type not allowed',
-                maxFileSize: 'File is too large',
+                acceptFileTypes: '文件类型错误',
+                maxFileSize: '文件太大',
                 minFileSize: 'File is too small'
             }
         },
